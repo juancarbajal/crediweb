@@ -1,0 +1,105 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+'<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n"
+.'<?xml-stylesheet href="'.$this->baseUrl().'/www/css/view.css" type="text/css"?>'."\n";
+?>
+<window title='<?=$this->title.' : '.$this->subTitle?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' >
+<script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+<script src='<?=$this->baseUrl()?>/www/js/validate.prototype.js' />
+<script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js' />
+<keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+<script>
+function f_buscar_credito(){
+  Quipu.open("<?=$this->url(array('controller'=>'credito','action'=>'buscardesembolso'))?>?f=f_capturar_credito");
+}
+function f_capturar_credito(cod){
+  //  alert(cod);
+  new Ajax.Request( 
+                   '<?=$this->url(array('action'=>'credito'))?>',
+  { method:'post',
+             parameters: { COD: cod}, 
+             onSuccess: function(t) {
+               r=t.responseJSON;
+               if (r.code==0){ 
+                 rs=r.data;
+                 $('MONTO').value=rs.credito.MONTO;
+                 $('ITF').value=rs.credito.ITF;
+                 $('DESEMBOLSO').value=rs.credito.DESEMBOLSO;
+                 $('COD').value=rs.cliente.K_COD;
+                 $('CLIENTE_COD').value=rs.cliente.K_CLIENTE_COD;
+                 $('CLIENTE_DOC').value=rs.cliente.K_DOC;
+                 $('NOM_LARGO').value=rs.cliente.K_NOM;
+               } 
+             } 
+  } );
+}
+function f_guardar(){
+  Quipu.desabilitaBoton('btn');
+  new Ajax.Request( 
+                   '<?=$this->url(array('action'=>'desembolsocredito'))?>',
+  { method:'post',
+             parameters: {COD: $('COD').value, FEC: $('FEC').value}, 
+             onSuccess: function(t) {
+               r=t.responseJSON;
+               alert(r.msg);
+               if (r.code==0){
+                 if (r.data==0){
+                   Quipu.print('<?=$this->url(array('module'=>'legal','controller'=>'credito','action'=>'contratocliente'))?>/COD/'+$('COD').value,'contrato','<?=$this->baseUrl()?>');
+                 }
+                 Quipu.print('<?=$this->url(array('module'=>'legal','controller'=>'credito','action'=>'pagarecliente'))?>/COD/'+$('COD').value,'pagare','<?=$this->baseUrl()?>');
+                 Quipu.print('<?=$this->url(array('module'=>'legal','controller'=>'credito','action'=>'solicitudcliente'))?>/COD/'+$('COD').value,'solicitud','<?=$this->baseUrl()?>');
+                 if (r.extrajudicial==1){
+                   Quipu.print('<?=$this->url(array('module'=>'legal','controller'=>'credito','action'=>'transaccionextrajudicialrep'))?>/COD/'+$('COD').value,'extrajudicial','<?=$this->baseUrl()?>');
+                 }
+                 f_cronograma();
+                 f_cancelar();
+               } 
+             } 
+  } );
+}
+function f_cronograma(){
+    url="<?=$this->url(array('controller'=>'cronograma','action'=>'desembolso'))?>/COD/"+$('COD').value;
+    Quipu.print(url,null,'<?=$this->baseUrl()?>');
+}
+function f_cancelar(){
+  window.location.href='<?=$this->url(array('action'=>'desembolsolista'))?>';
+}
+</script>
+<groupbox>
+<caption label='<?=$this->subTitle?>' />
+<grid>
+<columns>
+<column />
+<column />
+<column />
+</columns>
+<rows>
+<row><label value='Crédito' control='COD'/><hbox><textbox id='COD' maxlength='12' readonly="true" value="<?=$this->cliente->CREDITO_COD?>" /></hbox>
+</row>
+<row><label value='Cliente' control='CLIENTE_COD'/><hbox><textbox id='CLIENTE_COD' maxlength='12' size="12" readonly="true" value="<?=$this->cliente->CLIENTE_COD?>"/>
+<textbox id='CLIENTE_DOC' size="12" readonly="true" value="<?=$this->cliente->DOC?>"/>
+<textbox id='NOM_LARGO' size='40' readonly="true" value="<?=$this->cliente->NOM_LARGO?>"/></hbox>
+</row>
+</rows>
+</grid>
+
+<groupbox>
+<caption label="Datos de Desembolso"/>
+<hbox><label value='Fecha' control='FEC'/><datepicker id='FEC' value="<?=date('Y-m-d')?>" type="popup"/></hbox>
+<grid>
+<columns>
+<column/>
+<column/>
+</columns>
+<rows>
+<row><label value="MONTO:" class="resaltado_azul"/><label id="MONTO" class="resaltado_azul" value="<?=$this->credito['MONTO']?>"/></row>
+<row><label value="ITF:" class="resaltado_azul"/> <label id="ITF" class="resaltado_azul" value="<?=$this->credito['ITF']?>"/></row>
+<row><label value="DESEMBOLSO:" class="resaltado_rojo"/><label id="DESEMBOLSO" class="resaltado_rojo" value="<?=$this->credito['DESEMBOLSO']?>"/></row>
+
+</rows>
+</grid>
+</groupbox>
+<hbox><button id='btn' image="<?=$this->baseUrl()?>/www/img/icons/ok.png" label="Desembolsar" oncommand="f_guardar()"/>
+<button image="<?=$this->baseUrl()?>/www/img/icons/close.png" label="Cancelar" oncommand="f_cancelar()"/>
+</hbox>
+</groupbox>
+</window>

@@ -1,0 +1,21 @@
+;; Object models/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "models/"
+  :tables (list 
+   (semanticdb-table "Credito.php"
+    :major-mode 'php-mode
+    :tags 'nil
+    :file "Credito.php"
+    :pointmax 8508
+    )
+   (semanticdb-table "NumLet.php"
+    :major-mode 'php-mode
+    :tags 'nil
+    :file "NumLet.php"
+    :pointmax 3485
+    )
+   )
+  :file "semantic.cache"
+  :semantic-tag-version "2.0pre3"
+  :semanticdb-version "2.0pre3"
+  )

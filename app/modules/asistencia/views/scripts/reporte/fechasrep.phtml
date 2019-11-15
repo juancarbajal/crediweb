@@ -1,0 +1,48 @@
+<html>
+<head>
+<link rel="stylesheet" href="<?=$this->baseUrl()?>/www/css/print.css" type="text/css" media="screen,print" />
+</head>
+<body>
+<table width="100%">
+<tr>
+<td width="10%"><img src="<?=$this->baseUrl()?>/www/img/empresa/logo_min.jpg"/></td>
+<td>
+<h1>ASISTENCIAS</h1>
+<h1><?=$this->desde?> al <?=$this->hasta?></h1>
+</td>
+<td width="20%">
+   Fecha: <?=date('Y-m-d')?><br/>
+   Hora: <?=date('H:i:s')?><br/>
+   Usuario: <?=$this->user?>
+</td>
+</table>
+
+<table width="100%">
+<thead>
+   <th>C&oacute;digo</th>
+<th>Nombres</th>
+<th>H. Trabajadas</th>
+<th>H. Trab. Especial</th>
+<th>H. Tardanza</th>
+<th>H. Extras</th>
+   <th>N&deg; Tardanza</th>
+   <th>N&deg; Inasistencia</th>
+</thead>
+<tbody>
+<?foreach($this->lista as $e){?>
+<tr>
+                 <td><?=$e->K_COD?></td>
+<td><?=$e->K_NOM?></td>
+<td><?=$e->K_HOR_TRABAJADAS?></td>
+<td><?=$e->K_HOR_ESPECIAL?></td>
+<td><?=$e->K_HOR_TARDANZA?></td>
+<td><?=$e->K_HOR_EXTRAS?></td>
+<td><?=$e->K_DIA_TARDE?></td>
+<td><?=$e->K_DIA_FALTA?></td>
+<tr>
+  <?}?>
+</tbody>
+</table>
+
+</body>
+</table>

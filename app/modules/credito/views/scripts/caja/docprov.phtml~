@@ -1,0 +1,95 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+'<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n".
+  '<?xml-stylesheet href="'.$this->baseUrl().'/www/css/view.css" type="text/css"?>'."\n";
+?>
+<window title='<?=$this->title.' : '.$this->subTitle?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' >
+  <script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+  <script src='<?=$this->baseUrl()?>/www/js/validate.prototype.js' />
+  <script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js' />
+  <keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+  <script>
+function f_capturar_cliente(codigo){
+  new Ajax.Request(
+                   '<?=$this->url(array('controller'=>'credito','action'=>'cliente'))?>',
+  {
+            method: 'post',
+            parameters:{ COD: codigo },
+            onSuccess: function(t ){
+              r=t.responseJSON;
+              if ( r.code==0){
+                //                alert(r.edad.K_AUTO);
+                  $('PROVEEDOR_COD').value=r.data[0].COD;
+                  $('PROVEEDOR_NOM').value=r.data[0].NOM_LARGO;
+                  $('DIRE').value=r.data[0].DIRE;
+              }
+            }
+  }
+);
+}
+function f_buscar_cliente(){
+  var bcliente=window.open("<?=$this->url(array('controller'=>'cliente',action=>'buscar'))?>?f=f_capturar_cliente","bc","chrome,dialog,modal,titlebar=no,height=400,width=600");
+  bcliente.creator=self;
+}
+function f_guardar(){
+  if (f_validar()){
+  new Ajax.Request( 
+                   '<?=$this->url(array('action'=>'docprov'))?>',
+                   { method:'post',
+                       parameters: {op:'ins',NUM:$('NUM').value,FEC:$('FEC').value,PROVEEDOR_COD:$('PROVEEDOR_COD').value,DET:$('DET').value,MONEDA_COD:$('MONEDA_COD').value,MONTO:$('MONTO').value}, 
+                       onSuccess: function(t) {
+                       r=t.responseJSON;
+                       alert(r.msg);
+                       if (r.code==0){ 
+                         
+                       } 
+                     } 
+                     } );
+  }//if
+}
+function f_limpiar(){
+  $('NUM').value='';
+  $('FEC').value='<?=date('Y-m-d')?>';
+  $('PROVEEDOR_COD').value='';
+  $('PROVEEDOR_NOM').value='';
+  $('DET').value='';
+  $('MONTO').value='';
+}
+function f_validar(){
+v=new Validate();
+  v.addRules({id:'PROVEEDOR_COD', required: true, label: 'Código de Proveedor'});
+  v.addRules({id:'DET',required:true, option: 'Decimal', label:'Detalle'});
+  v.addRules({id:'MONTO',required:true, option: 'Decimal', label:'Monto'});
+  return v.Apply();
+}
+
+  </script>
+  <groupbox>
+  <caption label='<?=$this->subTitle?>' />
+  <grid>
+  <columns>
+  <column />
+  <column />
+  </columns>
+  <rows>
+  <row><label value='Número' control='NUM'/><textbox id='NUM' maxlength='11'/></row>
+  <row><label value='Fecha' control='FEC'/><datepicker id='FEC' type="popup" value="<?=date('Y-m-d')?>"/></row>
+  <row><label value='Proveedor' control='PROVEEDOR_COD'/><hbox><textbox id='PROVEEDOR_COD' maxlength='12' size='12' readonly='true'/><textbox id='PROVEEDOR_NOM' maxlength='100' size="40" readonly='true'/></hbox><button label='' image='<?=$this->baseUrl()?>/www/img/icons/search.png' oncommand="f_buscar_cliente()"/></row>
+  <row><label value='Detalle' control='DET'/><textbox id='DET' multiline='true' rows='3'/></row>
+  <row><label value='Moneda' control='MONEDA_COD'/>
+  <menulist id='MONEDA_COD'>
+  <menupopup>
+  <? foreach($this->monedas as $moneda){?>
+  <menuitem label='<?=$moneda->NOM?>' value='<?=$moneda->COD?>' />
+     <? }?>
+  </menupopup>
+  </menulist>
+
+ </row>
+  <row><label value='Monto' control='MONTO'/><textbox id='MONTO' maxlength='11'/></row>
+  </rows>
+  </grid>
+  <hbox>
+  <button label='Guardar' image='<?=$this->baseUrl()?>/www/img/icons/ok.png' oncommand="f_guardar()"/>
+  </hbox>
+  </groupbox>
+  </window>

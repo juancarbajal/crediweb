@@ -1,0 +1,129 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+'<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n".
+  '<?xml-stylesheet href="'.$this->baseUrl().'/www/css/view.css" type="text/css"?>'."\n";
+?>
+<window title='<?=$this->title.' : '.$this->subTitle?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul'  onload='f_cargar()'>
+  <script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+  <script src='<?=$this->baseUrl()?>/www/js/validate.prototype.js' />
+  <script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js' />
+  <keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+  <script>
+function f_limpiar(){
+  Quipu.ultimo_registro=null;
+  $('EMPLEADO_COD').value='';
+  $('EMPLEADO_NOM').value='';
+  $('FEC').value='<?=date('Y-m-d')?>';
+  $('HOR_DESDE').value='<?=date('H:i:s')?>';
+  $('HOR_HASTA').value='<?=date('H:i:s')?>';
+  $('MOT').value='';
+  new Ajax.Request( 
+                   'permisodia',
+    { method:'post',
+        parameters: {op:'getid'}, 
+        onSuccess: function(t) {
+        r=t.responseJSON;
+        if (r.code==0){ 
+          $('ID').value=r.data;
+        } 
+      } 
+      } );
+    $('EMPLEADO_COD').focus();
+}
+function f_buscar_empleado(){
+  var bempleado=window.open("<?=$this->url(array(action=>'buscarempleado'))?>?f=f_capturar_empleado","bempleado","chrome,dialog,modal,titlebar=no,height=400,width=600");
+  bempleado.creator=self;
+}
+function f_capturar_empleado(cod){
+  if (cod!=''){
+  new Ajax.Request( 
+                   '<?=$this->url(array('action'=>'datoscliente'))?>',
+                   { method:'post',
+                       parameters: {COD:cod}, 
+                       onSuccess: function(t) {
+                       r=t.responseJSON;
+                       if (r.code==0){ 
+                         $('EMPLEADO_COD').value=r.data.COD;
+                         $('EMPLEADO_NOM').value=r.data.NOM_LARGO;
+                       } 
+                     } 
+                     } );
+  }
+}
+
+Quipu.campos=new Array('EMPLEADO_COD','EMPLEADO_NOM','DES','HAS','ANIO');
+Quipu.campos_primarios=new Array('ID');
+Quipu.defecto={'FEC':'<?=date('Y-m-d')?>','HOR_HASTA':'<?=date('H:i:s')?>','HOR_DESDE':'<?=date('H:i:s')?>','MOT':''};
+Quipu.url='<?=$this->url(array('action'=>'permisodia'))?>';
+var v=new Validate();
+v.addRules({id:'EMPLEADO_COD', required: true, option: 'Alpha', label: 'Código de Empleado'});
+v.addRules({id:'FEC', required: true, option: 'date', label: 'Fecha'});
+v.addRules({id:'MOT', required: true, option: 'Alpha', label: 'Motivo'});
+
+function f_cargar(){
+  Quipu.tree=$('tr');
+  $('EMPLEADO_COD').focus();
+  Quipu.cargarLista({op:'get'});
+}
+function f_cargar_uno(cod){
+  Quipu.cargarUno({op:'get', idx:cod});
+  $('EMPLEADO_COD').focus();
+}
+function f_guardar(){
+  if (v.Apply()){
+    if(Quipu.ultimo_registro==null)
+      Quipu.guardarRegistro(Quipu.toParams('EMPLEADO_COD','EMPLEADO_NOM','FEC','HOR_DESDE','HOR_HASTA','MOT',{op: 'ins'}));
+    else{
+      Quipu.guardarRegistro(Quipu.toParams('EMPLEADO_COD','EMPLEADO_NOM','FEC','HOR_DESDE','HOR_HASTA','MOT',{op: 'upd', idx:Quipu.ultimo_registro.ID}));
+    }
+  }
+  
+}
+function f_eliminar(){
+  Quipu.eliminarRegistro({op: 'del', idx: Quipu.getTreeValue()});
+}
+  </script>
+  <groupbox>
+    <caption label='<?=$this->subTitle?>'/>
+    <hbox>
+      <vbox>
+        <grid>
+          <columns>
+            <column />
+            <column />
+          </columns>
+          <rows>
+            <row><label value='Registro' control='ID'/><hbox><textbox id='ID' maxlength='11' readonly='true' value='<?=$this->cod?>'/></hbox></row>
+            <row><label value='Empleado' control='EMPLEADO_COD'/><hbox><textbox id='EMPLEADO_COD' maxlength='12' size='12' onchange='f_capturar_empleado(this.value)'/><textbox id='EMPLEADO_NOM' size='40' readonly='true'/></hbox><button label='' image='<?=$this->baseUrl()?>/www/img/icons/search.png' oncommand='f_buscar_empleado()'/></row>
+  <row><label value='Fecha' control='FEC'/><hbox><datepicker id='FEC' maxlength='4' size='4' value='<?=date('Y-m-d')?>'/></hbox></row>
+            <row><label value='Hora Inicio' control='HOR_DESDE'/><timepicker id='HOR_DESDE' value='<?=date('H:i')?>' hideseconds='true'/></row>
+  <row><label value='Hora Termino' control='HOR_HASTA'/><timepicker id='HOR_HASTA' type='popup' value='<?=date('H:i')?>' hideseconds='true'/></row>
+  <row><label value='Motivo' control='MOT'/><textbox id='MOT' multiline='true'/></row>
+          </rows>
+        </grid>
+        <hbox>
+          <button label='Guardar' image='<?=$this->baseUrl()?>/www/img/icons/ok.png' oncommand='f_guardar()'/>
+        </hbox>
+      </vbox>
+      <hbox flex='1'>
+        <tree id='tr' enableColumnDrag='true' flex='1' onselect='f_cargar_uno(Quipu.getTreeValue(this))'>
+          <treecols>
+            <treecol label='Reg' flex='1'/>
+            <splitter class='tree-splitter' />
+            <treecol label='Empleado' flex='1'/>
+            <splitter class='tree-splitter' />
+            <treecol label='Fecha' flex='1'/>
+            <splitter class='tree-splitter' />
+
+          </treecols>
+          <treechildren>
+          </treechildren>
+          </tree>
+        <vbox>
+          <button label='' image='<?=$this->baseUrl()?>/www/img/icons/new.png' oncommand='f_limpiar()'/>
+          <button label='' image='<?=$this->baseUrl()?>/www/img/icons/close.png'  oncommand="f_eliminar()"/>
+
+          </vbox>
+        </hbox>
+    </hbox>
+  </groupbox>
+</window>

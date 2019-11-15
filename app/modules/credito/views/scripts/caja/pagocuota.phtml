@@ -1,0 +1,146 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+'<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n".
+'<?xml-stylesheet href="'.$this->baseUrl().'/www/css/view.css" type="text/css"?>'."\n";
+?>
+<window title='<?=$this->title.' : '.$this->subTitle?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' onload="f_cargar()">
+<script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+<script src='<?=$this->baseUrl()?>/www/js/validate.prototype.js' />
+<script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js' />
+<keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+<script>
+function f_cargar(){
+     Quipu.tree=$('tr');
+}
+function f_validar(){
+v=new Validate();
+  v.addRules({id:'CREDITO_COD', required: true, label: 'Código de Crédito'});
+  v.addRules({id:'MONTO',required:true, option: 'Decimal', label:'Monto'});
+  return v.Apply();
+}
+function f_pagar(){
+  if ($('FEC').value!="<?=date('Y-m-d')?>"){
+    if (!<?=($this->role=='GERENCIA')?'true':'false'?>){
+      Quipu.alertError("No tiene permisos para cambiar la Fecha");
+      return false;
+    }
+  }
+    if (f_validar()){
+      Quipu.desabilitaBoton('btn');
+      new Ajax.Request( 
+                   '<?=$this->url(array('action'=>'pagocuota'))?>',
+                   { method:'post',
+                       parameters: {FEC: $('FEC').value, CREDITO: $('CREDITO_COD').value, MONTO: $('MONTO').value}, 
+                       onSuccess: function(t) {
+                       r=t.responseJSON;
+                       alert(r.msg);
+                       if (r.code==0){ 
+                         $('COD').value=r.data.COD;
+                         $('CREDITO_COD').value='';
+                         $('CLIENTE_COD').value='';
+                         $('CLIENTE_NOM').value='';
+                         $('MONTO').value='';
+                         Quipu.treeClear($('tr'));
+                         Quipu.print("<?=$this->url(array('action'=>'pagocuotarep'))?>/COD/"+r.data.RECIBO,null, '<?=$this->baseUrl()?>');
+                       } 
+                     } 
+                   } );
+    }
+}
+function f_buscar_credito(){
+  Quipu.open("<?=$this->url(array('controller'=>'credito','action'=>'buscardesembolso'))?>?f=f_capturar_credito");
+}
+
+function f_capturar_credito(cod){
+  new Ajax.Request( 
+                   '<?=$this->url(array('action'=>'creditoestado'))?>',
+  { method:'post',
+      parameters: { COD: cod, FEC: $('FEC').value }, 
+             onSuccess: function(t) {
+               r=t.responseJSON;
+               if (r.code==0){ 
+                 rs=r.data;
+                 Quipu.treeAdd($('tr'),rs.credito);
+                 $('CREDITO_COD').value=rs.cliente.CREDITO_COD;
+                 $('CLIENTE_COD').value=rs.cliente.CLIENTE_COD;
+                 $('CLIENTE_NOM').value=rs.cliente.NOM_LARGO;
+                                  /*
+                 $('CUOTA_PENDIENTE').value=rs.credito.K_NRO_CUOTA_ACTIVA+"/"+rs.credito.K_NRO_CUOTA;
+                 $('MONTO_PENDIENTE').value=rs.credito.K_TOTAL_CUOTA_ACTIVA+"/"+rs.credito.K_TOTAL_CUOTA;
+                 $('PAGO_CUOTA').value=rs.credito.K_MONTO_CUOTA_ACTUAL;
+                 $('PAGO_CUOTA_ITF').value=rs.credito.K_MONTO_CUOTA_ACTUAL_ITF;
+                 $('MONEDA').value=rs.credito.K_MONEDA;*/
+               } 
+             } 
+  } );
+}
+function f_seleccion(tr){
+  row=Quipu.getTreeRow(tr);
+  if (row!=null){
+    //alert('Seleccion');
+    $('MONTO').value=row.childNodes[8].getAttribute('label');
+  }
+}
+function f_seleccion_suma(tr){
+  if (Quipu.getTreeValue(tr)!=''){
+  new Ajax.Request( 
+                   '<?=$this->url(array('action'=>'montocancelar'))?>',
+                   { method:'post',
+                       parameters: {COD:$('CREDITO_COD').value,'ID':Quipu.getTreeValue(tr)}, 
+                       onSuccess: function(t) {
+                       r=t.responseJSON;
+                       if (r.code==0){ 
+                         $('MONTO').value=r.data;
+                       } 
+                     } 
+                     } );
+  }
+  else{
+    $('MONTO').value='';
+  }
+}
+</script>
+<groupbox>
+  <caption label='<?=$this->subTitle?>' />
+
+  <grid>
+    <columns>
+      <column />
+      <column/>
+    </columns>
+    <rows>
+      <row><label value='Número' control='COD'/> <textbox id='COD' readonly="true" size="12" value="<?=$this->cod?>"/></row>
+      <row><label value='Fecha' control='FEC'/> <datepicker id='FEC' value="<?=date('Y-m-d')?>" type="popup" readonly='false'/></row>
+      <row><label value='Crédito' control='CREDITO_COD'/> <hbox><textbox id='CREDITO_COD' maxlength="12" onchange="f_capturar_credito(this.value)"/> <button image="<?=$this->baseUrl()?>/www/img/icons/search.png" oncommand="f_buscar_credito()"/></hbox></row>
+      <row><label value='Cliente' control='CLIENTE_COD'/> <hbox><textbox id='CLIENTE_COD' readonly="true" size="12"/> <textbox id='CLIENTE_NOM' readonly="true"/></hbox></row>
+    </rows>
+  </grid>
+<tree id="tr" flex="1" enableColumnDrag="true" rows="20" onselect="f_seleccion_suma(this)">
+<treecols>
+<treecol label="Cuota" flex="1"/>
+<splitter class="tree-splitter" />
+<treecol label="Venc." flex="1"/>
+<splitter class="tree-splitter" />
+<treecol label="Sub-Total" flex="1" align="right"/>
+<splitter class="tree-splitter" />
+<treecol label="Mora" flex="1"/>
+<splitter class="tree-splitter" />
+<treecol label="ITF" flex="1"/>
+<splitter class="tree-splitter" />
+<treecol label="Total" flex="1"/>
+<splitter class="tree-splitter" />
+<splitter class="tree-splitter" />
+<treecol label="A Cuenta" flex="1"/>
+<splitter class="tree-splitter" />
+<treecol label="M" flex="1"/>
+<splitter class="tree-splitter" />
+<treecol label="Saldo" flex="1"/>
+<splitter class="tree-splitter" />
+<treecol label="E" flex="1"/>
+</treecols>
+<treechildren>
+</treechildren>
+</tree>
+
+  <hbox><label value='Monto a Cancelar' control='MONTO'/> <textbox id='MONTO' size="11" maxlength="11"/><button id="btn" image="<?=$this->baseUrl()?>/www/img/icons/ok.png" label="Pagar" oncommand="f_pagar()"/></hbox>
+</groupbox>
+</window>

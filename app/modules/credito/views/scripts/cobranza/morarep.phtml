@@ -1,0 +1,81 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'?>
+<html>
+<head>
+<link rel="stylesheet" href="<?=$this->baseUrl()?>/www/css/print.css" type="text/css" media="screen,print" />
+
+</head>
+<body>
+<table width="100%">
+<tr>
+<td width="10%"><img src="<?=$this->baseUrl()?>/www/img/empresa/logo_min.jpg"/></td>
+<td>
+<h1>REPORTE DE MORA</h1>
+<h1><?=$this->fecha?></h1>
+</td>
+<td width="20%">
+   Fecha: <?=date('d.m.Y')?><br/>
+   Hora: <?=date('H.i.s')?>
+</td>
+</table>
+<table width="100%" cellspacing="0">
+<tr>
+<td class="cuadro">N&deg;</td>
+<td class="cuadro">Cr&eacute;dito</td>
+<td class="cuadro" >Cod.Cliente</td>
+<td class="cuadro" width='20%'>Cliente</td>
+<td class="cuadro" width='20%'>Aval</td>
+<td class="cuadro">D&iacute;as</td>
+<td class="cuadro">Total</td>
+<td class="cuadro">SubTotal</td>
+<td class="cuadro">Cancelado</td>
+<td class="cuadro">Capital</td>
+<td class="cuadro">Interes</td>
+<td class="cuadro">IGV</td>
+<td class="cuadro">MORA</td>
+<td class="cuadro">ITF</td>
+<td class="cuadro">Seguro</td>
+<td class="cuadro">G.A.</td>
+<td class="cuadro">Usuario</td>
+</tr>
+<?$i=1;?>
+<?foreach($this->mora as $fila){?>
+<tr>
+<td class="bordelados" valign="top"><?=$i++?></td>
+<td class="bordederecho" valign="top"><?=substr($fila->K_CREDITO,6,6)?></td>
+<td class="bordederecho" valign="top"><?=substr($fila->K_CLIENTE_COD,6,6)?></td>
+                                <td class="bordederecho" valign="top" ><?=$fila->K_CLIENTE_NOM?><br/>Dir: <?=$fila->K_DIRE?><br/>Neg: <?=$fila->K_DIRE_NEGOCIO?><br/>Fono: <?=$fila->K_FONO?></td>
+<td class="bordederecho" valign="top" ><?=$fila->K_AVAL_NOM?><br/>Dir: <?=$fila->K_AVAL_DIRE?><br/>Fono: <?=$fila->K_AVAL_FONO?></td>
+<td class="bordederecho" valign="top" ><?=$fila->K_DIAS_MORA?></td>
+<td align="right" class="bordederecho" valign="top"><?=$fila->K_TOTAL?></td>
+<td align="right" class="bordederecho" valign="top"><?=$fila->K_SUB_TOTAL?></td>
+<td align="right" class="bordederecho" valign="top"><?=$fila->K_CANCELADO?></td>
+<td align="right" class="bordederecho" valign="top"><?=$fila->K_CAPITAL?></td>
+<td align="right" class="bordederecho" valign="top"><?=$fila->K_INTERES?></td>
+<td align="right" class="bordederecho" valign="top"><?=$fila->K_IGV?></td>
+<td align="right" class="bordederecho" valign="top"><?=$fila->K_MORA?></td>
+<td align="right" class="bordederecho" valign="top"><?=$fila->K_ITF?></td>
+<td align="right" class="bordederecho" valign="top"><?=$fila->K_SEGURO?></td>
+<td align="right" class="bordederecho" valign="top"><?=$fila->K_OTROS?></td>
+<td align="right" class="bordederecho" valign="top"><?=$fila->K_USR?></td>
+</tr>
+  <?}?>
+<tr>
+<td colspan="3"></td>
+<td align="right" colspan="3"><b>TOTAL</b></td>
+<td align="right" class="cuadro"><b><?=$this->moraTotal->S1?></b></td>
+<td align="right" class="cuadro"><b><?=$this->moraTotal->S2?></b></td>
+<td align="right" class="cuadro"><b><?=$this->moraTotal->S3?></b></td>
+<td align="right" class="cuadro"><b><?=$this->moraTotal->S4?></b></td>
+<td align="right" class="cuadro"><b><?=$this->moraTotal->S5?></b></td>
+<td align="right" class="cuadro"><b><?=$this->moraTotal->S6?></b></td>
+<td align="right" class="cuadro"><b><?=$this->moraTotal->S7?></b></td>
+<td align="right" class="cuadro"><b><?=$this->moraTotal->S8?></b></td>
+<td align="right" class="cuadro"><b><?=$this->moraTotal->S9?></b></td>
+<td align="right" class="cuadro"><b><?=$this->moraTotal->S10?></b></td>
+<!--
+<td align="right" class="cuadro"><b><?=$this->moraTotal->S11?></b></td>
+<td align="right" class="cuadro"><b><?=$this->moraTotal->S12?></b></td>
+-->
+</tr>
+</table>
+</html>

@@ -1,0 +1,179 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+'<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n".
+'<?xml-stylesheet href="'.$this->baseUrl().'/www/css/view.css" type="text/css"?>'."\n";
+?>
+<window title='<?=$this->title.' : '.$this->subTitle?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' onload='f_cargar()'>
+  <script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+  <script src='<?=$this->baseUrl()?>/www/js/validate.prototype.js' />
+  <script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js' />
+  <keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+  <script>
+function f_limpiar(){
+  $('EMPLEADO_COD').value='';
+  $('EMPLEADO_NOM').value='';
+  $('FEC_INI').value='<?=date('Y-m-d')?>';
+  //  $('FEC_FIN').value='2020-12-31';
+        <?foreach($this->turnos as $turno){?>
+        $('H_<?=$turno->ID?>_I').value='00:00:00';
+        $('H_<?=$turno->ID?>_S').value='00:00:00';
+          <?}?>
+}
+
+function f_guardar(){
+new Ajax.Request( 
+'horarioespecial',
+{ method:'post',
+parameters: {
+        EMPLEADO_COD: $('EMPLEADO_COD').value,
+        FEC_INI: $('FEC_INI').value,
+      //      FEC_FIN: $('FEC_FIN').value,
+        <?foreach($this->turnos as $turno){?>
+        H_<?=$turno->ID?>_I:$('H_<?=$turno->ID?>_I').value,
+        H_<?=$turno->ID?>_S:$('H_<?=$turno->ID?>_S').value,
+          <?}?>
+          op:'ins'
+}, 
+onSuccess: function(t) {
+r=t.responseJSON;
+alert(r.msg);
+if (r.code==0){
+Quipu.treeAdd($('tr'),r.data);
+f_limpiar();
+}
+} 
+} );
+
+}
+function f_capturar(){
+  val=Quipu.getTreeRow($('tr'));
+  /*
+  fec=val.firstChild.getAttribute("label");
+  empleado=val.firstChild.getAttribute("label");
+  */
+  fec=val.childNodes[0].getAttribute("label");
+  empleado=val.childNodes[1].getAttribute("label");
+
+  new Ajax.Request( 
+                   'horarioespecial',
+                   { method:'post',
+                       parameters: {op:'get',COD:empleado,FEC:fec}, 
+                       onSuccess: function(t) {
+                       r=t.responseJSON;
+                       if (r.code==0){ 
+                         f_limpiar();
+                         Quipu.fromJSON(r.data);
+                         Quipu.fromJSON(r.det);
+                       } 
+                     } 
+                     } );
+  
+}
+function f_cargar(){
+          new Ajax.Request( 
+          'horarioespecial',
+          { method:'post',
+          parameters: {op:'getlista'}, 
+          onSuccess: function(t) {
+          r=t.responseJSON;
+          if (r.code==0){ 
+          Quipu.treeAdd($('tr'),r.data);
+          } 
+          } 
+          } );
+}
+function f_buscar_empleado(){
+  var bempleado=window.open("<?=$this->url(array(action=>'buscarempleado'))?>?f=f_capturar_empleado","bempleado","chrome,dialog,modal,titlebar=no,height=400,width=600");
+  bempleado.creator=self;
+}
+function f_capturar_empleado(cod){
+  new Ajax.Request( 
+                   '<?=$this->url(array('action'=>'datoscliente'))?>',
+                   { method:'post',
+                       parameters: {COD:cod}, 
+                       onSuccess: function(t) {
+                       r=t.responseJSON;
+                       if (r.code==0){ 
+                         $('EMPLEADO_COD').value=r.data.COD;
+                         $('EMPLEADO_NOM').value=r.data.NOM_LARGO;
+                       } 
+                     } 
+                     } );
+}
+  </script>
+  <groupbox>
+    <caption label='<?=$this->subTitle?>' />
+    <hbox>      
+      <vbox>
+        <grid>
+          <columns>
+            <column />
+            <column />
+          </columns>
+          <rows>
+            <row>
+              <label value='FECHA' control='FEC_INI'/>
+              <hbox>
+                <datepicker id='FEC_INI' type='popup' value='<?=date('Y-m-d')?>'/>
+              </hbox>
+            </row>
+
+  <row><label value='Empleado' control='EMPLEADO_COD'/>
+  <hbox>
+  <textbox id='EMPLEADO_COD' maxlength='12' size='12' readonly='true'/><textbox id='EMPLEADO_NOM' maxlength='40' size='40' readonly='true'/><button label='' image='<?=$this->baseUrl()?>/www/img/icons/search.png' oncommand='f_buscar_empleado()'/>
+  </hbox>
+
+</row>
+            
+
+          </rows>
+        </grid>
+        <grid>
+          <columns>
+            <column />
+            <column />
+            <column />
+            <column />
+            <column />
+            <column />
+            <column />
+          </columns>
+          <rows>
+            <row>
+              <label value='HORARIO'/>
+              <label value='HORA'/>
+            </row>
+            <?foreach($this->turnos as $turno){?>
+            <row><label value='<?=$turno->NOM?> INGRESO'/>
+              <timepicker id='H_<?=$turno->ID?>_I' hideseconds='true' value='00:00'/>
+            </row>
+            <row><label value='<?=$turno->NOM?> SALIDA'/>
+              <timepicker id='H_<?=$turno->ID?>_S' hideseconds='true' value='00:00'/>
+            </row>
+            <?}?>
+          </rows>
+        </grid>
+
+        <hbox>
+          <button label='Guardar' image='<?=$this->baseUrl()?>/www/img/icons/ok.png' oncommand='f_guardar()'/>
+        </hbox>
+      </vbox>
+      <hbox flex='1'>
+        <tree id='tr' enableColumnDrag='true' flex='1' rows='10' onselect='f_capturar()'>
+          <treecols>
+            <treecol label='Fecha' flex='1'/>
+            <splitter class='tree-splitter' />
+            <treecol label='Empleado' flex='1'/>
+            <splitter class='tree-splitter' />
+            <treecol label='Nombres' flex='1'/>
+            <splitter class='tree-splitter' />
+          </treecols>
+          <treechildren>
+          </treechildren>
+        </tree>
+        <vbox>
+          <button label='' image='<?=$this->baseUrl()?>/www/img/icons/new.png' oncommand='f_limpiar()'/>
+        </vbox>
+      </hbox>
+    </hbox>
+  </groupbox>
+</window>

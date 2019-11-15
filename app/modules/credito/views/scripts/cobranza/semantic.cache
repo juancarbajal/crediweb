@@ -1,0 +1,21 @@
+;; Object cobranza/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "cobranza/"
+  :tables (list 
+   (semanticdb-table "planilla.phtml"
+    :major-mode 'php-mode
+    :tags '(("f_generar" function (:type ("function" type (:type "class") nil nil)) nil [736 882]) ("foreach" function (:arguments (("" variable (:type ("$this" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1254 1260]) ("as" variable (:type ("cobradores" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1261 1284]) ("" variable (:type ("$cobrador" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1275 1285])) :type "int") nil [1246 1392]))
+    :file "planilla.phtml"
+    :pointmax 1605
+    )
+   (semanticdb-table "planillarep.phtml"
+    :major-mode 'php-mode
+    :tags '(("foreach" function (:arguments (("" variable (:type ("$this" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [209 215]) ("as" variable (:type ("planillas" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [216 238]) ("" variable (:type ("$planilla" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [229 239])) :type "int") nil [201 3063]))
+    :file "planillarep.phtml"
+    :pointmax 3082
+    )
+   )
+  :file "semantic.cache"
+  :semantic-tag-version "2.0pre3"
+  :semanticdb-version "2.0pre3"
+  )

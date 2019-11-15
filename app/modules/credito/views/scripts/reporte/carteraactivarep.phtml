@@ -1,0 +1,75 @@
+<html>
+<head>
+<link rel="stylesheet" href="<?=$this->baseUrl()?>/www/css/print.css" type="text/css" media="screen,print" />
+</head>
+<body>
+<table width="100%">
+<tr>
+<td width"50%">
+<table width="100%">
+ <tr><td width="30%"><img src="<?=$this->baseUrl()?>/www/img/empresa/logo_min.jpg"/></td><td><h1 align="center"><?=$this->subTitle?></h1><h1>HASTA <?=$this->hasta?></h1></td><td width="30%" align="right">Fecha: <?=date('d.m.Y')?><br/>Hora: <?=date('H:i:s')?><br/>Usuario: <?=$this->user?></td></tr>
+</table>
+<table width="100%">
+   <tr><th>Nro</th><th>Cr&eacute;dito</th><th>L&iacute;nea</th><th>Cliente Cod</th><th>Nombres</th><th>Fec. Desembolso</th><th>Fec. Term.</th><th>Plazo</th><th>Monto</th><th>Saldo Capital</th></tr>
+ <?
+   $num=0;
+foreach($this->cartera as $row){?>
+ 
+   <tr>
+     <td align="right"><?=++$num?></td>
+     <td><?=($row->K_VENCIO==1)?'<font color="red">':''?>
+       <?=($row->K_OTRO>1)?'<u>':''?>
+       <?=substr($row->K_CREDITO_COD,6,6)?>
+       <?=($row->K_OTRO>1)?'</u>':''?>
+       <?=($row->K_VENCIO==1)?'</font>':''?></td>
+     <td><?=($row->K_VENCIO==1)?'<font color="red">':''?>
+       <?=($row->K_OTRO>1)?'<u>':''?>       
+       <?=$row->K_LINEA_COD?>
+       <?=($row->K_OTRO>1)?'</u>':''?>
+       <?=($row->K_VENCIO==1)?'</font>':''?></td>
+     <td><?=($row->K_VENCIO==1)?'<font color="red">':''?>
+       <?=($row->K_OTRO>1)?'<u>':''?>
+       <?=substr($row->K_CLIENTE_COD,6,6)?>
+       <?=($row->K_OTRO>1)?'</u>':''?>
+       <?=($row->K_VENCIO==1)?'</font>':''?></td>
+     <td><?=($row->K_VENCIO==1)?'<font color="red">':''?>
+       <?=($row->K_OTRO>1)?'<u>':''?>
+       <?=$row->K_CLIENTE_NOM?>
+       <?=($row->K_OTRO>1)?'</u>':''?>
+       <?=($row->K_VENCIO==1)?'</font>':''?></td>
+     <td><?=($row->K_VENCIO==1)?'<font color="red">':''?>
+       <?=($row->K_OTRO>1)?'<u>':''?>
+       <?=$row->K_DESEMBOLSO_FEC?>
+       <?=($row->K_OTRO>1)?'</u>':''?>
+       <?=($row->K_VENCIO==1)?'</font>':''?></td>
+     <td><?=($row->K_VENCIO==1)?'<font color="red">':''?>
+       <?=($row->K_OTRO>1)?'<u>':''?>
+       <?=$row->K_FEC_FIN?>
+       <?=($row->K_OTRO>1)?'</u>':''?>
+       <?=($row->K_VENCIO==1)?'</font>':''?></td>
+     <td align="right"><?=($row->K_VENCIO==1)?'<font color="red">':''?>
+       <?=($row->K_OTRO>1)?'<u>':''?>
+       <?=$row->K_PLAZO?>
+       <?=($row->K_OTRO>1)?'</u>':''?>
+       <?=($row->K_VENCIO==1)?'</font>':''?></td>
+     <td align="right"><?=($row->K_VENCIO==1)?'<font color="red">':''?>
+       <?=($row->K_OTRO>1)?'<u>':''?>
+       <?=$row->K_MONTO?>
+       <?=($row->K_OTRO>1)?'</u>':''?>
+       <?=($row->K_VENCIO==1)?'</font>':''?></td>
+     <td align="right"><?=($row->K_VENCIO==1)?'<font color="red">':''?>
+       <?=($row->K_OTRO>1)?'<u>':''?>
+       <?=$row->K_SALDO_CAPITAL?>
+       <?=($row->K_OTRO>1)?'</u>':''?>
+       <?=($row->K_VENCIO==1)?'</font>':''?></td>
+
+   </tr>     
+<? 
+   $totalMonto+=$row->K_MONTO;
+   $totalSaldo+=$row->K_SALDO_CAPITAL;
+?>
+<?}?>
+<tr><td colspan="8" align="right"><b>TOTAL</b></td><td align="right"><?=$totalMonto?></td><td align="right"><?=$totalSaldo?></td></tr>
+</table>
+</body>
+</html>

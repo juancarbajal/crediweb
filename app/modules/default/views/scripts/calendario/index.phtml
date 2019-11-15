@@ -1,0 +1,32 @@
+<html>
+<head>
+<title>FECHA</title>
+</head>
+<body>
+<!--formulario de calendario-->
+<form><select name="anio">
+<?for($i=1940;$i<=2100;$i++){?>
+<option value="<?=$i?>"><?=$i?></option>
+<? }?>
+</select>
+<select name="mes">
+<? foreach($this->meses as $key=>$mes) { ?>
+<option name="<?=$key?>"><?=$mes?></option>
+<?}?>
+</select>
+</form>
+<table>
+<thead>
+<th>DOM</th>
+<th>LUN</th>
+<th>MAR</th>
+<th>MIE</th>
+<th>JUE</th>
+<th>VIE</th>
+<th>SAB</th>
+</thead>
+<tbody>
+</tbody>
+</table>
+</body>
+</html>

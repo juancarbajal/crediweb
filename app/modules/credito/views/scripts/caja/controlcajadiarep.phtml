@@ -1,0 +1,206 @@
+<html>
+<head>
+<link rel="stylesheet" href="<?=$this->baseUrl()?>/www/css/print.css" type="text/css" media="screen,print" />
+</head>
+<body>
+<table width="100%">
+<tr>
+<td width="10%"><img src="<?=$this->baseUrl()?>/www/img/empresa/logo_min.jpg"/></td>
+<td>
+<h1>CONTROL DE CAJA DIARIO</h1>
+<h1><?=$this->fecha?></h1>
+</td>
+<td width="20%">
+   Fecha: <?=date('Y-m-d')?><br/>
+   Hora: <?=date('H:i:s')?><br/>
+   Usuario: <?=$this->user?>
+</td>
+</table>
+
+<table width="100%" cellpadding="5">
+<tr><td align="center"><b>APERTURA</b></td><td align="center"><b>CIERRE</b></td></tr>
+
+<!--Control de cada caja -->
+<? foreach($this->cajas as $caja){?>
+<tr><td width="50%" valign="top"  style="border-right: 1px solid black;">
+
+
+<!--Caja de Ingreso-->
+<?if (count($this->tbi['i'][$caja->K_COD])>0){?>
+<table width="95%">
+<caption><?=$caja->K_COD.'-',$caja->K_NOM?></caption>
+<tr><th rowspan="2">BLLTS</th>
+<th colspan="2">SOL</th>
+<th colspan="2">DOL</th>
+</tr>
+<tr><th>CANT</th><th>TOTAL</th><th>CANT</th><th>TOTAL</th></tr>
+<tbody>
+                                     <? $ant=''?>
+                                     <?foreach ($this->tbi['i'][$caja->K_COD] as $tb){?>
+                                          <? if ($tb->K_VAL==$ant){?>
+                                              <td  align="right"><?=$tb->K_CANT?></td><td  align="right"><?=$tb->K_TOTAL?></td>
+                                          <?} else{?>
+                                                   <? if ($ant!=''){?></tr><?}?>
+                                                  <tr><td align="right"><?=$tb->K_VAL?></td><td  align="right"><?=$tb->K_CANT?></td><td  align="right"><?=$tb->K_TOTAL?></td>
+                                                   
+                                          <?}?>
+<? $ant=$tb->K_VAL?>
+                                    <?}/*end foreach*/?>
+                                  <tr><td align="right" class="bordesuperior"><b>TOTAL</b></td><? foreach ($this->tbi['ti'][$caja->K_COD] as $total){?><td class="bordesuperior"></td><td align="right"  class="bordesuperior"><b><?=$total->K_TOTAL?></b></td><?}?></tr>
+</tbody>
+</table>
+ <?}?>
+<!--Fin Caja de Ingreso-->
+
+</td>
+<td width="50%" valign="top">
+
+<!--Caja de Salida-->
+<?if (count($this->tbc['c'][$caja->K_COD])>0){?>
+<table width="95%">
+<caption><?=$caja->K_COD.'-',$caja->K_NOM?></caption>
+<tr><th rowspan="2">BLLTS</th>
+<th colspan="2">SOL</th>
+<th colspan="2">DOL</th>
+</tr>
+<tr><th>CANT</th><th>TOTAL</th><th>CANT</th><th>TOTAL</th></tr>
+<tbody>
+                                     <? $ant=''?>
+                                     <?foreach ($this->tbc['c'][$caja->K_COD] as $tb){?>
+                                          <? if ($tb->K_VAL==$ant){?>
+                                              <td  align="right"><?=$tb->K_CANT?></td><td  align="right"><?=$tb->K_TOTAL?></td>
+                                          <?} else{?>
+                                                   <? if ($ant!=''){?></tr><?}?>
+                                                  <tr><td align="right"><?=$tb->K_VAL?></td>
+                                                   <td  align="right"><?=$tb->K_CANT?></td><td  align="right"><?=$tb->K_TOTAL?></td>
+                                                   
+                                          <?}?>
+<? $ant=$tb->K_VAL?>
+                                    <?}/*end foreach*/?>
+
+                                  <tr><td align="right"  class="bordesuperior"><b>TOTAL</b></td><? foreach ($this->tbc['tc'][$caja->K_COD] as $total){?><td class="bordesuperior"></td><td align="right"  class="bordesuperior"><b><?=$total->K_TOTAL?></b></td><?}?></tr>
+</tbody>
+</table>
+ <?}?>
+<!--Fin Caja de Salida-->
+
+</td></tr>
+<? }/*end foreach*/?>
+<!--Fin de Control de cada caja -->
+
+<!--Totales del Control de Caja -->
+<tr><td width="50%" valign="top"  style="border-right: 1px solid black;">
+<!--Total Caja de Ingreso-->
+<table width="95%">
+<caption>TOTAL APERTURA</caption>
+<tr><th rowspan="2">BLLTS</th>
+<th colspan="2">SOL</th>
+<th colspan="2">DOL</th>
+</tr>
+<tr><th>CANT</th><th>TOTAL</th><th>CANT</th><th>TOTAL</th></tr>
+<tbody>
+                                     <? $ant=''?>
+                                     <?foreach ($this->total['i'] as $tb){?>
+                                          <? if ($tb->K_VAL==$ant){?>
+                                              <td  align="right"><?=$tb->K_CANT?></td><td  align="right"><?=$tb->K_TOTAL?></td>
+                                          <?} else{?>
+                                                   <? if ($ant!=''){?></tr><?}?>
+                                                  <tr><td align="right"><?=$tb->K_VAL?></td>
+                                                   <td  align="right"><?=$tb->K_CANT?></td><td  align="right"><?=$tb->K_TOTAL?></td>
+                                                   
+                                          <?}?>
+<? $ant=$tb->K_VAL?>
+                                    <?}/*end foreach*/
+?>
+ <tr><td align="right"  class="bordesuperior"><b>TOTAL</b></td><? foreach ($this->total['ti'] as $total){?> <? if (!isset($totalInicioCaja)) $totalInicioCaja=$total->K_TOTAL?><td  class="bordesuperior"></td><td align="right" class="bordesuperior"><b><?=$total->K_TOTAL?></b></td><?}?></tr>
+
+</tbody>
+</table>
+<!--Fin de Total Caja de Inicio-->
+</td>
+
+<td width="50%" valign="top">
+<!--Total Caja de Cierre-->
+<table width="95%">
+<caption>TOTAL CIERRE</caption>
+<tr><th rowspan="2">BLLTS</th>
+<th colspan="2">SOL</th>
+<th colspan="2">DOL</th>
+</tr>
+<tr><th>CANT</th><th>TOTAL</th><th>CANT</th><th>TOTAL</th></tr>
+<tbody>
+                                     <? $ant=''?>
+                                     <?foreach ($this->total['c'] as $tb){?>
+                                          <? if ($tb->K_VAL==$ant){?>
+                                              <td  align="right"><?=$tb->K_CANT?></td><td  align="right"><?=$tb->K_TOTAL?></td>
+                                          <?} else{?>
+                                                   <? if ($ant!=''){?></tr><?}?>
+                                                  <tr><td align="right"><?=$tb->K_VAL?></td>
+                                                   <td  align="right"><?=$tb->K_CANT?></td><td  align="right"><?=$tb->K_TOTAL?></td>
+                                                   
+                                          <?}?>
+<? $ant=$tb->K_VAL?>
+                                    <?}/*end foreach*/?>
+ <tr><td align="right" class="bordesuperior"><b>TOTAL</b></td><? foreach ($this->total['tc'] as $total){?> <? if (!isset($totalCierreCaja)) $totalCierreCaja=$total->K_TOTAL;?><td class="bordesuperior"></td><td align="right" class="bordesuperior"><b><?=$total->K_TOTAL?></b></td><?}?></tr>
+
+</tbody>
+</table>
+<!--Fin de Total Caja de Cierre-->
+
+</td>
+</tr>
+
+</table>
+
+<hr>
+<!--Ingresos y Salidas-->
+<table width="100%" cellpadding="5">
+   <tr><td align="center">INGRESOS EXTRAS O PRESTAMOS (+)</td><td align="center">GASTOS DEL DIA(-)</td></tr>
+<tr><td  valign="top" width="50%">
+<table width="100%">
+<thead><th>NRO.</th><th>CONCEPTO</th><th>MONTO</th></thead>
+
+   <?$total=0;$nro=0;?>
+   <?foreach($this->ingreso as $s){?>
+<tr><td><?=++$nro?></td><td><?=substr($s->K_COD,6,6)?> - <?=$s->K_NOM_LARGO?> - <?=$s->K_DET?> - <?=$s->K_USR?></td><td align="right"><?=$s->K_MONTO?></td></tr>
+   <? $total+=$s->K_MONTO;}?>
+
+   <?foreach($this->recibosIncoherentes as $s){?>
+<tr><td><?=++$nro?></td><td><?=substr($s->K_COD,6,6)?> - <?=$s->K_FEC_DOC?> - <?=$s->K_NOM?> - <?=$s->K_USR?></td><td align="right"><?=$s->K_MONTO?></td></tr>
+   <? $total+=$s->K_MONTO;}?>
+
+   <tr><td  class="bordesuperior"></td><td align="right"  class="bordesuperior"><b>TOTAL</b></td><td align="right"  class="bordesuperior"><b><?=number_format($total,2,'.','')?></b></td></tr>
+</table>
+
+</td><td valign="top"  width="50%">
+<!--Ingresos y Salidas-->
+<table width="100%">
+<thead><th>NRO.</th><th>CONCEPTO</th><th>MONTO</th></thead>
+   <?$totalGastos=0;?>
+   <?foreach($this->salida as $s){?>
+<tr><td><?=$s->K_NRO?></td><td><?=$s->K_CLIENTE?> - <?=$s->K_DET?> - <?=$s->K_USR?></td><td align="right"><?=$s->K_MONTO?></td></tr>
+         <? $totalGastos+=$s->K_MONTO;}?>
+<tr><td  class="bordesuperior"></td><td align="right"  class="bordesuperior"><b>TOTAL</b></td><td align="right"  class="bordesuperior"><b><?=number_format($totalGastos,2,'.','')?></b></td></tr>
+</table>
+</td><tr></table>
+<hr>
+<br>
+<table width="25%" border="1" cellpadding="0">
+<tr><td>TOTAL DE DESEMBOLSOS DEL DIA</td><td align="right"><?=$this->desembolsos[0]->K_MONTO?></td></tr>
+<tr><td>ITF TOTAL DE DESEMBOLSOS</td><td align="right"><?=$this->desembolsos[0]->K_ITF?></td></tr>
+<tr><td>RECIBOS DESDE <?=$this->recibos[0]->K_DESDE?> HASTA <?=$this->recibos[0]->K_HASTA?></td><td  align="right"><?=$this->recibos[0]->K_MONTO?></td><tr>
+</table>
+<br>
+<table width="25%" border="1" cellpadding="0">
+<tr><td>REMESAS A CAJA</td><td  align="right"><?=$totalInicioCaja?></td></tr>
+<tr><td>RECIBOS COBRADOS</td><td  align="right"><?=$this->recibos[0]->K_MONTO?></td></tr>
+<tr><td>ITF</td><td  align="right"><?=$this->desembolsos[0]->K_ITF?></td></tr>
+                <tr><td><b>SUBTOTAL</b></td><td align="right"><b><?$subtotal=$this->remesas+$this->recibos[0]->K_MONTO+$this->desembolsos[0]->K_ITF+$totalInicioCaja; echo number_format($subtotal,2,'.','')?></b></td></tr>
+<tr><td>Dsbls y Egresos</td><td align="right"><?=$this->desembolsos[0]->K_MONTO?></td></tr>
+                  <tr><td>SALDO CR&Eacute;DITO</td><td align="right"><?=number_format($subtotal-$this->desembolsos[0]->K_MONTO,2,'.',' ')?></td></tr>
+<tr><td>GASTOS DEL DIA</td><td align="right"><?=number_format($totalGastos,2,'.','')?></td></tr>
+                                            <tr><td><b>SALDO TOTAL</b></td><td align="right"><b><?$saldo=$subtotal-$this->desembolsos[0]->K_MONTO-$totalGastos; echo number_format($saldo,2,'.','')?></b></td></tr>
+                                              <tr><td>DIFERENCIA</td><td align='right'><font color='<?=($totalCierreCaja>$saldo)?'blue':'red';?>'><?=number_format($totalCierreCaja-$saldo,2,'.','')?></font></td></tr>
+   </table>
+</body> 
+</html>

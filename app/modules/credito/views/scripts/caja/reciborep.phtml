@@ -1,0 +1,28 @@
+<html>
+<head>
+<link rel="stylesheet" href="<?=$this->baseUrl()?>/www/css/print_small.css" type="text/css" media="screen,print" />
+</head>
+<body>
+<hr>
+<center>FIRMA</center>
+<table width="100%">
+<tr>
+<td width"50%">
+<table width="100%">
+   <tr><td width="35%"><?=$this->empresa->NOM?><BR/>RUC: <?=$this->empresa->COD?></td><td><h3 align="center">RECIBO DE PAGO</h3></td><td width="35%" align="right">Nro.: <?=substr($this->recibo->K_RECIBO_COD,6,6)?><br/>Emitido: <?=$this->recibo->K_RECIBO_FEC?> <br/>Fecha: <?=date('Y-m-d')?><br/><?=date('H:i:s')?></td></tr>
+<tr><td colspan="3">CLIENTE: <?=substr($this->recibo->K_CLIENTE_COD,6,6)?> - <?=$this->recibo->K_CLIENTE_NOM?></td></tr>
+</table>
+<table width="100%">
+<caption>DETALLE</caption>
+<thead><th width="10%">Cant</th><th width="65%">Descripci&oacute;n</th><th width="20%">Importe</th></thead>
+<tbody>
+<tr><td>01</td><td><?=$this->recibo->K_RECIBO_DET?></td><td align="right"><?=number_format($this->recibo->K_RECIBO_SUB_TOTAL,2,'.',' ')?></td></tr>
+<tr><td></td><td>IGV</td></td><td align="right"><?=number_format($this->recibo->K_RECIBO_IGV,2,'.',' ')?></td></tr>
+<tr><td></td><td align="right"><b><font size="10px">TOTAL RECIBIDO (<?=$this->recibo->K_MONEDA_NOM?>) <?=$this->recibo->K_MONEDA_ABREV?></b></td><td align="right"><b><?=number_format($this->recibo->K_RECIBO_MONTO,2,'.',' ')?></font></b></td></tr>
+</tbody>
+</table>
+</td>
+</tr>
+</table>
+</body>
+</html>

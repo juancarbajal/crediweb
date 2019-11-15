@@ -1,0 +1,65 @@
+<html>
+<head>
+<title><?=$this->title ?> - <?=$this->subTitle ?></title>
+<link rel="stylesheet" href="<?=$this->baseUrl()?>/www/css/print_planilla.css" type="text/css" media="screen,print" />
+</head>
+<body>
+<? $cont=0;?>
+<? foreach($this->planillas as $planilla){ ?>
+<table width="100%" cellspacing="10" cellpading="0"> <!--TABLA DE PLANILLA-->
+<tr>
+
+<td width="50%">
+<table border="0" width="100%">
+<tr><td>Empresa</td><td><?=$this->empresa->NOM?></td><td>Fecha</td><td><?=$this->fec?></td></tr>
+<tr><td>RUC</td><td><?=$this->empresa->COD?></td><td>Cr&eacute;dito</td><td><?=substr($planilla->K_CREDITO_COD,6,6)?></td></tr>
+<tr><td>Cliente</td><td colspan="3"><?=substr($planilla->K_CLIENTE_COD,6,6)?> <?=$planilla->K_CLIENTE_NOM?></td></tr>
+<tr><td>Dir.</td><td colspan="3"><?=$planilla->K_CLIENTE_DIRE?></td></tr>
+<tr><td>Localidad</td><td colspan="3"><? $x=explode('-',$planilla->K_LOCALIDAD_NOM); echo $x[2];?></td></tr>
+<tr><td>Dir. Neg.</td><td colspan="3"><?=$planilla->K_NEGOCIO_DIRE?></td></tr>
+<!--<tr><td>Cobrador</td><td><?=$planilla->K_COBRADOR_NOM?></td></tr>-->
+</table>
+<div class="cuadro">
+<table border="0" align="center">
+<tr><td align="right">Saldo Deuda a la Fecha</td><td align="right"><?=number_format($planilla->K_SUBTOTAL,2,'.',' ')?></td></tr>
+<tr><td align="right">Mora</td><td align="right"><?=number_format($planilla->K_MORA,2,'.',' ')?></td></tr>
+<tr><td align="right">ITF</td><td align="right"><?=number_format($planilla->K_ITF,2,'.',' ')?></td></tr>
+<tr><td></td><td><hr/></td></tr>
+<tr><td align="right">TOTAL AL PAGAR</td><td align="right"><?=number_format($planilla->K_TOTAL,2,'.',' ')?></td><td><?=$planilla->K_MONEDA?></td></tr>
+</table>
+</div>
+PENDIENTE: <?=$planilla->K_PLAZO_NO_PAGADO-1?>  / <?=$planilla->K_PLAZO_TOTAL?>
+</td>
+<td width="50%">
+<table border="0" width="100%">
+<tr><td>Empresa</td><td><?=$this->empresa->NOM?></td><td>Fecha</td><td><?=$this->fec?></td></tr>
+<tr><td>RUC</td><td><?=$this->empresa->COD?></td><td>Cr&eacute;dito</td><td><?=substr($planilla->K_CREDITO_COD,6,6)?></td></tr>
+<tr><td>Cliente</td><td colspan="3"><?=substr($planilla->K_CLIENTE_COD,6,6)?> <?=$planilla->K_CLIENTE_NOM?></td></tr>
+<tr><td>Dir.</td><td colspan="3"><?=$planilla->K_CLIENTE_DIRE?></td></tr>
+<tr><td>Localidad</td><td colspan="3"><? $x=explode('-',$planilla->K_LOCALIDAD_NOM); echo $x[2];?></td></tr>
+<tr><td>Dir. Neg.</td><td colspan="3"><?=$planilla->K_NEGOCIO_DIRE?></td></tr>
+<!--<tr><td>Cobrador</td><td><?=$planilla->K_COBRADOR_NOM?></td></tr>-->
+</table>
+<div class="cuadro">
+<table border="0" align="center">
+<tr><td align="right">Saldo Deuda a la Fecha</td><td align="right"><?=number_format($planilla->K_SUBTOTAL,2,'.',' ')?></td></tr>
+<tr><td align="right">Mora</td><td align="right"><?=number_format($planilla->K_MORA,2,'.',' ')?></td></tr>
+<tr><td align="right">ITF</td><td align="right"><?=number_format($planilla->K_ITF,2,'.',' ')?></td></tr>
+<tr><td></td><td><hr/></td></tr>
+<tr><td align="right">TOTAL AL PAGAR</td><td align="right"><?=number_format($planilla->K_TOTAL,2,'.',' ')?></td><td><?=$planilla->K_MONEDA?></td></tr>
+</table>
+</div>
+PENDIENTE: <?=$planilla->K_PLAZO_NO_PAGADO-1?>  / <?=$planilla->K_PLAZO_TOTAL?>
+</td>
+</tr>
+</table> <!--TABLA DE PLANILLA-->
+<? $cont++; 
+   if ($cont==5){
+   $cont=0; 
+?>
+<br class="saltopagina">
+<?
+}?>
+<? } ?>
+</body>
+</html>

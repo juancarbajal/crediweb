@@ -1,0 +1,65 @@
+;; Object credito/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "credito/"
+  :tables (list 
+   (semanticdb-table "index.phtml"
+    :major-mode 'php-mode
+    :tags '(("Array" function (:prototype-flag t :type ("new" type (:type "class") nil nil)) nil [768 1303]) ("aval1" variable (:default-value "''" :type ("var" type (:type "class") nil nil)) nil [1304 1317]) ("aval2" variable (:default-value "''" :type ("var" type (:type "class") nil nil)) nil [1318 1331]) ("f_cargar" function (:type ("function" type (:type "class") nil nil)) nil [1332 1396]) ("f_guardar" function (:type ("function" type (:type "class") nil nil)) nil [1397 2962]) ("f_anadir_aval" function (:type ("function" type (:type "class") nil nil)) nil [2963 3300]) ("f_capturar_linea" function (:type ("function" type (:type "class") nil nil)) nil [3301 4049]) ("f_capturar_cliente" function (:arguments (("" variable (:type ("codigo" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [4078 4085])) :type ("function" type (:type "class") nil nil)) nil [4050 5117]) ("f_capturar_ciiu" function (:arguments (("" variable (:type ("codigo" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [5143 5150])) :type ("function" type (:type "class") nil nil)) nil [5118 5547]) ("f_capturar_aval" function (:arguments (("" variable (:type ("codigo" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [5573 5580])) :type ("function" type (:type "class") nil nil)) nil [5548 7017]) ("f_buscar_cliente" function (:type ("function" type (:type "class") nil nil)) nil [7018 7250]) ("f_buscar_codigo_cliente" function (:arguments (("" variable (:type ("obj" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [7284 7288])) :type ("function" type (:type "class") nil nil)) nil [7251 7465]) ("f_buscar_codigo_ciiu" function (:type ("function" type (:type "class") nil nil)) nil [7466 7697]) ("f_imprimir" function (:type ("function" type (:type "class") nil nil)) nil [7698 8032]) ("f_validar" function (:type ("function" type (:type "class") nil nil)) nil [8033 11028]) ("f_cambiar_modalidad" function (:type ("function" type (:type "class") nil nil)) nil [11062 11789]) ("f_calcular_negocio" function (:type ("function" type (:type "class") nil nil)) nil [11790 12192]) ("foreach" function (:arguments (("" variable (:type ("$this" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [14684 14690]) ("as" variable (:type ("lineas" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [14691 14707]) ("" variable (:type ("$linea" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [14701 14708])) :type "int") nil [14676 14798]) ("foreach" function (:arguments (("" variable (:type ("$this" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [16449 16455]) ("as" variable (:type ("modalidades" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [16456 16481]) ("" variable (:type ("$modalidad" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [16471 16482])) :type "int") nil [16441 16589]) ("foreach" function (:arguments (("" variable (:type ("$this" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [16764 16770]) ("as" variable (:type ("destinos" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [16771 16791]) ("" variable (:type ("$destino" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [16783 16792])) :type "int") nil [16756 16894]))
+    :file "index.phtml"
+    :pointmax 23029
+    :unmatched-syntax 'nil
+    )
+   (semanticdb-table "linea.phtml"
+    :major-mode 'php-mode
+    :tags 'nil
+    :file "linea.phtml"
+    )
+   (semanticdb-table "persona.phtml"
+    :major-mode 'php-mode
+    :tags 'nil
+    :file "persona.phtml"
+    )
+   (semanticdb-table "cliente.phtml"
+    :major-mode 'php-mode
+    :tags 'nil
+    :file "cliente.phtml"
+    )
+   (semanticdb-table "autorizar.phtml"
+    :major-mode 'php-mode
+    :tags '(("f_cargar" function (:type ("function" type (:type "class") nil nil)) nil [668 786]) ("f_capturar_linea" function (:type ("function" type (:type "class") nil nil)) nil [787 1535]) ("f_proceso" function (:arguments (("" variable (:type ("url" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1555 1559])) :type ("function" type (:type "class") nil nil)) nil [1536 1946]) ("f_anular" function (:type ("function" type (:type "class") nil nil)) nil [1947 2028]) ("f_denegar" function (:type ("function" type (:type "class") nil nil)) nil [2029 2112]) ("f_guardar" function (:type ("function" type (:type "class") nil nil)) nil [2113 3349]) ("f_salir" function (:type ("function" type (:type "class") nil nil)) nil [3350 3451]) ("f_validar" function (:type ("function" type (:type "class") nil nil)) nil [3452 3776]) ("f_cronograma" function (:type ("function" type (:type "class") nil nil)) nil [3777 4311]) ("f_cambiar_modalidad" function (:type ("function" type (:type "class") nil nil)) nil [4345 5001]) ("foreach" function (:arguments (("" variable (:type ("$this" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [6267 6273]) ("as" variable (:type ("lineas" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [6274 6290]) ("" variable (:type ("$linea" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [6284 6291])) :type "int") nil [6259 6443]) ("foreach" function (:arguments (("" variable (:type ("$this" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [8082 8088]) ("as" variable (:type ("modalidades" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [8089 8114]) ("" variable (:type ("$modalidad" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [8104 8115])) :type "int") nil [8074 8294]) ("foreach" function (:arguments (("" variable (:type ("$this" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [8466 8472]) ("as" variable (:type ("destinos" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [8473 8493]) ("" variable (:type ("$destino" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [8485 8494])) :type "int") nil [8458 8665]) ("foreach" function (:arguments (("" variable (:type ("$this" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [9403 9409]) ("as" variable (:type ("cobradores" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [9410 9433]) ("" variable (:type ("$cobrador" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [9424 9434])) :type "int") nil [9395 9541]))
+    :file "autorizar.phtml"
+    :pointmax 10175
+    :unmatched-syntax 'nil
+    )
+   (semanticdb-table "simulacion.phtml"
+    :major-mode 'php-mode
+    :tags '(("f_cargar" function (:type ("function" type (:type "class") nil nil)) nil [755 819]) ("f_capturar_linea" function (:type ("function" type (:type "class") nil nil)) nil [820 1535]) ("f_validar" function (:type ("function" type (:type "class") nil nil)) nil [1536 1934]) ("f_cronograma" function (:type ("function" type (:type "class") nil nil)) nil [1935 2262]) ("foreach" function (:arguments (("" variable (:type ("$this" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2574 2580]) ("as" variable (:type ("lineas" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2581 2597]) ("" variable (:type ("$linea" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2591 2598])) :type "int") nil [2566 2680]) ("foreach" function (:arguments (("" variable (:type ("$this" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3715 3721]) ("as" variable (:type ("modalidades" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3722 3747]) ("" variable (:type ("$modalidad" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3737 3748])) :type "int") nil [3707 3834]) ("foreach" function (:arguments (("" variable (:type ("$this" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3947 3953]) ("as" variable (:type ("destinos" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3954 3974]) ("" variable (:type ("$destino" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3966 3975])) :type "int") nil [3939 4057]))
+    :file "simulacion.phtml"
+    :pointmax 4384
+    :unmatched-syntax 'nil
+    )
+   (semanticdb-table "buscarciiu.phtml"
+    :major-mode 'php-mode
+    :tags '(("f_cargar" function (:type ("function" type (:type "class") nil nil)) nil [796 838]) ("f_buscar" function (:type ("function" type (:type "class") nil nil)) nil [839 976]) ("f_capturar" function (:arguments (("" variable (:type ("cod" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [997 1001])) :type ("function" type (:type "class") nil nil)) nil [977 1091]))
+    :file "buscarciiu.phtml"
+    :pointmax 1810
+    :unmatched-syntax 'nil
+    )
+   (semanticdb-table "buscar.phtml"
+    :major-mode 'php-mode
+    :tags '(("f_cargar" function (:type ("function" type (:type "class") nil nil)) nil [835 879]) ("f_buscar" function (:type ("function" type (:type "class") nil nil)) nil [880 1041]) ("f_capturar" function (:arguments (("" variable (:type ("cod" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1062 1066])) :type ("function" type (:type "class") nil nil)) nil [1042 1156]))
+    :file "buscar.phtml"
+    :pointmax 2149
+    :unmatched-syntax 'nil
+    )
+   (semanticdb-table "listaautorizar.phtml"
+    :major-mode 'php-mode
+    :tags '(("f_cargar" function (:type ("function" type (:type "class") nil nil)) nil [731 810]) ("f_proceso" function (:arguments (("" variable (:type ("url" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [830 834])) :type ("function" type (:type "class") nil nil)) nil [811 1181]) ("f_anular" function (:type ("function" type (:type "class") nil nil)) nil [1182 1263]) ("f_denegar" function (:type ("function" type (:type "class") nil nil)) nil [1264 1347]) ("f_autorizar" function (:type ("function" type (:type "class") nil nil)) nil [1348 1471]) ("foreach" function (:arguments (("" variable (:type ("$this" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2030 2036]) ("as" variable (:type ("lista" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2037 2054]) ("" variable (:type ("$credito" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2046 2055])) :type "int") nil [2022 2363]))
+    :file "listaautorizar.phtml"
+    :pointmax 2763
+    )
+   )
+  :file "semantic.cache"
+  :semantic-tag-version "2.0pre3"
+  :semanticdb-version "2.0pre3"
+  )

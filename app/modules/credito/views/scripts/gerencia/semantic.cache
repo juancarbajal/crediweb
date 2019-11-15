@@ -1,0 +1,16 @@
+;; Object gerencia/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "gerencia/"
+  :tables (list 
+   (semanticdb-table "index.phtml"
+    :major-mode 'php-mode
+    :tags '(("loadPage" function (:arguments (("" variable (:type ("url" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [666 670])) :type ("function" type (:type "class") nil nil)) nil [648 718]) ("f_salir" function (:type ("function" type (:type "class") nil nil)) nil [719 788]))
+    :file "index.phtml"
+    :pointmax 5854
+    :unmatched-syntax 'nil
+    )
+   )
+  :file "semantic.cache"
+  :semantic-tag-version "2.0pre3"
+  :semanticdb-version "2.0pre3"
+  )

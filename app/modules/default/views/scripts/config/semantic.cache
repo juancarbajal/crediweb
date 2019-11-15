@@ -1,0 +1,37 @@
+;; Object config/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "config/"
+  :tables (list 
+   (semanticdb-table "empleado.phtml"
+    :major-mode 'php-mode
+    :tags '(("Array" function (:prototype-flag t :type ("new" type (:type "class") nil nil)) nil [769 899]) ("Array" function (:prototype-flag t :type ("new" type (:type "class") nil nil)) nil [923 940]) ("Validate" function (:prototype-flag t :type ("new" type (:type "class") nil nil)) nil [1005 1020]) ("addRules" function (:prototype-flag t :type "int") nil [1023 1093]) ("addRules" function (:prototype-flag t :type "int") nil [1096 1163]) ("addRules" function (:prototype-flag t :type "int") nil [1166 1236]) ("addRules" function (:prototype-flag t :type "int") nil [1239 1323]) ("addRules" function (:prototype-flag t :type "int") nil [1326 1410]) ("addRules" function (:prototype-flag t :type "int") nil [1413 1487]) ("addRules" function (:prototype-flag t :type "int") nil [1490 1564]) ("addRules" function (:prototype-flag t :type "int") nil [1651 1718]) ("f_cargar" function (:type ("function" type (:type "class") nil nil)) nil [1719 1858]) ("f_cargar_uno" function (:arguments (("" variable (:type ("cod" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1881 1885])) :type ("function" type (:type "class") nil nil)) nil [1859 1948]) ("f_guardar" function (:type ("function" type (:type "class") nil nil)) nil [1949 2497]) ("f_eliminar" function (:type ("function" type (:type "class") nil nil)) nil [2498 2588]) ("foreach" function (:arguments (("" variable (:type ("$this" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3835 3841]) ("as" variable (:type ("agencias" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3842 3862]) ("" variable (:type ("$agencia" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3854 3863])) :type "int") nil [3827 4001]) ("foreach" function (:arguments (("" variable (:type ("$this" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [4270 4276]) ("as" variable (:type ("tipoEmpleado" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [4277 4306]) ("" variable (:type ("$tipoEmpleado" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [4293 4307])) :type "int") nil [4262 4455]) ("foreach" function (:arguments (("" variable (:type ("$this" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [5134 5140]) ("as" variable (:type ("roles" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [5141 5154]) ("" variable (:type ("$rol" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [5150 5155])) :type "int") nil [5126 5283]))
+    :file "empleado.phtml"
+    :pointmax 6046
+    :unmatched-syntax 'nil
+    )
+   (semanticdb-table "agencia.phtml"
+    :major-mode 'php-mode
+    :tags '(("Array" function (:prototype-flag t :type ("new" type (:type "class") nil nil)) nil [769 815]) ("Array" function (:prototype-flag t :type ("new" type (:type "class") nil nil)) nil [839 856]) ("Validate" function (:prototype-flag t :type ("new" type (:type "class") nil nil)) nil [920 935]) ("addRules" function (:prototype-flag t :type "int") nil [938 1009]) ("addRules" function (:prototype-flag t :type "int") nil [1012 1083]) ("addRules" function (:prototype-flag t :type "int") nil [1086 1161]) ("addRules" function (:prototype-flag t :type "int") nil [1164 1239]) ("f_cargar" function (:type ("function" type (:type "class") nil nil)) nil [1240 1376]) ("f_cargar_uno" function (:arguments (("" variable (:type ("cod" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1399 1403])) :type ("function" type (:type "class") nil nil)) nil [1377 1466]) ("f_guardar" function (:type ("function" type (:type "class") nil nil)) nil [1467 1781]) ("f_eliminar" function (:type ("function" type (:type "class") nil nil)) nil [1782 1872]))
+    :file "agencia.phtml"
+    :pointmax 3375
+    :unmatched-syntax 'nil
+    )
+   (semanticdb-table "localidad.phtml"
+    :major-mode 'php-mode
+    :tags '(("Array" function (:prototype-flag t :type ("new" type (:type "class") nil nil)) nil [769 792]) ("Array" function (:prototype-flag t :type ("new" type (:type "class") nil nil)) nil [816 833]) ("Validate" function (:prototype-flag t :type ("new" type (:type "class") nil nil)) nil [899 914]) ("addRules" function (:prototype-flag t :type "int") nil [917 988]) ("addRules" function (:prototype-flag t :type "int") nil [991 1062]) ("f_cargar" function (:type ("function" type (:type "class") nil nil)) nil [1063 1204]) ("f_cargar_uno" function (:arguments (("" variable (:type ("cod" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1227 1231])) :type ("function" type (:type "class") nil nil)) nil [1205 1294]) ("f_guardar" function (:type ("function" type (:type "class") nil nil)) nil [1295 1563]) ("f_eliminar" function (:type ("function" type (:type "class") nil nil)) nil [1564 1654]))
+    :file "localidad.phtml"
+    :pointmax 2766
+    :unmatched-syntax 'nil
+    )
+   (semanticdb-table "empresa.phtml"
+    :major-mode 'php-mode
+    :tags '(("f_cargar" function (:type ("function" type (:type "class") nil nil)) nil [749 1061]) ("f_guardar" function (:type ("function" type (:type "class") nil nil)) nil [1062 1417]))
+    :file "empresa.phtml"
+    :pointmax 2277
+    :unmatched-syntax 'nil
+    )
+   )
+  :file "semantic.cache"
+  :semantic-tag-version "2.0pre3"
+  :semanticdb-version "2.0pre3"
+  )

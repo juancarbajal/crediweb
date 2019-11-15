@@ -1,0 +1,77 @@
+<?
+/**
+ * DescripciÅÛn Corta
+ * 
+ * DescripciÅÛn Larga
+ * 
+ * @copyright  Copyright (c) 2008 Juan Carbajal Paxi <juancarbajal@gmail.com>
+ * @license    Leer el archivo LICENSE
+ * @version    1.0
+ * @since      Archivo disponible desde su version 1.0
+ */
+
+/**
+  * DescripciÅÛn Corta
+   * DescripciÅÛn Larga
+    * @category   
+    * @package    
+    * @copyright  Copyright (c) 2008 Juan Carbajal Paxi <juancarbajal@gmail.com>
+    * @license    Leer archivo LICENSE
+    */
+class Infocorp_EnvioController extends Quipu_Controller_Action { 
+  /**
+   * 
+   * @param type name desc
+   * @uses Clase::methodo()
+   * @return type desc
+   */
+  function equifaxmesAction () { 
+    $this->view->title='Equifax Mensual';
+    
+  } //end function
+  /**
+   * 
+   * @param type name desc
+   * @uses Clase::methodo()
+   * @return type desc
+   */
+  function equifaxmesenvioAction () { 
+    $mes=$_REQUEST['MES'];
+    $anio=$_REQUEST['ANIO'];
+    $f=new PlaneFile("equifax_{$mes}_{$anio}",
+                     array(
+                           'PER'=>6,
+                           'COD'=>6,
+                           'COD_CLIENTE'=>30,
+                           'DOC_TIPO'=>1,
+                           'DOC_NUM'=>12,
+                           'RAZON'=>100,
+                           'APE_PAT'=>20,
+                           'APE_MAT'=>20,
+                           'NOM'=>30,
+                           'TIP_PER'=>1,//TIPO DE PERSONA
+                           'MN_DDV'=>13,//DEUDA DIRECTA VIGENTE
+                           'MN_DDR'=>13,//DEUDA DIRECTA REFINANCIADA
+                           'MN_DDV_MEN_30'=>13, //DEUDA DIRECTA VENCIDA MENOR O IGUAL A 30 DIAS
+                           'MN_DDV_MAY_30'=>13, //DEUDA DIRECTA VENCIDA MAYOR A 30 DIAS
+                           'MN_DD_COB_JUD'=>13, //DEUDA DIRECTA EN COBRANZA JUDICIAL
+                           'MN_DI'=>13, //DEUDA INDIRECTA
+                           'MN_DA'=>13, //DEUDA AVALADA
+                           'MN_LC'=>13,//LINEA DE CREDITO
+                           'MN_CC'=>13,//CREDITOS CASTIGADOS
+                           'ME_DDV'=>13,//DEUDA DIRECTA VIGENTE
+                           'ME_DDR'=>13,//DEUDA DIRECTA REFINANCIADA
+                           'ME_DDV_MEN_30'=>13, //DEUDA DIRECTA VENCIDA MENOR O IGUAL A 30 DIAS
+                           'ME_DDV_MAY_30'=>13, //DEUDA DIRECTA VENCIDA MAYOR A 30 DIAS
+                           'ME_DD_COB_JUD'=>13, //DEUDA DIRECTA EN COBRANZA JUDICIAL
+                           'ME_DI'=>13, //DEUDA INDIRECTA
+                           'ME_DA'=>13, //DEUDA AVALADA
+                           'ME_LC'=>13,//LINEA DE CREDITO
+                           'ME_CC'=>13, //CREDITOS CASTIGADOS
+                           'CAL'=>20 //CALIFICACION
+                           )
+                     );
+  } //end function
+  
+} //end class
+?>

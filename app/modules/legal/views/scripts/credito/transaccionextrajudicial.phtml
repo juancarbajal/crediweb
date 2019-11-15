@@ -1,0 +1,111 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+'<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n".
+  '<?xml-stylesheet href="'.$this->baseUrl().'/www/css/view.css" type="text/css"?>'."\n";
+?>
+<window title='<?=$this->title.' : '.$this->subTitle?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' >
+<script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+<script src='<?=$this->baseUrl()?>/www/js/validate.prototype.js' />
+<script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js' />
+<keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+<script>
+function f_buscar_credito(){
+  Quipu.open("<?=$this->url(array('module'=>'credito','controller'=>'credito','action'=>'buscardesembolso'))?>?f=f_capturar_credito");
+}
+function f_limpiar(){
+                 $('CREDITO_COD').value='';
+                 $('CLIENTE_COD').value='';
+                 $('CLIENTE_NOM').value='';
+                 $('AVAL_COD').value='';
+                 $('AVAL_NOM').value='';
+                 $('MONTO').value='';
+                 $('PLAZO').value='';
+                 $('MONTO_MORA').value='0.00';
+                 $('PLAZO_MORA').value='0';
+                 $('FEC_INI_MORA').value='<?=date('Y-m-d')?>';
+                 $('FEC_EMISION').value='<?=date('Y-m-d')?>';
+                 $('btnDocumento').setAttribute('disabled','true');
+}
+function f_capturar_credito(cod){
+  new Ajax.Request( 
+                   '<?=$this->url(array('action'=>'transaccionextrajudicial'))?>',
+  { method:'post',
+      parameters: { op:'getcredito', COD: cod}, 
+             onSuccess: function(t) {
+               r=t.responseJSON;
+               if (r.code==0){ 
+                 rs=r.data;
+                 $('CREDITO_COD').value=rs.K_CREDITO_COD;
+                 $('CLIENTE_COD').value=rs.K_CLIENTE_COD;
+                 $('CLIENTE_NOM').value=rs.K_CLIENTE_NOM;
+                 $('AVAL_COD').value=rs.K_AVAL_COD;
+                 $('AVAL_NOM').value=rs.K_AVAL_NOM;
+                 $('MONTO').value=rs.K_MONTO;
+                 $('PLAZO').value=rs.K_PLAZO;
+                 $('MONTO_MORA').value=rs.K_MONTO_MORA;
+                 $('PLAZO_MORA').value=rs.K_PLAZO_MORA;
+                 $('FEC_INI_MORA').value=rs.K_FEC_INI_MORA;
+                 $('FEC_EMISION').value=rs.K_FEC_EMISION;
+                 if (eval(rs.K_PLAZO_MORA)==0){
+                   $('btnDocumento').setAttribute('disabled','true');
+                 }
+                 else{
+                   $('btnDocumento').setAttribute('disabled','false');
+                 }
+                 
+               } 
+             } 
+  } );
+}
+function f_guardar_mora(){
+  new Ajax.Request( 
+                   '<?=$this->url(array('action'=>'transaccionextrajudicial'))?>',
+                   { method:'post',
+                       parameters: {
+                     op:'ins',
+                     COD:$('CREDITO_COD').value,
+                         MONTO: $('MONTO_MORA').value,
+                         PLAZO: $('PLAZO_MORA').value,
+                         FEC_INI: $('FEC_INI_MORA').value,
+                         FEC_EMISION: $('FEC_EMISION').value
+                     }, 
+                       onSuccess: function(t) {
+                       r=t.responseJSON;
+                       alert(r.msg);
+                       if (r.code==0){ 
+                         f_limpiar();
+                       } 
+                     } 
+                     } );
+}
+function f_generar_documento(){
+  credito=$('CREDITO_COD').value;
+    url="<?=$this->url(array('module'=>'legal','controller'=>'credito','action'=>'transaccionextrajudicialrep'))?>/COD/"+credito;
+    Quipu.print(url,null,'<?=$this->baseUrl()?>');
+}
+</script>
+<groupbox>
+  <caption label='<?=$this->subTitle?>' />
+  <grid>
+    <columns>
+      <column />
+      <column />
+    </columns>
+    <rows>
+      <row><label value='Crédito' control=''/><hbox><textbox id='CREDITO_COD' maxlength='12' size='12' onblur='f_capturar_credito(this.value)'/><button label='' image='<?=$this->baseUrl()?>/www/img/icons/search.png' oncommand='f_buscar_credito()'/></hbox></row>
+      <row><label value='Cliente' control=''/><hbox><textbox id='CLIENTE_COD' maxlength='12' size='12' readonly='true'/><textbox id='CLIENTE_NOM' maxlength='40' size='40' readonly='true'/></hbox></row>
+      <row><label value='Aval' control=''/><hbox><textbox id='AVAL_COD' maxlength='12' size='12' readonly='true'/><textbox id='AVAL_NOM' maxlength='40' size='40' readonly='true'/></hbox></row>
+      <row><label value='Plaxo' control=''/><hbox><textbox id='PLAZO' maxlength='11' readonly='true'/></hbox></row>
+      <row><label value='Monto' control=''/><hbox><textbox id='MONTO' maxlength='11' readonly='true'/></hbox></row>
+      <row><label value='Monto Total  de Mora' control='MONTO_MORA'/><hbox><textbox id='MONTO_MORA' maxlength='11'/></hbox></row>
+      <row><label value='Plazo de Pago de Mora' control='PLAZO_MORA'/><hbox><textbox id='PLAZO_MORA' maxlength='11'/></hbox></row>
+      <row><label value='Fecha de Inicio de Pago' control='FEC_INI_MORA'/><hbox><datepicker id='FEC_INI_MORA' value='<?=date('Y-m-d')?>' type='popup'/></hbox></row>
+      <row><label value='Fecha de Emisión' control='FEC_EMISION'/><hbox><datepicker id='FEC_EMISION' value='<?=date('Y-m-d')?>' type='popup'/></hbox></row>
+
+    </rows>
+    </grid>
+  <hbox>
+    <button label='Guardar' image='<?=$this->baseUrl()?>/www/img/icons/ok.png' oncommand='f_guardar_mora()'/>
+  <button id='btnDocumento' label='Generar Documento' image='' disabled='true' oncommand='f_generar_documento()'/>
+    </hbox>
+</groupbox>
+</window>

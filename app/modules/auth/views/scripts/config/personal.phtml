@@ -1,0 +1,67 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+'<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n"
+.'<?xml-stylesheet href="'.$this->baseUrl().'/www/css/view.css" type="text/css"?>'."\n";
+
+?>
+<window title='<?=$this->title.' : '.$this->subTitle?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' onload="f_cargar()">
+<script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+<script src='<?=$this->baseUrl()?>/www/js/validate.prototype.js' />
+<script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js' />
+<keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+<script>
+function f_cargar(){
+  $('PASSANT').focus();
+}
+function f_guardar(){
+  if ($('PASSANT').value==$('PASS').value){
+    Quipu.alertError('La Nueva Contraseña no debe ser igual que la Anterior Contraseña');
+    return false;
+  }
+  if ($('PASS').value!=$('PASS2').value){
+    Quipu.alertError('La de repetir la Nueva Contraseña');
+    return false;
+  }
+  new Ajax.Request(
+                   '<?=$this->url(array('module'=>'auth','controller'=>'config','action'=>'personal'))?>', 
+  { method: 'post',
+              parameters: {USR:$('USR').value, PASS:$('PASS').value},
+              onSuccess: function(t)	{
+                r=t.responseJSON;
+                alert(r.msg);
+                window.parent.location.href='<?=$this->baseUrl()?>';
+              }
+              
+  }
+  );
+
+}
+</script>
+<groupbox>
+<caption label='<?=$this->subTitle?>' />
+<grid>
+  <columns>
+    <column/>
+    <column/>
+  </columns>
+  <rows>
+    <row>
+      <label value="Usuario"/>
+<textbox id="USR" maxlength="11" readonly="true" value="<?=$this->USR?>"/>
+    </row>
+    <row>
+      <label value="Contraseña Anterior" control="PASSANT"/>
+      <textbox id="PASSANT" maxlength="32" type="password"/>
+    </row>
+    <row>
+      <label value="Nueva Contraseña" control="PASS"/>
+      <textbox id="PASS" maxlength="32" type="password"/>
+    </row>
+    <row>
+      <label value="Repetir Contraseña" control="PASS2"/>
+      <textbox id="PASS2" maxlength="32" type="password"/>
+    </row>
+  </rows>
+</grid>
+<hbox><button label="Guardar" oncommand="f_guardar()" image="<?=$this->baseUrl()?>/www/img/icons/ok.png"/> </hbox>
+</groupbox>
+</window>

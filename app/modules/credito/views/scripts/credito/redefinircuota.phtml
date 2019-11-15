@@ -1,0 +1,81 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+     '<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n".
+     '<?xml-stylesheet href="'.$this->baseUrl().'/www/css/view.css" type="text/css"?>'."\n";
+?>
+<window title='<?=$this->title.' : '.$this->subTitle?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' >
+  <script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+  <script src='<?=$this->baseUrl()?>/www/js/validate.prototype.js' />
+  <script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js' />
+  <keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+  <script>
+     function f_guardar(){
+     if (($('COD').value!='')){
+       if ($('CUOTA_NUEVA')!=''){
+         new Ajax.Request( 
+                          'redefinircuota',
+    { method:'post',
+        parameters: {opc:'ins', COD:$('COD').value, MONTO:$('SALDO').value, PLAZO:$('CUOTA_NUEVA').value, FEC: $('FEC').value, CUOTAS_PENDIENTES:$('CUOTAS_PENDIENTES').value }, 
+        onSuccess: function(t) {
+        r=t.responseJSON;
+        alert(r.msg);
+        if (r.code==0){ 
+          credito=$('COD').value;
+          url="<?=$this->url(array('module'=>'credito','controller'=>'cronograma','action'=>'desembolso'))?>/COD/"+credito;
+          Quipu.print(url,null,'<?=$this->baseUrl()?>');
+          $('COD').value='';
+          $('SALDO').value='';
+          $('FEC').value='<?=date('Y-m-d')?>';
+          $('CUOTAS').value='';
+          $('CUOTAS_PENDIENTES').value='';
+          $('CUOTA_NUEVA').value='';
+        } 
+      } 
+    } );
+       }//IF
+     }//IF
+   }
+function f_buscar_credito(){
+  Quipu.open("<?=$this->url(array('controller'=>'credito','action'=>'buscardesembolso'))?>?f=f_capturar_credito");
+}
+function f_capturar_credito(cod){
+  if(cod!=''){
+    new Ajax.Request( 
+                     '<?=$this->url(array('action'=>'redefinircuota'))?>',
+                     { method:'post',
+                         parameters: {opc:'get', COD:cod}, 
+                         onSuccess: function(t) {
+                         r=t.responseJSON;
+                         if (r.code==0){ 
+                           $('COD').value=r.data.K_COD;
+                           $('SALDO').value=r.data.K_SALDO;
+                           $('FEC').value=r.data.K_FEC;
+                           $('CUOTAS').value=r.data.K_CUOTAS;
+                           $('CUOTAS_PENDIENTES').value=r.data.K_CUOTAS_PENDIENTES;
+                           $('CUOTA_NUEVA').value='';
+                         } 
+                       } 
+                     } );
+  }
+}    
+</script>
+  <groupbox>
+    <caption label='<?=$this->subTitle?>' />
+    <grid>
+      <columns>
+        <column />
+        <column />
+      </columns>
+      <rows>
+        <row><label value='Crédito' control='COD'/><hbox><textbox id='COD' maxlength='12' onchange='f_capturar_credito(this.value)'/><button label='' image='<?=$this->baseUrl()?>/www/img/icons/search.png' oncommand='f_buscar_credito()'/></hbox></row>
+        <row><label value='Saldo Capital' control='SALDO'/><textbox id='SALDO' maxlength='11' readonly='true'/></row>
+        <row><label value='Fecha' control='FEC'/><datepicker id='FEC' maxlength='10' readonly='true' type='popup'/></row>
+        <row><label value='Cuotas' control='CUOTAS'/><textbox id='CUOTAS' maxlength='11' readonly='true'/></row>
+        <row><label value='Cuotas pendientes' control='CUOTAS_PENDIENTES'/><textbox id='CUOTAS_PENDIENTES' maxlength='11' readonly='true'/></row>
+        <row><label value='Cuotas redefinidas' control='CUOTA_NUEVA'/><textbox id='CUOTA_NUEVA' maxlength='11'/></row>
+      </rows>
+    </grid>
+    <hbox>
+      <button label='Guardar' image='<?=$this->baseUrl()?>/www/img/icons/ok.png' oncommand='f_guardar()'/></hbox>
+
+  </groupbox>
+</window>

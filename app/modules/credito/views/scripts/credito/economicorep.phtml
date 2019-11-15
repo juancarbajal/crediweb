@@ -1,0 +1,62 @@
+<html>
+<head>
+<link rel="stylesheet" href="<?=$this->baseUrl()?>/www/css/print.css" type="text/css" media="screen,print" />
+</head>
+<body>
+<table width="100%">
+<tr>
+<td width"50%">
+
+<table width="100%">
+ <tr><td width="30%"><img src="<?=$this->baseUrl()?>/www/img/empresa/logo_min.jpg"/></td><td><h1 align="center"><?=$this->subTitle?></h1><h1>DESDE <?=$this->desde?> HASTA <?=$this->hasta?></h1></td><td width="30%" align="right">Fecha: <?=date('Y-m-d')?><br/>Hora: <?=date('H:i:s')?><br/>Usuario: <?=$this->user?></td></tr>
+</table>
+<table>
+   <tr><td>L&Iacute;NEA: </td><td><?=$this->linea->LINEA_COD?> - <?=$this->linea->LINEA_NOM?></td></tr>
+                      <tr><td>MONEDA: </td><td><?=$this->linea->MONEDA_NOM?></td></tr>
+</table>
+<table width="100%" cellspacing="0">
+   <thead>
+<th>Fecha</th>
+<th>Total</th>
+<th>Capital</th>
+<th>Interes</th>
+<th>Mora</th>
+<th>Seguro</th>
+<th>G.A.</th>
+<!--<th>Otros</th>-->
+<th>IGV</th>
+<th>ITF</th>
+</thead>
+<tbody>
+   <?foreach($this->lista as $dato){?>
+<tr>
+<td  class="bordelados"><?=$dato->K_FEC?></td>
+<td align="right" class="bordederecho"><?=$dato->K_TOTAL?></td>
+<td align="right" class="bordederecho"><?=$dato->K_CAPITAL?></td>
+<td align="right" class="bordederecho"><?=$dato->K_INTERES?></td>
+<td align="right" class="bordederecho"><?=$dato->K_MORA?></td>
+<td align="right" class="bordederecho"><?=$dato->K_SEGURO?></td>
+<td align="right" class="bordederecho"><?=$dato->K_GA?></td>
+<!--<td align="right" class="bordederecho"><?=$dato->K_OTROS?></td>-->
+<td align="right" class="bordederecho"><?=$dato->K_IGV?></td>
+<td align="right" class="bordederecho"><?=$dato->K_ITF?></td>
+</tr>
+     <?}?>
+<tr>
+<td align="right" class="bordesuperior"><b>TOTAL</b></td>
+<td align="right" class="cuadro"><b><?=$this->total->TOTAL?></b></td>
+<td align="right" class="cuadro"><b><?=$this->total->CAPITAL?></b></td>
+<td align="right" class="cuadro"><b><?=$this->total->INTERES?></b></td>
+<td align="right" class="cuadro"><b><?=$this->total->MORA?></b></td>
+<td align="right" class="cuadro"><b><?=$this->total->SEGURO?></b></td>
+<td align="right" class="cuadro"><b><?=$this->total->GA?></b></td>
+<!--<td align="right" class="cuadro"><b><?=$this->total->OTROS?></b></td>-->
+<td align="right" class="cuadro"><b><?=$this->total->IGV?></b></td>
+<td align="right" class="cuadro"><b><?=$this->total->ITF?></b></td>
+</tr>
+</tbody>
+</table>
+<br/><br/><br/>
+                      Nota: OTROS son los valores que se pierden o se ganan por redondeo de una cuota.
+</body>
+</html>

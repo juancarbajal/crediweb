@@ -1,0 +1,68 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+          '<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n".
+          '<?xml-stylesheet href="'.$this->baseUrl().'/www/css/view.css" type="text/css"?>'."\n";
+          ?>
+<window title='<?=$this->title.' : '.$this->subTitle?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' >
+<script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+<script src='<?=$this->baseUrl()?>/www/js/validate.prototype.js' />
+<script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js' />
+<keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+<script>
+function f_generar(){
+            new Ajax.Request( 
+                             '<?=$this->url(array('action'=>'exportarlimpiar'))?>',
+    { method:'post',
+        parameters: {MES:$('MES').value,
+          ANIO:$('ANIO').value
+          }, 
+        onSuccess: function(t) {
+        r=t.responseJSON;
+        alert(r.msg);
+        if (r.code==0){ 
+          window.open(r.data);
+        } 
+      } 
+      } );
+}
+</script>
+<groupbox>
+  <caption label='<?=$this->subTitle?>' />
+  <grid>
+    <columns>
+      <column />
+      <column />
+    </columns>
+    <rows>
+      <row><label value='Mes' control='MES'/>
+        <menulist id='MES'>
+          <menupopup>
+            <menuitem label='ENERO' value='01' />
+            <menuitem label='FEBRERO' value='02' />
+            <menuitem label='MARZO' value='03' />
+            <menuitem label='ABRIL' value='04' />
+            <menuitem label='MAYO' value='05' />
+            <menuitem label='JUNIO' value='06' />
+            <menuitem label='JULIO' value='07' />
+            <menuitem label='AGOSTO' value='08' />
+            <menuitem label='SEPTIEMBRE' value='09' />
+            <menuitem label='OCTUBRE' value='10' />
+            <menuitem label='NOVIEMBRE' value='11' />
+            <menuitem label='DICIEMBRE' value='12' />
+          </menupopup>
+        </menulist>
+        <menulist id='ANIO'>
+          <menupopup>
+            <?for($i=date('Y')-5;$i<=date('Y');$i++){?>
+               <menuitem label='<?=$i?>' value='<?=$i?>' selected='<?=($i==date('Y')?'true':'false')?>'/>
+               <?}?>
+          </menupopup>
+        </menulist>
+
+      </row>
+    </rows>
+  </grid>
+            <hbox>
+            <button label='Generar' image='<?=$this->baseUrl()?>/img/icons/ok.png' oncommand='f_generar()'/>
+            </hbox>
+</groupbox>
+</window>

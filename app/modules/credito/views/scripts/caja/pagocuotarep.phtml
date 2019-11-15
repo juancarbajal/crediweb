@@ -1,0 +1,54 @@
+<html>
+<head>
+<link rel="stylesheet" href="<?=$this->baseUrl()?>/www/css/print_small.css" type="text/css" media="screen,print" />
+</head>
+<body leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0">
+<table width="100%" >
+<tr>
+<td width"50%">
+
+<table width="100%">
+   <tr><td width="35%"><?=$this->empresa->NOM?><BR/>RUC: <?=$this->empresa->COD?></td><td><h3 align="center">RECIBO DE PAGO</h3></td><td width="35%" align="right">Nro.: <?=substr($this->recibo->COD,6,6)?><br/>Emitido: <?=$this->recibo->FEC?> <br/>Fecha: <?=date('Y-m-d')?><br/><?=date('H:i:s')?></td></tr>
+<tr><td colspan="3">CLIENTE: <?=substr($this->cliente->CLIENTE_COD,6,6)?> - <?=$this->cliente->NOM_LARGO?></td></tr>
+<tr><td colspan="3">CR&Eacute;DITO: <?=substr($this->recibo->CREDITO_COD,6,6)?></td></tr>
+</table>
+<table width="100%">
+<caption>LIQUIDACI&Oacute;N</caption>
+<thead><th width="10%">Cuota</th><th  width="5%">TC</th><th width="65%">Descripci&oacute;n</th><th width="20%">Importe</th></thead>
+<tbody>
+<tr><td></td><td>09</td><td>ITF</td><td  align="right"><?=number_format($this->recibo->ITF,2,'.',' ')?></td></tr>
+<? if($this->recibo->A_CUENTA!=0) {?>
+<tr><td></td><td>11</td><td>PAGO A CUENTA</td><td align="right">-<?=number_format($this->recibo->A_CUENTA,2,'.',' ')?></td></tr>
+<? } ?>
+<? foreach ($this->detalles as $detalle){ ?>
+<? if($detalle->CAPITAL!=0) {?>
+<tr><td><?=str_pad($detalle->CUOTA_ID,3,'0',STR_PAD_LEFT)?></td><td>01</td><td>CAPITAL</td><td align="right"><?=number_format($detalle->CAPITAL,2,'.',' ')?></td></tr>
+<? } ?>
+<? if($detalle->INTERES!=0) {?>
+<tr><td><?=str_pad($detalle->CUOTA_ID,3,'0',STR_PAD_LEFT)?></td><td>02</td><td>INTERES</td><td align="right"><?=number_format($detalle->INTERES,2,'.',' ')?></td></tr>
+<?}?>
+<? if($detalle->IGV!=0) {?>
+<tr><td><?=str_pad($detalle->CUOTA_ID,3,'0',STR_PAD_LEFT)?></td><td>03</td><td>IGV</td><td align="right"><?=number_format($detalle->IGV,2,'.',' ')?></td></tr>
+<? } ?>
+<? if($detalle->MORA!=0) {?>
+<tr><td><?=str_pad($detalle->CUOTA_ID,3,'0',STR_PAD_LEFT)?></td><td>04</td><td>MORA</td><td align="right"><?=number_format($detalle->MORA,2,'.',' ')?></td></tr>
+<? } ?>
+<? if($detalle->SEGURO!=0) {?>
+<tr><td><?=str_pad($detalle->CUOTA_ID,3,'0',STR_PAD_LEFT)?></td><td>05</td><td>SEGURO</td><td align="right"><?=number_format($detalle->SEGURO,2,'.',' ')?></td></tr>
+<? } ?>
+<? if($detalle->OTROS!=0) {?>
+<tr><td><?=str_pad($detalle->CUOTA_ID,3,'0',STR_PAD_LEFT)?></td><td>06</td><td>OTROS</td><td align="right"><?=number_format($detalle->OTROS,2,'.',' ')?></td></tr>
+<? } ?>
+<? } ?>
+<? if($this->recibo->A_CUENTA_SIG!=0) {?>
+<tr><td></td><td>12</td><td>ADELANTO</td><td align="right"><?=number_format($this->recibo->A_CUENTA_SIG,2,'.',' ')?></td></tr>
+<? } ?>
+<tr><td></td><td></td><td align="right"><b><font size="10px">TOTAL RECIBIDO (<?=$this->moneda->NOM?>) <?=$this->moneda->ABREV?></b></td><td align="right"><b><?=number_format($this->recibo->MONTO,2,'.',' ')?></font></b></td></tr>
+</tbody>
+</table>
+</td>
+</tr>
+</table>
+<?=date('Y-m-d')?> PEND. CUOTAS: <?=$this->recibo->CUOTA_PENDIENTE?> / <?=$this->plazo?> | MONTO: <?=$this->montoPendiente?>
+</body>
+</html>

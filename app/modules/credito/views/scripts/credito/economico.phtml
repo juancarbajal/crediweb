@@ -1,0 +1,39 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+     '<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n".
+     '<?xml-stylesheet href="'.$this->baseUrl().'/www/css/view.css" type="text/css"?>'."\n";
+?>
+<window title='<?=$this->title.' : '.$this->subTitle?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' >
+     <script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+     <script src='<?=$this->baseUrl()?>/www/js/validate.prototype.js' />
+     <script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js' />
+     <keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+     <script>
+     function f_imprimir(){
+     
+     Quipu.print("<?=$this->url(array('action'=>'economicorep'))?>/FEC_INI/"+$('FEC_INI').value+"/FEC_TER/"+$('FEC_TER').value+'/LINEA_COD/'+$('LINEA_COD').value,null, '<?=$this->baseUrl()?>');
+}
+     </script>
+     <groupbox>
+     <caption label='<?=$this->subTitle?>' />
+     <grid>
+     <columns>
+     <column />
+     <column />
+     </columns>
+     <rows>
+     <row><label value='Línea' control='LINEA_COD'/>
+     <menulist id='LINEA_COD'>
+     <menupopup>
+     <?foreach($this->lineas as $linea){?>
+     <menuitem label='<?=$linea->NOM?>' value='<?=$linea->COD?>' />
+     <?}?>
+     <menuitem label='TODOS' value='0' />
+     </menupopup>
+     </menulist></row>
+     <row><label value='Fecha de Inicio' control='FEC_INI'/><datepicker id='FEC_INI' value='<?=date('Y-m-d')?>' type="popup"/></row>
+     <row><label value='Fecha de Termino' control='FEC_TER'/><datepicker id='FEC_TER'  value='<?=date('Y-m-d')?>' type="popup"/></row>
+     </rows>
+     </grid>
+<hbox><button label='Generar Reporte' image="<?=$this->baseUrl()?>/www/img/icons/ok.png" oncommand="f_imprimir()"/></hbox>
+     </groupbox>
+     </window>

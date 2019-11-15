@@ -1,0 +1,128 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+     '<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n".
+     '<?xml-stylesheet href="'.$this->baseUrl().'/www/css/view.css" type="text/css"?>'."\n";
+?>
+<window title='<?=$this->title.' : '.$this->subTitle?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' >
+  <script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+  <script src='<?=$this->baseUrl()?>/www/js/validate.prototype.js' />
+  <script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js' />
+  <keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+  <script>
+<? 
+       $campos='';
+$borrar='';
+foreach($this->monedas as $moneda) { 
+       foreach($this->tipoBilletes as $tipoBillete){
+         $campos.=$moneda->COD.'_'.$tipoBillete->COD.' : $("'.$moneda->COD.'_'.$tipoBillete->COD.'").value,'."\n";  
+         $borrar.='$("'.$moneda->COD.'_'.$tipoBillete->COD.'").value="0"'.";\n";
+
+       }
+}
+?>
+function f_borrar(){
+  <?=$borrar?>
+<? foreach($this->monedas as $moneda) { ?>
+  $('<?=$moneda->COD?>_TOTAL').value='0';
+    <?}?>
+}
+function f_extraer(){
+         new Ajax.Request( 
+                   '<?=$this->url(array('action'=>'billetaje'))?>',
+                   { method:'post',
+                       parameters: {op:'get',
+                         CAJA_COD:$('CAJA_COD').value,
+                         FEC:$('FEC').value,
+                         TIPO:$('TIPO').value},
+                       onSuccess: function(t) {
+                       r=t.responseJSON;
+                       if (r.code==0){ 
+                         f_borrar();
+                         Quipu.fromJSONVector(r.data);
+                         f_calcular();
+                       } 
+                     } 
+                     } );
+}
+function f_guardar(){
+  new Ajax.Request( 
+                   '<?=$this->url(array('action'=>'billetaje'))?>',
+                   { method:'post',
+                       parameters: {op:'ins',
+                         CAJA_COD:$('CAJA_COD').value,
+                         FEC:$('FEC').value,
+                         TIPO:$('TIPO').value,
+                         <?=$campos?>}, 
+                       onSuccess: function(t) {
+                       r=t.responseJSON;
+                       alert(r.msg);
+                       if (r.code==0){ 
+                         f_borrar();
+                       } 
+                     } 
+                     } );
+}
+function f_calcular(){
+<? foreach($this->monedas as $moneda) { ?>
+  $('<?=$moneda->COD?>_TOTAL').value=
+  <? foreach($this->tipoBilletes as $tipoBillete){?> 
+    eval($('<?=$moneda->COD?>_<?=$tipoBillete->COD?>').value)*eval(<?=$tipoBillete->VAL?>)+
+  <?}?> 0;
+<? } ?>
+}
+  </script>
+  <groupbox>
+    <caption label='<?=$this->subTitle?>' />
+    <grid>
+      <columns>
+        <column />
+        <column />
+      </columns>
+      <rows>
+        <row><label value='Caja' control=''/>
+          <menulist id='CAJA_COD'>
+            <menupopup>
+              <?foreach($this->cajas as $caja){ ?>
+              <menuitem label='<?=$caja->K_COD?> - <?=$caja->K_NOM?>' value='<?=$caja->K_COD?>' />
+              <?}?>
+            </menupopup>
+        </menulist></row>
+  <row><label value='Fecha' control='FEC'/><datepicker id='FEC' maxlength='10' value="<?=date('Y-m-d')?>" type='popup'/></row>
+        <row><label value='Periodo' control='TIPO'/>
+          <menulist id='TIPO'>
+            <menupopup>
+              <menuitem label='Apertura de Caja' value='I' />
+              <menuitem label='Cierre de Caja' value='C' />
+            </menupopup>
+        </menulist><button label='Extraer' image='' oncommand='f_extraer()'/></row>
+      </rows>
+    </grid>
+    <grid>
+      
+      <columns>
+        <column />
+        <? for($i=0;$i<count($this->monedas);$i++){?>
+        <column />
+        <? }?>
+      </columns>
+      <rows>
+        <row>
+          <label value='DENOMINACIÓN'/>
+          <? foreach($this->monedas as $moneda) { ?>
+          <label value='<?=$moneda->NOM?>'/>
+          <?}?>
+        </row>
+        <? foreach($this->tipoBilletes as $tipoBillete){?>
+        <row>
+          <label align="right" value='<?=$tipoBillete->VAL?>'/>
+          <? foreach($this->monedas as $moneda) { ?>
+          <textbox id="<?=$moneda->COD?>_<?=$tipoBillete->COD?>" maxlength='11' value="0"/>
+          <?}?>
+        </row>
+
+        <?}?>
+        <row><label align="right" value='Total'/><? foreach($this->monedas as $moneda) { ?><textbox id="<?=$moneda->COD?>_TOTAL" maxlength='11' value="0" onfocus="f_calcular()"/><?}?></row>
+      </rows>
+    </grid>
+    <hbox><button label="Guardar" image="<?=$this->baseUrl()?>/www/img/icons/ok.png" oncommand="f_guardar()"/></hbox>
+  </groupbox>
+</window>

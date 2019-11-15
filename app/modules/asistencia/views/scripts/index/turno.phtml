@@ -1,0 +1,73 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+'<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n".
+  '<?xml-stylesheet href="'.$this->baseUrl().'/www/css/view.css" type="text/css"?>'."\n";
+?>
+<window title='<?=$this->title.' : '.$this->subTitle?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' onload="f_cargar()">
+  <script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+  <script src='<?=$this->baseUrl()?>/www/js/validate.prototype.js' />
+  <script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js' />
+  <keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+  <script>
+  Quipu.campos=new Array('ID','NOM','APLICA_TARDANZA','APLICA_EXTRA');
+Quipu.campos_primarios=new Array('ID');
+Quipu.url='<?=$this->url(array('action'=>'turno'))?>';
+var v=new Validate();
+v.addRules({id:'ID', required: true, option: 'Number', label: 'Código'});
+v.addRules({id:'NOM', required: true, option: 'Alpha', label: 'Nombre'});
+function f_cargar(){
+  //  Quipu.list=$('lb');
+  Quipu.tree=$('tr');
+  $('ID').focus();
+  Quipu.cargarLista({op:'get'});
+}
+function f_cargar_uno(cod){
+  Quipu.cargarUno({op:'get', idx:cod});
+  $('ID').focus();
+}
+function f_guardar(){
+  if (v.Apply()){
+    if(Quipu.ultimo_registro==null)
+      Quipu.guardarRegistro(Quipu.toParams('ID','NOM','APLICA_TARDANZA','APLICA_EXTRA',{op: 'ins'}));
+    else{
+      Quipu.guardarRegistro(Quipu.toParams('ID','NOM','APLICA_TARDANZA','APLICA_EXTRA',{op: 'upd', idx:Quipu.ultimo_registro.ID}));
+    }
+  }
+}
+function f_eliminar(){
+  Quipu.eliminarRegistro({op: 'del', idx: Quipu.getTreeValue()});
+}
+
+  </script>
+  <groupbox>
+    <caption label='<?=$this->subTitle?>' />
+    <hbox>
+      <vbox>
+        <grid>
+          <columns>
+            <column/>
+            <column/>
+          </columns>
+          <rows>
+            <row><label value="Código" control="ID"/> <textbox maxlength="10" id="ID"/></row>
+            <row><label value="Nombre" control="NOM"/> <textbox maxlength="40" id="NOM" oninput="this.value=this.value.toUpperCase()"/></row>
+            <row><label value='Se Aplica Tardanza' control='APLICA_TARDANZA'/><checkbox id='APLICA_TARDANZA' value='1'/></row>
+            <row><label value='Se Aplica Horas Extras' control='APLICA_EXTRA'/><checkbox id='APLICA_EXTRA' value='1'/></row>
+
+          </rows>
+        </grid>
+        <hbox><button id="btnGuardar" label="Guardar" image="<?=$this->baseUrl()?>/www/img/icons/ok.png" oncommand="f_guardar()" /></hbox>
+      </vbox>
+      <hbox flex="1">
+        <tree id="tr" flex="1" enableColumnDrag="true" onselect="f_cargar_uno(Quipu.getTreeValue())" rows="10">
+          <treecols>
+            <treecol label="Código"/>
+            <splitter class="tree-splitter" />
+            <treecol label="Nombre" flex="1"/>
+          </treecols>
+        </tree>
+        <vbox><button image="<?=$this->baseUrl()?>/www/img/icons/new.png" oncommand="Quipu.nuevoRegistro()"/> <button image="<?=$this->baseUrl()?>/www/img/icons/delete.png" oncommand="f_eliminar()"/></vbox>
+      </hbox>
+    </hbox>
+    
+  </groupbox>
+</window>

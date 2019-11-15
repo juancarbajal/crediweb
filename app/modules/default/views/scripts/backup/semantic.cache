@@ -1,0 +1,15 @@
+;; Object backup/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "backup/"
+  :tables (list 
+   (semanticdb-table "index.phtml"
+    :major-mode 'php-mode
+    :tags '(("f_cargar" function (:type ("function" type (:type "class") nil nil)) nil [755 812]) ("f_generar" function (:type ("function" type (:type "class") nil nil)) nil [813 1163]) ("f_descargar" function (:type ("function" type (:type "class") nil nil)) nil [1164 1274]) ("foreach" function (:arguments (("" variable (:type ("$this" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1860 1866]) ("as" variable (:type ("copias" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1867 1883]) ("" variable (:type ("$copia" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1877 1884])) :type "int") nil [1852 2014]))
+    :file "index.phtml"
+    :pointmax 2211
+    )
+   )
+  :file "semantic.cache"
+  :semantic-tag-version "2.0pre3"
+  :semanticdb-version "2.0pre3"
+  )

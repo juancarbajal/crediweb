@@ -1,0 +1,28 @@
+<html>
+<head>
+<link rel="stylesheet" href="<?=$this->baseUrl()?>/www/css/print_small.css" type="text/css" media="screen,print" />
+</head>
+<body>
+<hr>
+<center>FIRMA</center>
+<table width="100%">
+<tr>
+<td width"50%">
+<table width="100%">
+   <tr><td width="35%"><?=$this->empresa->NOM?><BR/>RUC: <?=$this->empresa->COD?></td><td><h3 align="center">RECIBO DE PROVEEDOR</h3></td><td width="35%" align="right">Nro.: <?=$this->recibo->K_ID?><br/>Emitido: <?=$this->recibo->K_FEC?> <br/>Fecha: <?=date('Y-m-d')?><br/><?=date('H:i:s')?></td></tr>
+<tr><td colspan="3">PROVEEDOR: <?=substr($this->recibo->K_PROVEEDOR_COD,6,6)?> - <?=$this->recibo->K_PROVEEDOR_NOM?></td></tr>
+</table>
+<table width="100%">
+<caption>DETALLE</caption>
+<thead><th width="10%">Cant</th><th width="65%">Descripci&oacute;n</th><th width="20%">Importe</th></thead>
+<tbody>
+<tr><td>01</td><td><?=$this->recibo->K_DET?></td><td align='right'><?=$this->recibo->K_MONTO?></td></tr>
+<tr><td colspan='2' align="right"><b>TOTAL</b></td><td align='right'><b><?=$this->recibo->K_MONTO?></b></td></tr>
+
+</tbody>
+</table>
+</td>
+</tr>
+</table>
+</body>
+</html>

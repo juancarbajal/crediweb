@@ -1,0 +1,122 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+     '<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n".
+     '<?xml-stylesheet href="'.$this->baseUrl().'/www/css/view.css" type="text/css"?>'."\n";
+?>
+<window title='<?=$this->title.' : '.$this->subTitle?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' onload='f_reloj();f_cargar()'>
+     <script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+     <script src='<?=$this->baseUrl()?>/www/js/validate.prototype.js' />
+     <script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js' />
+     <keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+     <script>
+Quipu.url='<?=$this->url(array('action'=>'marcar'))?>';
+
+function f_get_hora(){
+hora=new Date();
+return lpad(hora.getHours(),2,'0')+':'+lpad(hora.getMinutes(),2,'0')+':'+lpad(hora.getSeconds(),2,'0');
+}
+function f_reloj(){
+$('reloj').value=f_get_hora();
+setTimeout('f_reloj()',1000);
+}
+
+function f_guardar(){
+  if ($('PERMISO').checked) per=1 
+    else per=0;
+
+new Ajax.Request( 
+'marcar',
+{ method:'post',
+parameters: {
+  op:'ins',
+      FEC:$('FEC').value,
+      PERSONA_COD:$('PERSONA_COD').value,
+      HOR:$('reloj').value,
+      PERMISO:per
+}, 
+onSuccess: function(t) {
+r=t.responseJSON;
+alert(r.msg);
+if (r.code==0){ 
+  Quipu.treeAdd($('lista'),r.data);
+  f_limpiar();
+} 
+$('PERSONA_COD').focus()
+} 
+} );
+}
+
+function f_cargar(){
+  Quipu.tree=$('lista');
+  //$('COD').focus();
+  $('PERSONA_COD').focus();
+  Quipu.cargarLista({op:'get'});
+  
+}
+function f_capturar_persona(){
+new Ajax.Request( 
+'marcar',
+{ method:'post',
+parameters: {op:'persona',
+      COD:$('PERSONA_COD').value,
+      FEC:$('FEC').value
+}, 
+onSuccess: function(t) {
+r=t.responseJSON;
+if (r.code==0){ 
+   if (r.data.K_COD==null){
+     f_limpiar();
+      $('PERSONA_COD').focus();
+
+   }
+   else{
+   $('PERSONA_COD').value=r.data.K_COD;
+   $('PERSONA_NOM').value=r.data.K_NOM;
+   $('btnGuardar').focus();
+   }
+} 
+
+} 
+} );
+}
+function f_limpiar(){
+      $('PERSONA_COD').value='';
+      $('PERSONA_NOM').value='';
+
+}
+     </script>
+     <groupbox>
+       <caption label='<?=$this->subTitle?>' />
+       <hbox>
+         <grid>
+           <columns>
+             <column />
+             <column />
+           </columns>
+           <rows>
+             <row><label value='Fecha' control='FEC'/><hbox><datepicker id='FEC' readonly='true' value='<?=date('Y-m-d')?>'/> <timepicker id='reloj' value='00:00:00' style='font-size:24' readonly='true' size='8' /></hbox></row>
+             <row><label value='Código' control='PERSONA_COD'/><hbox><textbox id='PERSONA_COD' maxlength='12' size='12' onchange='f_capturar_persona()'/><textbox id='PERSONA_NOM' maxlength='20' size='40' readonly='true'/></hbox></row>
+  <row><label value='Permiso' control='PERMISO'/><checkbox id='PERMISO' value='1'/></row>
+           </rows>
+         </grid>
+         
+       </hbox>
+       <hbox>
+         <button label='Guardar' id='btnGuardar' image='<?=$this->baseUrl()?>/www/img/icons/ok.png' oncommand='f_guardar()'/>
+       </hbox>
+       <tree id='lista' enableColumnDrag='true'  rows="10">
+         <treecols>
+           <treecol label='Código' flex='1'/>
+           <splitter class='tree-splitter' />
+           <treecol label='Nombres' flex='1'/>
+           <splitter class='tree-splitter' />
+           <treecol label='Hora' flex='1'/>
+           <splitter class='tree-splitter' />
+           <treecol label='Tipo' flex='1'/>
+           <splitter class='tree-splitter' />
+
+         </treecols>
+         <treechildren>
+         </treechildren>
+       </tree>
+     </groupbox>
+</window>

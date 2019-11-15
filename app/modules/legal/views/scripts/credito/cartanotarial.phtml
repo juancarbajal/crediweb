@@ -1,0 +1,79 @@
+<html>
+<head>
+<link rel="stylesheet" href="<?=$this->baseUrl()?>/www/css/print.css" type="text/css" media="screen,print" />
+</head>
+<body oncontextmenu="return false" leftmargin="80" topmargin="120" rightmargin="50">
+<table width="100%"><tr><td width="20%"><img src="<?=$this->baseUrl()?>/www/img/empresa/logo_min.jpg" width="50%"/></td><td><h1><?=$this->empresa->NOM?></h1><center><font size="4">CARTA NOTARIAL</font></center></td><td width="20%"></td></tr></table>
+<br/><br/><br/>
+  <b> TACNA, <?=strtoupper($this->fechaHoy)?></b>
+<table width="100%">
+<tr><td>
+<b>
+   SR. <?=$this->cliente->NOM_LARGO?>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- TITULAR<br/>
+DIR. <?=$this->cliente->DIRE?> LOCALIDAD <?=$this->clienteLocalidad?><br/>
+   CLIENTE N&deg; <?=substr($this->cliente->CLIENTE_COD,6,6)?> CR&Eacute;DITO N&deg;: <?=substr($this->cod,6,6)?></b>
+</td>
+<td valign='top'>
+<b>
+    <? if (isset($this->aval)){?>
+SR. <?=$this->aval->NOM_LARGO?> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AVAL<br/>
+DIR.  <?=$this->aval->DIRE?> LOCALIDAD <?=$this->avalLocalidad?>
+    <?}?></b>
+</td></tr>
+</table>
+<p>TACNA.-</p>
+
+<p>ESTIMADO PRESTATARIO</p>
+
+<p>POR LA PRESENTE <b>CARTA NOTARIAL</b> LE NOTIFICAMOS QUE SU CR&Eacute;DITO ESTA EN EXCESIVA MOROSIDAD EN EL PAGO DE SUS CUOTAS DIARIAS DEL PR&Eacute;STAMO QUE LE CONCEDIMOS POR <?=$this->moneda->ABREV?> <?=$this->credito->MONTO?> (<?=$this->montoTexto?>) EL DÍA <?=strtoupper($this->fecha)?>.</p>
+
+                           <p>AL D&Iacute;A DE HOY SU PR&Eacute;STAMO SIGNADO CON EL C&Oacute;DIGO N&deg; <?=substr($this->cod,6,6)?> REGISTRA QUE SU &Uacute;LTIMO PAGO FUE EL D&Iacute;A <?=strtoupper($this->ultimoPago->FEC)?>, EN QUE PAG&Oacute; LA CUOTA DIARIA N&deg; <?=str_pad($this->ultimoPago->ID,6,'0',STR_PAD_LEFT)?> Y A LA FECHA ESTA ADEUDANDO DESDE LA CUOTA N&deg; <?=str_pad($this->intervaloSinPago['ini']->ID,6,'0',STR_PAD_LEFT)?> DE FECHA <?=strtoupper($this->intervaloSinPago['ini']->FEC)?> HASTA LA CUOTA N&deg;  <?=str_pad($this->intervaloSinPago['fin']->ID,6,'0',STR_PAD_LEFT)?> DE FECHA <?=strtoupper($this->intervaloSinPago['fin']->FEC)?>, UN TOTAL DE <?=$this->intervaloSinPago['cuotas']?> CUOTAS INPAGAS.</p>
+
+                                                                                                                                                                                                                                                         <p>POR LA PRESENTE LE <b>NOTIFICAMOS</b> PARA QUE PROCEDA AL PAGO TOTAL DE LA DEUDA CORRESPONDIENTE A LAS CUOTAS ATRASADAS EN EL PLAZO DE 2 (DOS) D&Iacute;AS &Uacute;TILES, A PARTIR DE LA RECEPCI&Oacute;N DE LA PRESENTE, YA QUE LUEGO <b>PROCEDEREMOS A DAR POR VENCIDOS TODOS LOS PLAZOS Y CUOTAS DEL PR&Eacute;STAMO</b>, Y COBRAREMOS EL INTEGRO DE LA DEUDA MEDIANTE PROCESO JUDICIAL, VENCIDO EL PLAZO SE&Ntilde;ALADO PROCEDEREMOS CON EL <b>PROTESTO DEL PAGARE</b> ANTES DE SU VENCIMIENTO POR LAS RAZONES INDICADAS.</p>
+                                                                                                                                                                                                                                                         <p>COMO ES DE SU CONOCIMIENTO SU MAL PAGO POR EL PR&Eacute;STAMO QUE LE CONCEDIMOS, <b>QUEDAR&Aacute; REGISTRADO EN INFOCORP</b>, Y A SU VEZ LO INHABILITARÁ PARA RECIBIR CR&Eacute;DITOS EN CUALQUIER EMPRESA DEL PA&Iacute;S.</p>
+
+
+ATENTAMENTE.
+
+<br/>
+<br/>
+<br/>
+<br/>
+
+<table width="30%" cellspacing="0">
+  <tr>
+    <td width="33%" align="center"><img src="<?=$this->baseUrl()?>/www/img/empresa/firma_contrato.jpg"/></td> 
+  </tr>
+  <tr  height="2px">
+    <td height="2px"><hr/></td>
+  </tr>
+  <tr>
+    <td align="center">JULIO CAYA BELAHONIA<br/>GERENTE<br/>"<?=$this->empresa->NOM?>"</td>
+  </tr>
+</table>
+
+<br/>
+<br/>
+
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
+<hr/>
+<center><?=$this->empresa->NOM?><br/>
+                                                                                  Oficina Asoc. de Viv. Villa San Francisco Mza. 06 Lte. 07 Av. La Cultura Frente al Mercado Santa Rosa, Distrito de <br/>                                          Coronel Gregorio Albarrac&iacute;n Lanchipa-Tacna - Tel&eacute;fono: (052) <?=$this->empresa->FONO1?><br/>
+</center>
+</body>
+</html>

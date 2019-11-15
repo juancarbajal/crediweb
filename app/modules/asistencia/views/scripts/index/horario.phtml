@@ -1,0 +1,183 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+'<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n".
+'<?xml-stylesheet href="'.$this->baseUrl().'/www/css/view.css" type="text/css"?>'."\n";
+?>
+<window title='<?=$this->title.' : '.$this->subTitle?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' onload='f_cargar()'>
+  <script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+  <script src='<?=$this->baseUrl()?>/www/js/validate.prototype.js' />
+  <script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js' />
+  <keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+  <script>
+function f_tipo_cambio(){
+  if ($('TIPO_HOR').value==0){
+     $('div_dia_semana').hidden=false;
+     $('div_intervalo_fecha').hidden=false;
+     $('div_fecha').hidden=true;
+  }
+  else{
+     $('div_dia_semana').hidden=true;
+     $('div_intervalo_fecha').hidden=true;
+     $('div_fecha').hidden=false;    
+  }
+}
+function f_limpiar(){
+  $('COD').value='';
+  $('FEC_INI').value='<?=date('Y-m-d')?>';
+  $('FEC_FIN').value='2020-12-31';
+        <?foreach($this->turnos as $turno){
+           foreach($this->dias as $dia){?>
+        $('H_<?=$turno->ID?>_<?=$dia['ID']?>_I').value='00:00:00';
+        $('H_<?=$turno->ID?>_<?=$dia['ID']?>_S').value='00:00:00';
+        <? }
+          }?>
+}
+
+function f_guardar(){
+new Ajax.Request( 
+'horario',
+{ method:'post',
+parameters: {
+  COD:$('COD').value,
+        TIPO_EMPLEADO_COD: $('TIPO_EMPLEADO_COD').value,
+        FEC_INI: $('FEC_INI').value,
+      FEC_FIN: $('FEC_FIN').value,
+        <?foreach($this->turnos as $turno){
+           foreach($this->dias as $dia){?>
+        H_<?=$turno->ID?>_<?=$dia['ID']?>_I:$('H_<?=$turno->ID?>_<?=$dia['ID']?>_I').value,
+        H_<?=$turno->ID?>_<?=$dia['ID']?>_S:$('H_<?=$turno->ID?>_<?=$dia['ID']?>_S').value,
+          <?}
+             }?>
+          op:'ins'
+
+}, 
+onSuccess: function(t) {
+r=t.responseJSON;
+alert(r.msg);
+if (r.code==0) Quipu.treeAdd($('tr'),r.data);
+f_limpiar();
+} 
+} );
+
+}
+function f_capturar(){
+  new Ajax.Request( 
+                   'horario',
+                   { method:'post',
+                       parameters: {op:'get',COD:Quipu.getTreeValue($('tr'))}, 
+                       onSuccess: function(t) {
+                       r=t.responseJSON;
+                       if (r.code==0){ 
+                         f_limpiar();
+                         Quipu.fromJSON(r.data);
+                         Quipu.fromJSON(r.det);
+                       } 
+                     } 
+                     } );
+}
+function f_cargar(){
+          new Ajax.Request( 
+          'horario',
+          { method:'post',
+          parameters: {op:'getlista'}, 
+          onSuccess: function(t) {
+          r=t.responseJSON;
+          if (r.code==0){ 
+          Quipu.treeAdd($('tr'),r.data);
+          } 
+          } 
+          } );
+}
+  </script>
+  <groupbox>
+    <caption label='<?=$this->subTitle?>' />
+    <hbox>      
+      <vbox>
+        <grid>
+          <columns>
+            <column />
+            <column />
+          </columns>
+          <rows>
+            <row><label value='Código' control='COD'/><box><textbox id='COD' maxlength='12'/></box></row>
+            <row><label value='Área' control='TIPO_EMPLEADO_COD'/>
+              <box>
+                <menulist id='TIPO_EMPLEADO_COD'>
+                  <menupopup>
+                    <?foreach($this->tipoEmpleados as $tipoEmpleado){?>
+                    <menuitem label='<?=$tipoEmpleado->COD?>- <?=$tipoEmpleado->NOM?>' value='<?=$tipoEmpleado->COD?>' />
+                    <?}?>
+                  </menupopup>
+                </menulist>
+              </box>
+            </row>
+            
+            <row>
+              <label value='Desde' control='FEC_INI'/>
+              <hbox>
+                <datepicker id='FEC_INI' type='popup' value='<?=date('Y-m-d')?>'/>
+                <label value='Hasta' control='FEC_FIN'/>
+                <datepicker id='FEC_FIN' type='popup' value='2020-12-31'/>
+              </hbox>
+            </row>
+
+          </rows>
+        </grid>
+        <grid>
+          <columns>
+            <column />
+            <column />
+            <column />
+            <column />
+            <column />
+            <column />
+            <column />
+          </columns>
+          <rows>
+            <row>
+              <label value='HORARIO'/>
+              <?foreach($this->dias as $dia){?>
+              <label value='<?=$dia['VALUE']?>'/>
+              <?}?>
+            </row>
+            <?foreach($this->turnos as $turno){?>
+            <row><label value='<?=$turno->NOM?> INGRESO'/>
+              <?foreach($this->dias as $dia){?>
+              <timepicker id='H_<?=$turno->ID?>_<?=$dia['ID']?>_I' hideseconds='true' value='00:00'/>
+              <?}?>
+            </row>
+            <row><label value='<?=$turno->NOM?> SALIDA'/>
+              <?foreach($this->dias as $dia){?>
+              <timepicker id='H_<?=$turno->ID?>_<?=$dia['ID']?>_S' hideseconds='true' value='00:00'/>
+              <?}?>
+            </row>
+            <?}?>
+          </rows>
+        </grid>
+
+        <hbox>
+          <button label='Guardar' image='<?=$this->baseUrl()?>/www/img/icons/ok.png' oncommand='f_guardar()'/>
+        </hbox>
+      </vbox>
+      <hbox flex='1'>
+        <tree id='tr' enableColumnDrag='true' flex='1' rows='10' onselect='f_capturar()'>
+          <treecols>
+            <treecol label='Código' flex='1'/>
+            <splitter class='tree-splitter' />
+            <treecol label='Área' flex='1'/>
+            <splitter class='tree-splitter' />
+            <treecol label='F.Desde' flex='1'/>
+            <splitter class='tree-splitter' />
+            <treecol label='F.Hasta'  flex='1'/>
+            <splitter class='tree-splitter' />
+
+          </treecols>
+          <treechildren>
+          </treechildren>
+        </tree>
+        <vbox>
+          <button label='' image='<?=$this->baseUrl()?>/www/img/icons/new.png' oncommand='f_limpiar()'/>
+        </vbox>
+      </hbox>
+    </hbox>
+  </groupbox>
+</window>

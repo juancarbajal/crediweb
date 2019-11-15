@@ -1,0 +1,60 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+          '<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n".
+          '<?xml-stylesheet href="'.$this->baseUrl().'/www/css/view.css" type="text/css"?>'."\n";
+          ?>
+<window title='<?=$this->title.' : '.$this->subTitle?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' >
+<script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+<script src='<?=$this->baseUrl()?>/www/js/validate.prototype.js' />
+<script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js' />
+<keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+<script>
+var printurl;
+function f_imprimir(){
+  Quipu.print(printurl,null,'<?=$this->baseUrl()?>');
+}
+function f_capturar(){
+new Ajax.Request( 
+'<?=$this->url(array('action'=>'recibo'))?>',
+{ method:'post',
+parameters: {TIPO:$('TIPO').value, COD:$('COD').value}, 
+onSuccess: function(t) {
+r=t.responseJSON;
+if (r.code==0){ 
+  $('COD').value=r.data.K_COD;
+  $('FEC').value=r.data.K_FEC;
+  $('CLIENTE_COD').value=r.data.K_CLIENTE_COD;
+  $('CLIENTE_NOM').value=r.data.K_CLIENTE_NOM;
+  $('MONTO').value=r.data.K_MONTO;
+  printurl=r.url;
+} 
+else Quipu.alertError(r.data.msg);
+} 
+} );
+}
+</script>
+<groupbox>
+  <caption label='<?=$this->subTitle?>' />
+  <grid>
+    <columns>
+      <column />
+      <column />
+    </columns>
+    <rows>
+      <row><label value='Tipo Documento' control=''/>
+        <menulist id='TIPO'>
+          <menupopup>
+            <menuitem label='Recibo de Cliente' value='1' />
+            <menuitem label='Recibo de Proveedor' value='2' />
+      </menupopup>
+      </menulist></row>
+      <row><label value='Número' control='COD'/><hbox><textbox id='COD' maxlength='12' onchange='f_capturar()'/></hbox></row>
+  <row><label value='Fecha' control='FEC'/><datepicker id='FEC' readonly='true'/></row>
+      <row><label value='Cliente' control='CLIENTE_COD'/><hbox><textbox id='CLIENTE_COD' maxlength='12' readonly='true' size='12'/><textbox id='CLIENTE_NOM'  readonly='true' size='40'/></hbox></row>
+      <row><label value='Monto' control='MONTO'/><hbox><textbox id='MONTO' maxlength='11' readonly='true'/></hbox></row>
+    </rows>
+  </grid>
+  <hbox>
+    <button label='Imprimir' image='<?=$this->baseUrl()?>/www/img/icons/print.png' oncommand='f_imprimir()'/>
+    </hbox>
+</groupbox>
+</window>

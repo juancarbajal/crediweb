@@ -1,0 +1,39 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+'<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n".
+  '<?xml-stylesheet href="'.$this->baseUrl().'/www/css/view.css" type="text/css"?>'."\n";
+?>
+<window title='<?=$this->title.' : '.$this->subTitle.' [' .$this->user.']' ?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' width="800" height="600">
+  <script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+  <script src='<?=$this->baseUrl()?>/www/js/validate.prototype.js' />
+  <script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js' />
+  <keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+  <script>
+function loadPage(url){
+  $("frmContenido").setAttribute('src',url);
+}
+function f_salir(){
+  window.location.href='<?=$this->baseUrl()?>';
+}
+  </script>
+  <menubar>
+    <?foreach ($this->menu as $key=>$menuitem){?>
+    <?if (count($menuitem)>0){?>
+    <menu label="<?=$key?>">
+      <menupopup>
+        <?foreach ($menuitem as $submenu){?>
+        <? if ($submenu->SEP==1) {?><menuseparator/><?}?>
+        <menuitem label="<?=$submenu->NOM?>" oncommand="loadPage('<?=$this->baseUrl()?>/<?=$submenu->URL?>')"/>
+        
+        <?}?>
+      </menupopup>
+    </menu>
+    <?}?>
+    <?}?>
+  </menubar>
+  <toolbox>
+    <toolbar>
+      <toolbarbutton image="<?=$this->baseUrl()?>/www/img/icons/close.png" oncommand="f_salir()" />
+    </toolbar>
+  </toolbox>
+  <iframe id="frmContenido" flex="2"  minheight="400px" scroll="yes" src="<?=$this->url(array('action'=>'presentacion'))?>"></iframe>
+</window>

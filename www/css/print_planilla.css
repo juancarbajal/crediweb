@@ -1,0 +1,51 @@
+* {
+overflow: visible !important;
+line-height: 0.9; 
+font-size: 8px;
+font-family: Sans,Serif, Verdana;
+}
+body{ 
+background: white;
+font-size:8px;
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+ }
+h1 { 
+font-size: 8px;
+text-align: center;
+font-weight: bold;
+ }
+h2 { 
+font-size: 8px;
+font-weight: bold;
+ }
+h3 { 
+font-size: 8px;
+font-weight: bold;
+ }
+A{
+   text-decoration: none
+}
+th{ 
+border-width: 1px;
+border-style: solid;
+border-color: black;
+margin: 5px 5px 5px 5px;
+overflow: auto;
+ }
+hr{ 
+color: black;
+}
+.cuadro{  
+
+border-width: 1px;
+border-style: solid;
+border-color: black;
+overflow: auto;
+
+}
+.saltopagina {
+      page-break-after: always;
+}

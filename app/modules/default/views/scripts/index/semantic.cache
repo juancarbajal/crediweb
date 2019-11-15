@@ -1,0 +1,21 @@
+;; Object index/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "index/"
+  :tables (list 
+   (semanticdb-table "calendario.phtml"
+    :major-mode 'php-mode
+    :tags 'nil
+    :file "calendario.phtml"
+    )
+   (semanticdb-table "index.phtml"
+    :major-mode 'php-mode
+    :tags 'nil
+    :file "index.phtml"
+    :pointmax 490
+    :unmatched-syntax 'nil
+    )
+   )
+  :file "semantic.cache"
+  :semantic-tag-version "2.0pre3"
+  :semanticdb-version "2.0pre3"
+  )

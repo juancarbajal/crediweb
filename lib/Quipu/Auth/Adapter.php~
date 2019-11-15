@@ -1,0 +1,4 @@
+<?php
+require_once('Zend/Auth/Adapter/DbTable.php');
+$QuipuAuthAdapter=new Zend_Auth_Adapter_DbTable($db, 'em_ta_empleado', 'vc_usuario', 'vc_contrasenia');
+?>

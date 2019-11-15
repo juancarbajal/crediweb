@@ -1,0 +1,22 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+'<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n".
+'<?xml-stylesheet href="'.$this->baseUrl().'/www/css/view.css" type="text/css"?>'."\n";
+?>
+<window title='<?=$this->title.' : '.$this->subTitle?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' >
+  <script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+  <script src='<?=$this->baseUrl()?>/www/js/validate.prototype.js' />
+  <script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js' />
+  <keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+  <script>
+function f_iniciar(){
+window.location.href='<?=$this->url(array('module'=>'auth','controller'=>'index','action'=>'index'))?>'
+}
+  </script>
+  <groupbox>
+    <caption label='<?=$this->subTitle?>' />
+    <description label="Su sesión a terminado o esta intentando
+    ingresar a una sección no permitida. Por favor inicie Sesión"/>
+    <description labe="Nota: La sesión dura 30 mínutos como máximo, si despues de ese tiempo no ha ejecutado ningún proceso el sistema le invita a ingresar de nuevo."/>
+    <button label="Iniciar Sesión" oncommand="f_iniciar()"/>
+  </groupbox>
+</window>

@@ -1,0 +1,146 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+     '<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n".
+     '<?xml-stylesheet href="'.$this->baseUrl().'/www/css/view.css" type="text/css"?>'."\n";
+?>
+<window title='<?=$this->title.' : '.$this->subTitle?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' onload='f_cargar()'>
+     <script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+     <script src='<?=$this->baseUrl()?>/www/js/validate.prototype.js' />
+     <script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js' />
+     <keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+     <script>
+     function f_cargar(){
+     f_cargar_codigo();
+}
+function f_cargar_codigo(){
+  new Ajax.Request( 
+                   '<?=$this->url(array('action'=>'recibo'))?>',
+                   { method:'post',
+                       parameters: {opc:'get'}, 
+                       onSuccess: function(t) {
+                       r=t.responseJSON;
+                       if (r.code==0){ 
+                         $('COD').value=r.data;
+                       } 
+                     } 
+                     } );
+}
+function f_validar(){
+v=new Validate();
+  v.addRules({id:'DET', required: true, label: 'Detalle'});
+  v.addRules({id:'NOM', required: true, label: 'Nombres'});
+  v.addRules({id:'APE_PAT', required: true, label: 'Apellido Paterno'});
+  v.addRules({id:'APE_MAT', required: true, label: 'Apellido Materno'});
+  v.addRules({id:'DNI', required: true, label: 'Documento de Identidad'});
+  v.addRules({id:'MONTO',required:true, option: 'Decimal', label:'Monto'});
+  return v.Apply();
+}
+function f_guardar(){
+  Quipu.campos=new Array('FEC','MONTO','IGV','SUB_TOTAL','NOM','APE_PAT','APE_MAT','DIRE','DNI','AFECTO_IGV');
+  if (f_validar()){
+    new Ajax.Request( 
+                     '<?=$this->url(array('action'=>'recibo'))?>',
+                     { method:'post',
+                         parameters: Quipu.toParams('FEC','DET','MONTO','IGV','SUB_TOTAL','NOM','APE_PAT','APE_MAT','DIRE','TIPO_DOC_COD','DNI','MONEDA_COD','AFECTO_IGV',{opc:'ins'}), 
+                         onSuccess: function(t) {
+                         r=t.responseJSON;
+                         alert(r.msg);
+                         if (r.code==0){ 
+                           Quipu.nuevoRegistro();
+                           $('COD').value=r.nuevo;
+                           Quipu.print("<?=$this->url(array('action'=>'reciborep'))?>/COD/"+r.data,null,  '<?=$this->baseUrl()?>');
+                         } 
+                       } 
+                     } );
+  }
+}
+function calcular_igv(){
+  if ($('AFECTO_IGV').checked==true){
+		igv=<?=$this->igv?>;		
+		if ($('MONTO').value!=''){
+          total=eval($('MONTO').value);					
+          $('SUB_TOTAL').value=Quipu.format(total/(igv+1.00),2);			
+          $('IGV').value=Quipu.format(total-eval($('SUB_TOTAL').value),2);			
+		}
+  }
+  else{
+    $('SUB_TOTAL').value=Quipu.format(total,2);
+    $('IGV').value='0.00';
+  }
+}
+function f_aplicar_igv(){
+  if ($('AFECTO_IGV').checked==true){
+    $('div_igv').hidden=false;
+    $('div_sub_total').hidden=false;
+  }
+  else{ $('div_igv').hidden=true;
+        $('div_sub_total').hidden=true;
+  }
+
+}
+function f_buscar_cliente(){
+  Quipu.open('<?=$this->url(array('controller'=>'cliente','action'=>'buscar'))?>?f=f_cargar_uno'); 
+}
+function f_cargar_uno(cod){
+  new Ajax.Request( 
+                   '<?=$this->url(array('controller'=>'cliente','action'=>'datos'))?>',
+  { method:'post',
+             parameters: {COD:cod}, 
+             onSuccess: function(t) {
+               r=t.responseJSON;
+               if (r.code==0){ 
+                   rs=r.data;
+                   $('TIPO_DOC_COD').value=rs.K_TIPO_DOC_COD;
+                   $('DNI').value=rs.K_DNI;
+                   $('NOM').value=rs.K_NOM;
+                   $('APE_MAT').value=rs.K_APE_MAT;
+                   $('APE_PAT').value=rs.K_APE_PAT;
+                   $('DIRE').value=rs.K_DIRE;
+
+               } 
+             } 
+  } );
+}
+     </script>
+     <groupbox>
+     <caption label='<?=$this->subTitle?>' />
+     <grid>
+     <columns>
+     <column />
+     <column />
+     </columns>
+     <rows>
+  <row><label value='Número' control='COD'/><textbox id='COD' maxlength='12' readonly='true' /></row>
+     <row><label value='Fecha' control='FEC'/><datepicker id='FEC' value='<?=date('Y-m-d')?>' type='popup' tabindex='1'/></row>
+  <row><label value='Tipo de Doc.' control='TIPO_DOC_COD' tabindex='2'/>
+  <menulist id='TIPO_DOC_COD'>
+  <menupopup>
+  <?foreach($this->tipoDocs as $doc){?>
+  <menuitem label='<?=$doc->NOM?>' value='<?=$doc->COD?>' />
+                                     <?}?>
+  </menupopup>
+  </menulist></row>
+  <row><label value='Documento' control='DNI'/><hbox><textbox id='DNI' maxlength='12' tabindex='3'/><button label='' image='<?=$this->baseUrl()?>/www/img/icons/search.png' oncommand='f_buscar_cliente()'/></hbox></row>
+  <row><label value='Nombres' control='NOM'/><textbox id='NOM' maxlength='40' tabindex='4' oninput="this.value=this.value.toUpperCase()"/></row>
+  <row><label value='Apel. Paterno' control='APE_PAT'/><textbox id='APE_PAT' maxlength='40' tabindex='5' oninput="this.value=this.value.toUpperCase()"/></row>
+  <row><label value='Apel. Materno' control='APE_MAT'/><textbox id='APE_MAT' maxlength='40' tabindex='6' oninput="this.value=this.value.toUpperCase()"/></row>
+  <row><label value='Dirección' control='DIRE'/><textbox id='DIRE' maxlength='200' tabindex='7' oninput="this.value=this.value.toUpperCase()"/></row>
+     <row><label value='Detalle' control='DET'/><textbox id='DET' multiline='true' rows='5' tabindex='8' value='INFOCORP' oninput="this.value=this.value.toUpperCase()"/></row>
+<row>
+  <label value='Moneda' control='MONEDA_COD'/>
+  <menulist id='MONEDA_COD'>
+  <menupopup>
+  <?foreach($this->monedas as $moneda){?>
+  <menuitem label='<?=$moneda->NOM?>' value='<?=$moneda->COD?>' />
+  <?}?>
+  </menupopup>
+  </menulist>
+</row>
+  <row><label value='Afecto IGV' control='AFECTO_IGV'/><checkbox id='AFECTO_IGV' checked='true' oncommand='f_aplicar_igv()'/></row>
+     <row id='div_sub_total'><label value='Sub-Total' control='SUB_TOTAL'/><textbox id='SUB_TOTAL' maxlength='10' readonly='true'/></row>
+     <row id='div_igv'><label value='IGV' control='IGV'/><textbox id='IGV' maxlength='10' readonly='true'/></row>
+     <row><label value='Total' control='MONTO'/><textbox id='MONTO' maxlength='10' tabindex='9' onblur='calcular_igv()'/></row>
+     </rows>
+     </grid>
+     <hbox><button label='Guardar' image='<?=$this->baseUrl()?>/www/img/icons/ok.png' tabindex='10' oncommand='f_guardar()'/></hbox>
+     </groupbox>
+     </window>

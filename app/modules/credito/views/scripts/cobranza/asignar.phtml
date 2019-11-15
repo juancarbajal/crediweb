@@ -1,0 +1,76 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+'<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n".
+'<?xml-stylesheet href="'.$this->baseUrl().'/www/css/view.css" type="text/css"?>'."\n";
+?>
+<window title='<?=$this->title.' : '.$this->subTitle?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' >
+  <script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+  <script src='<?=$this->baseUrl()?>/www/js/validate.prototype.js' />
+  <script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js' />
+  <keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+  <script>
+     function f_guardar(){
+     var v=new Validate();
+     v.addRules({id:'COD', required: true, label: 'Código de Crédito'});
+
+     if (v.Apply()){
+       new Ajax.Request( 
+                        'asignar',
+                        { method:'post',
+                            parameters: {op:'ins','COD':$('COD').value, 'COBRADOR_COD':$('COBRADOR_COD').value}, 
+                            onSuccess: function(t) {
+                            r=t.responseJSON;
+                            alert(r.msg);
+                            if (r.code==0){ 
+                              $('COD').value='';
+                              $('COBRADOR_COD').value='';
+                            } 
+                          } 
+                        } );
+     }
+   }
+function f_buscar_credito(){
+  Quipu.open("<?=$this->url(array('controller'=>'credito','action'=>'buscardesembolso'))?>?f=f_capturar_credito");
+}
+function f_capturar_credito(cod){
+  if(cod!=''){
+    new Ajax.Request( 
+                     '<?=$this->url(array('action'=>'asignar'))?>',
+                     { method:'post',
+                         parameters: {op:'get', COD:cod}, 
+                         onSuccess: function(t) {
+                         r=t.responseJSON;
+                         if (r.code==0){ 
+                           $('COD').value=r.data.COD;
+                           $('COBRADOR_COD').value=r.data.COBRADOR_COD;
+                         } 
+                       } 
+                     } );
+  }
+}    
+
+  </script>
+  <groupbox>
+    <caption label='<?=$this->subTitle?>' />
+     <grid>
+     <columns>
+     <column />
+     <column />
+     </columns>
+     <rows>
+            <row><label value='Crédito' control='COD'/><hbox><textbox id='COD' maxlength='12' onchange='f_capturar_credito(this.value)'/><button label='' image='<?=$this->baseUrl()?>/www/img/icons/search.png' oncommand='f_buscar_credito()'/></hbox></row>
+  <row><label value='Cobrador' control='COBRADOR_COD'/>
+  <menulist id='COBRADOR_COD'>
+  <menupopup>
+  <menuitem label='' value='' />
+  <? foreach($this->cobradores as $cobrador){?>
+  <menuitem label='<?=$cobrador->NOM_LARGO?>' value='<?=$cobrador->COD?>' />
+                                                   <?}?>
+  </menupopup>
+  </menulist></row>
+     </rows>
+     </grid>
+    <hbox>
+      <button label='Guardar' image='<?=$this->baseUrl()?>/www/img/icons/ok.png' oncommand='f_guardar()'/></hbox>
+
+  </groupbox>
+</window>

@@ -1,0 +1,37 @@
+;; Object caja/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "caja/"
+  :tables (list 
+   (semanticdb-table "desembolsocredito.phtml"
+    :major-mode 'php-mode
+    :tags '(("f_buscar_credito" function (:type ("function" type (:type "class") nil nil)) nil [736 881]) ("f_capturar_credito" function (:arguments (("" variable (:type ("cod" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [910 914])) :type ("function" type (:type "class") nil nil)) nil [882 1644]) ("f_guardar" function (:type ("function" type (:type "class") nil nil)) nil [1645 2091]) ("f_cronograma" function (:type ("function" type (:type "class") nil nil)) nil [2092 2244]) ("f_cancelar" function (:type ("function" type (:type "class") nil nil)) nil [2245 2347]))
+    :file "desembolsocredito.phtml"
+    :pointmax 3948
+    :unmatched-syntax 'nil
+    )
+   (semanticdb-table "desembolsolista.phtml"
+    :major-mode 'php-mode
+    :tags '(("tree" variable (:default-value "$('tr')" :type "int") nil [742 755]) ("f_desembolsar" function (:type ("function" type (:type "class") nil nil)) nil [756 946]) ("foreach" function (:arguments (("" variable (:type ("$this" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1465 1471]) ("as" variable (:type ("desembolsos" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1472 1498]) ("" variable (:type ("$desembolso" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1487 1499])) :type "int") nil [1457 1781]))
+    :file "desembolsolista.phtml"
+    :pointmax 1955
+    :unmatched-syntax 'nil
+    )
+   (semanticdb-table "pagocuota.phtml"
+    :major-mode 'php-mode
+    :tags '(("f_pagar" function (:type ("function" type (:type "class") nil nil)) nil [736 1605]) ("f_buscar_credito" function (:type ("function" type (:type "class") nil nil)) nil [1606 1751]) ("f_capturar_credito" function (:arguments (("" variable (:type ("cod" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1780 1784])) :type ("function" type (:type "class") nil nil)) nil [1752 2716]))
+    :file "pagocuota.phtml"
+    :pointmax 4308
+    :unmatched-syntax 'nil
+    )
+   (semanticdb-table "pagocuotarep.phtml"
+    :major-mode 'php-mode
+    :tags '(("Eacute" variable (:type ("CR" type (:type "class") nil nil)) nil [675 685]) ("Oacute" variable (:type ("LIQUIDACI" type (:type "class") nil nil)) nil [772 789]) ("oacute" variable (:type ("Descripci" type (:type "class") nil nil)) nil [873 890]) ("foreach" function (:arguments (("" variable (:type ("$this" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1196 1202]) ("as" variable (:type ("detalles" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1203 1223]) ("" variable (:type ("$detalle" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1215 1224])) :type "int") nil [1187 2215]) ("Eacute" variable (:type ("CR" type (:type "class") nil nil)) nil [3114 3124]) ("Oacute" variable (:type ("LIQUIDACI" type (:type "class") nil nil)) nil [3211 3228]) ("oacute" variable (:type ("Descripci" type (:type "class") nil nil)) nil [3312 3329]) ("foreach" function (:arguments (("" variable (:type ("$this" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3635 3641]) ("as" variable (:type ("detalles" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3642 3662]) ("" variable (:type ("$detalle" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3654 3663])) :type "int") nil [3626 4654]))
+    :file "pagocuotarep.phtml"
+    :pointmax 5044
+    :unmatched-syntax 'nil
+    )
+   )
+  :file "semantic.cache"
+  :semantic-tag-version "2.0pre3"
+  :semanticdb-version "2.0pre3"
+  )

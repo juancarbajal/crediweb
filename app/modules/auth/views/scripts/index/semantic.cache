@@ -1,0 +1,20 @@
+;; Object index/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "index/"
+  :tables (list 
+   (semanticdb-table "index.phtml"
+    :major-mode 'php-mode
+    :tags '(("f_cargar" function (:type ("function" type (:type "class") nil nil)) nil [690 730]) ("f_login" function (:type ("function" type (:type "class") nil nil)) nil [731 1157]))
+    :file "index.phtml"
+    :pointmax 1658
+    )
+   (semanticdb-table "logout.phtml"
+    :major-mode 'php-mode
+    :tags 'nil
+    :file "logout.phtml"
+    )
+   )
+  :file "semantic.cache"
+  :semantic-tag-version "2.0pre3"
+  :semanticdb-version "2.0pre3"
+  )

@@ -1,0 +1,76 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+'<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n"
+.'<?xml-stylesheet href="'.$this->baseUrl().'/www/css/view.css" type="text/css"?>'."\n";
+
+?>
+<window title='<?=$this->title.' : '.$this->subTitle?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' onload="f_cargar()">
+<script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+<script src='<?=$this->baseUrl()?>/www/js/validatejs.js' />
+<script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js' />
+<keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+<script>
+
+function f_cargar(){
+  new Ajax.Request( '<?=$this->url(array('action'=>'empresa'))?>',
+      { method: 'post',
+        parameters: {op:'get'},
+        onSuccess: function (t) {
+          d=t.responseJSON;
+          if (d.code==0)
+            Quipu.fromJSON(d.data[0]);
+        }
+      }
+                    );
+}
+function f_guardar(){
+  new Ajax.Request(
+                   '<?=$this->url(array('action'=>'empresa'))?>', 
+  { method: 'post',
+      parameters: Quipu.toParams('COD','NOM','DIRE','FONO1','FONO2','FEC_INI','INFOCORP_COD',{op:'ins'}),
+              onSuccess: function(t)	{
+                Quipu.alertError(t.responseJSON.msg);
+              },
+  }
+                   );
+}
+</script>
+
+<groupbox>
+<caption label='Configurar Empresa' />
+<grid>
+  <columns>
+    <column/>
+    <column/>
+  </columns>
+  <rows>
+    <row>
+      <label value="RUC"/>
+      <textbox id="COD" maxlength="11" />
+    </row>
+    <row>
+      <label value="Razón Social"/>
+      <textbox id="NOM" maxlength="100" oninput="this.value=this.value.toUpperCase()"/>
+    </row>
+    <row>
+      <label value="Dirección"/>
+      <textbox id="DIRE" maxlength="200" oninput="this.value=this.value.toUpperCase()"/>
+    </row>
+    <row>
+      <label value="Télefono 1"/>
+      <textbox id="FONO1" maxlength="25"/>
+    </row>
+    <row>
+      <label value="Télefono 2"/>
+      <textbox id="FONO2" maxlength="25"/>
+    </row>
+    <row>
+      <label value="Fecha de Inicio"/>
+      <datepicker id="FEC_INI" maxlength="10" type="popup"/>
+    </row>
+  <row><label value='Cod. Infocorp' control='INFOCORP_COD'/><textbox id='INFOCORP_COD' maxlength='6'/></row>
+  </rows>
+</grid>
+<hbox><button label="Guardar" oncommand="f_guardar()" image="<?=$this->baseUrl()?>/www/img/icons/ok.png"/> 
+</hbox>
+</groupbox>
+</window>

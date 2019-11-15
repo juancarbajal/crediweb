@@ -1,0 +1,64 @@
+<html>
+<head>
+<link rel="stylesheet" href="<?=$this->baseUrl()?>/www/css/print.css" type="text/css" media="screen,print" />
+</head>
+<body oncontextmenu="return false"  leftmargin="80" topmargin="30" rightmargin="30">
+<table width="100%"><tr><td width="20%"><img src="<?=$this->baseUrl()?>/www/img/empresa/logo_min.jpg"/></td><td><h1><u>PAGARE</u></h1></td><td width="20%"></td></tr></table>
+<br/>
+<table width="100%" border="1px" cellspacing="0px">
+<theader>
+<th>N&Uacute;MERO</th><th>LUGAR DE EMISI&Oacute;N</th><th>FECHA DE EMISION</th><th>FECHA DE VENCIMIENTO</th><th>MONEDA</th><th>IMPORTE</th>
+</theader>
+<tbody>
+<tr>
+<td align="center"><?=$this->cliente->CREDITO_COD?></td>
+<td align="center">TACNA</td>
+<td align="center"><?=$this->credito->FEC?></td>
+<td align="center"><?=$this->credito->FEC_FIN?></td>
+<td align="center"><?=$this->moneda->NOM?></td>
+<td align="center"><?=$this->moneda->ABREV?> <?=$this->credito->MONTO?></td>
+</tr>
+</tbody>
+</table>
+<br/>
+POR ESTE <b>PAGARE</b> DEBO(EMOS) Y PAGARE(MOS) SOLIDARIA E INCONDICIONALMENTE A LA ORDEN DE <b><?=$this->empresa->NOM?></b> CON <b>RUC <?=$this->empresa->COD?></b>, EN SU DOMICILIO SOCIAL O DONDE SE ME(NOS) PRESENTARE A COBRO, O A QUIEN &Eacute;STA EMPRESA SE LO HUBIESE TRANSFERIDO MI DEUDA; POR LA CANTIDAD DE:
+<div class="cuadro">
+<br/>
+<center><b><?=$this->montoTexto?></b></center>
+<br/>
+</div>
+<br/>
+IMPORTE A DEBITAR EN LAS OFICINAS DE <b><?=$this->empresa->NOM?></b> UBICADAS EN LA <b>DIRECCION <?=$this->empresa->DIRE?></b> DEL <b>DISTRITO DE GREGORIO ALBARRACIN LANCHIPA,  PROVINCIA Y DEPARTAMENTO DE TACNA</b> O COBRADOR ACREDITADO POR LA EMPRESA.
+<div class="cuadro">
+<br/>
+<table>
+<tr><td>EMITENTE</td><td><?=$this->cliente->NOM_LARGO?></td></tr>
+<tr><td><?=$this->cliente->TIPO_DOCUMENTO?> N&deg;</td><td><?=$this->cliente->DOC?></td></tr>
+<tr><td>DOMICILIO</td><td><?=$this->cliente->DIRE?> DEL DISTRITO DE <?=$this->clienteLocalidad[2]?>, PROVINCIA DE <?=$this->clienteLocalidad[1]?> Y DEPARTAMENTO DE <?=$this->clienteLocalidad[0]?></td></tr>
+<tr><td>FIRMA Y HUELLA</td><td><br/><br/><br/><br/><br/></td></tr>
+</table>
+</div><br/>
+<div class="cuadro">
+<table>
+<tr><td>AVAL</td><td><?=$this->aval->NOM_LARGO?></td></tr>
+<tr><td><?=$this->aval->TIPO_DOCUMENTO?> N&deg;</td><td><?=$this->aval->DNI?></td></tr>
+<tr><td>DOMICILIO</td><td><?=$this->aval->DIRE?> DEL DISTRITO DE <?=$this->avalLocalidad[2]?>, PROVINCIA DE <?=$this->avalLocalidad[1]?> Y DEPARTAMENTO DE <?=$this->avalLocalidad[0]?> </td></tr>
+<tr><td>FIRMA Y HUELLA</td><td><br/><br/><br/><br/><br/></td></tr>
+</table>
+</div>
+<div class="cuadro">
+<u><h2>CLAUSULAS ESPECIALES</h2></u>
+<ol class="letras_may">
+<li>ESTE PAGAR&Eacute; ESTA NORMADO POR LA LEY 27287 LEY DE T&Iacute;TULOS VALORES Y SUS RESPECTIVAS MODIFICATORIAS.</li>
+<li>ESTE PAGAR&Eacute; DEBE SER PAGADO EN LA MISMA MONEDA QUE EXPRESA EL T&Iacute;TULO VALOR.</li>
+<li>A SU VENCIMIENTO PODR&Aacute; SER PRORROGADO POR SU TENEDOR POR EL PLAZO QUE &Eacute;STE SE&ntilde;ALE EN ESTE MISMO DOCUMENTO, SIN QUE SEA NECESARIA INTERVENCI&Oacute;N ALGUNA DEL OBLIGADO PRINCIPAL NI DEL AVAL SOLIDARIO.</li>
+<li>EL PRESENTE PAGAR&Eacute; PUEDE SER CEDIDO POR PARTE DE <b>"<?=$this->empresa->NOM?>"</b> A TERCEROS, ASUMIENDO ESTE &Uacute;LTIMO EL DERECHO DE EXIGIR EL CUMPLIMIENTO DE TODAS LAS OBLIGACIONES ESTABLECIDAS EN EL PRESENTE DOCUMENTO PARA LO CUAL (EL) LOS OBLIGADOS DAN SU ACEPTACI&Oacute;N.</li>
+<li>DESDE SU &Uacute;LTIMO VENCIMIENTO, SU IMPORTE TOTAL Y/O CUOTAS, GENERAR&Aacute; LOS INTERESES COMPENSATORIOS, M&Aacute;S LOS INTERESES MORATORIOS A LAS TASAS M&Aacute;XIMAS AUTORIZADAS O PERMITIDAS A SU &Uacute;LTIMO TENEDOR.</li>
+<li>EL PRESENTE PAGAR&Eacute; NO REQUIERE SER PROTESTADO POR FALTA DE PAGO, PROCEDIENDO SU EJECUCI&Oacute;N POR EL S&Oacute;LO M&Eacute;RITO DE HABER VENCIDO SU PLAZO Y NO HABER SIDO PRORROGADO. AS&Iacute; COMO EN CASO DE INCUMPLIMIENTO DE UNA O M&Aacute;S CUOTAS SE FACULTA AL TENEDOR A DAR POR VENCIDO TODOS LOS PLAZOS EN CUYO CASO PROCEDER&Aacute; EL PROTESTO ANTES DE SU VENCIMIENTO.</li>
+<li>EL IMPORTE DE ESTE PAGAR&Eacute; SER&Aacute; PAGADO EN LOS MONTOS DE LAS CUOTAS QUE SE SE&Ntilde;ALAN EL DOCUMENTO EN HOJA ADHERIDA, DENOMINADO <b>"CRONOGRAMA DE PR&Eacute;STAMO INDIVIDUAL"</b>, LOS PAGOS SER&Aacute;N EN CUOTAS DIARIAS, SEMANALES, QUINCENALES Y/O MENSUALES SEG&Uacute;N LO ESTIPULADO Y/O ACORDADO CON EL CLIENTE.</li>
+<li>EL IMPORTE DE ESTE PAGAR&Eacute; Y/O DE LAS CUOTAS PACTADAS, DESDE SU FECHA DE EMISI&Oacute;N HASTA LA FECHA DE SU RESPECTIVO VENCIMIENTO GENERAR&Aacute; UN INTER&Eacute;S COMPENSATORIO A LA TASA DE INTER&Eacute;S LEGAL VIGENTE.</li>
+<li>LOS PAGOS PARCIALES O TOTALES DE LAS CUOTAS, PODR&Aacute;N SER VERIFICADOS EN <b><?=$this->empresa->NOM?></b>.</li>
+</ol>
+</div>
+</body>
+</html>

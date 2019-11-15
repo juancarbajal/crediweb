@@ -1,0 +1,147 @@
+<html>
+<head>
+<link rel="stylesheet" href="<?=$this->baseUrl()?>/www/css/print.css" type="text/css" media="screen,print" />
+</head>
+<body  leftmargin="80" topmargin="30" rightmargin="30">
+<table width="100%">
+<tr><td width="10%"><img src="<?=$this->baseUrl()?>/www/img/empresa/logo_min.jpg"/></td>
+<td>
+<h1>SOLICITUD DE CR&Eacute;DITO</h1>
+<center>
+CR&Eacute;DITO N&deg; <?=substr($this->cliente->CREDITO_COD,6,6)?> 
+C&Oacute;DIGO DE CLIENTE <?=substr($this->cliente->CLIENTE_COD,6,6)?> 
+PAGARE <?=substr($this->cliente->CREDITO_COD,6,6)?> 
+</center>
+</td>
+</tr>
+</table>
+<b>DATOS PERSONALES DEL CLIENTE Y/O AVAL</b><br/>
+FECHA: <?=$this->credito->FEC?><br/>
+EXPEDIENTE N&deg;:<?=$this->cliente->CREDITO_COD?><br/>
+<p>MEDIANTE LA PRESENTE, SOLICITO UN PR&Eacute;STAMO POR LA CANTIDAD DE <?=$this->moneda->ABREV?><?=$this->credito->MONTO?>, <?=$this->montoTexto?>, USANDO LA L&Iacute;NEA DE CR&Eacute;DITO PACTADA CON <?=$this->empresa->NOM?>, SUMA QUE DEVOLVER&Eacute; EN CUOTAS PAGADAS PUNTUALMENTE.</p>
+<p>NOMBRES Y APELLIDOS: <?=$this->cliente->NOM_LARGO?>, <?=$this->cliente->TIPO_DOCUMENTO?> N&deg; <?=$this->cliente->DOC?> DOMICILIO: <?=$this->cliente->DIRE?> DEL DISTRITO DE <?=$this->clienteLocalidad[2]?>, PROVINCIA DE <?=$this->clienteLocalidad[1]?> Y DEPARTAMENTO DE <?=$this->clienteLocalidad[0]?>; DIRECCI&Oacute;N DEL NEGOCIO: <?=$this->cliente->DIR_NEGOCIO?>	DEL DISTRITO DE <?=$this->clienteLocalidadNegocio[2]?>, PROVINCIA DE <?=$this->clienteLocalidadNegocio[1]?> Y DEPARTAMENTO DE <?=$this->clienteLocalidadNegocio[0]?>; TEL&Eacute;FONO PERSONAL N&deg;: <?=$this->cliente->FONO1?>, TEL&Eacute;FONO DEL NEGOCIO N&deg;: <?=$this->cliente->FONO2?></p>
+FIRMA: 			<br/><br/><br/><br/>
+
+<p>NOMBRE DEL AVAL: <?=$this->aval->NOM_LARGO ?>, <?=$this->aval->TIPO_DOCUMENTO?> N&deg; <?=$this->aval->DNI?> , DOMICILIO: <?=$this->aval->DIRE?> TEL&Eacute;FONO PERSONAL N&deg;: <?=$this->aval->FONO1?> , TEL&Eacute;FONO DEL NEGOCIO N&deg;:  <?=$this->aval->FONO2?></p>
+
+FIRMA: 			<br/><br/><br/><br/>
+AN&Aacute;LISIS Y COMPORTAMIENTO: DE CR&Eacute;DITOS ANTERIORES
+<table border="1" cellspacing="0" width="100%">
+<tr><td colspan="4">ANTECEDENTES DE 2 ULTIMOS CR&Eacute;DITOS</td>
+<td colspan="6">SITUACI&Oacute;N DE LOS CR&Eacute;DITOS VIGENTES</td></tr>
+<tr>
+<td rowspan="2">NRO. DE LOS CR&Eacute;DITOS</td>
+<td rowspan="2">IMPORTE S/.</td>
+<td rowspan="2">NRO. DE CUOTAS</td>
+<td rowspan="2">FECHA DE TERMINO</td>
+<td colspan="2">CUOTAS PAGADAS</td>
+<td colspan="3">POR PAGAR</td>
+<td rowspan="2">FECHA DE &Uacute;LTIMO PAGO</td>
+</tr>
+<tr>
+<td>TOTAL</td>
+<td>D&Iacute;AS DE MORA</td>
+<td>NRO. CUOTAS ADELANTADAS</td>
+<td>TOTAL</td>
+<td>VENCIDAS</td>
+</tr>
+
+<tr>
+<td><?=$this->solicitudDetalle[0]->COD?>&nbsp;</td>
+<td><?=$this->solicitudDetalle[0]->MONTO?>&nbsp;</td>
+<td><?=$this->solicitudDetalle[0]->PLAZO?>&nbsp;</td>
+<td><?=$this->solicitudDetalle[0]->FEC_FIN?>&nbsp;</td>
+<td><?=$this->solicitudDetalle[0]->CUOTA_TOTAL?>&nbsp;</td>
+<td><?=$this->solicitudDetalle[0]->CUOTA_MORA?>&nbsp;</td>
+<td><?=$this->solicitudDetalle[0]->CUOTA_ADELANTO?>&nbsp;</td>
+<td><?=$this->solicitudDetalle[0]->CUOTA_ADELANTO_TOTAL?>&nbsp;</td>
+<td><?=$this->solicitudDetalle[0]->CUOTA_VENCIDA?>&nbsp;</td>
+<td><?=$this->solicitudDetalle[0]->FEC_ULTIMO?>&nbsp;</td>
+</tr>
+<tr>
+<td><?=$this->solicitudDetalle[1]->COD?>&nbsp;</td>
+<td><?=$this->solicitudDetalle[1]->MONTO?>&nbsp;</td>
+<td><?=$this->solicitudDetalle[1]->PLAZO?>&nbsp;</td>
+<td><?=$this->solicitudDetalle[1]->FEC_FIN?>&nbsp;</td>
+<td><?=$this->solicitudDetalle[1]->CUOTA_TOTAL?>&nbsp;</td>
+<td><?=$this->solicitudDetalle[1]->CUOTA_MORA?>&nbsp;</td>
+<td><?=$this->solicitudDetalle[1]->CUOTA_ADELANTO?>&nbsp;</td>
+<td><?=$this->solicitudDetalle[1]->CUOTA_ADELANTO_TOTAL?>&nbsp;</td>
+<td><?=$this->solicitudDetalle[1]->CUOTA_VENCIDA?>&nbsp;</td>
+<td><?=$this->solicitudDetalle[1]->FEC_ULTIMO?>&nbsp;</td>
+</tr>
+</table>
+<table width="100%">
+<tr><td>
+ACTIVIDAD DEL CLIENTE: <?=$this->actividad->NOM?>
+</td>
+<td>CIIU DEL CLIENTE: <?=$this->ciiu->NOM?><br/>
+</td>
+</tr>
+</table>
+EN QUE INVERTIRA EL CR&Eacute;DITO:
+<?=$this->inversion->NOM ?><br/>
+<table border="0" width="100%">
+<tr>
+<td width="50%">
+<table border="1" width="100%" cellspacing="0">
+<thead><th colspan="2">ANALISIS ECONOMICO GENERAL DEL CLIENTE</th></thead>
+<tr><td width="80%">DEPENDIENTES ADULTOS N&deg;</td><td width="20%"><?=$this->solicitud->DEP_ADULTO?></td></tr>
+<tr><td>DEPENDIENTES NI&Ntilde;OS N&deg;</td><td><?=$this->solicitud->DEP_MENOR?></td></tr>
+<tr><td>VALOR DE INMUEBLES</td><td><?=$this->solicitud->VAL_INMUEBLE?></td></tr>
+<tr><td>VALOR DE BIENES MUEBLES DEL CLIENTE</td><td><?=$this->solicitud->VAL_MUEBLE_CLIENTE?></td></tr>
+<tr><td>VALOR DE BIENES MUEBLES DEL NEGOCIO</td><td><?=$this->solicitud->VAL_MUEBLE_NEGOCIO?></td></tr>
+<tr><td>SALDO TOTAL DE CR&Eacute;DITOS: 1</td><td><?=$this->solicitud->SAL_TOT_1?></td></tr>
+<tr><td>SALDO TOTAL DE CR&Eacute;DITOS: 2</td><td><?=$this->solicitud->SAL_TOT_2?></td></tr>
+<tr><td>ACREEDORES</td><td><?=$this->solicitud->ACREEDOR?></td></tr>
+<tr><td>CAPITAL DE TRABAJO EN EFECTIVO AL D&Iacute;A DE HOY</td><td><?=$this->solicitud->CAP_TRAB_EFECTIVO?></td></tr>
+<tr><td>CAPITAL DE TRABAJO EN MERCADERIAS</td><td><?=$this->solicitud->CAP_TRAB_MERCA?></td></tr>
+</table>
+</td>
+
+<td>
+<table border="1" width="100%" cellspacing="0">
+<thead><th colspan="2">AN&Aacute;LISIS ECON&Oacute;MICO DEL NEGOCIO POR D&Iacute;A</th></thead>
+<tr><td width="80%">+ VENTAS / INGRESOS</td><td width="20%"><?=$this->solicitud->VENT_ING?></td></tr>
+<tr><td>+ OTROS INGRESOS</td><td><?=$this->solicitud->OTROS_ING?></td></tr>
+<tr><td>- COSTO DE INSUMOS Y/O PRODUCTOS DEL NEGOCIO</td><td><?=$this->solicitud->COSTO_INSUMO?></td></tr>
+<tr><td>- GASTOS FAMILIARES</td><td><?=$this->solicitud->GASTO_FAMILIAR?></td></tr>
+<tr><td>- OTROS GASTOS DEL NEGOCIO</td><td><?=$this->solicitud->GASTO_NEGOCIO?></td></tr>
+<tr><td>- PAGO PROMEDIO DE CR&Eacute;DITOS: 1</td><td><?=$this->solicitud->PAGO_PROM_1?></td></tr>
+<tr><td>- PAGO PROMEDIO DE CR&Eacute;DITOS: 2</td><td><?=$this->solicitud->PAGO_PROM_2?></td></tr>
+<tr><td>- PAGO PROMEDIO A ACREEDORES</td><td><?=$this->solicitud->PAGO_PROM_ACREEDOR?></td></tr>
+<tr><td>- GASTOS PERSONALES</td><td><?=$this->solicitud->GASTO_PERSONAL?></td></tr>
+<tr><td>(+) (-) SALDO PARA PAGAR</td><td><?=$this->solicitud->SALDO?></td></tr>
+</table>
+</td>
+</tr>
+</table>
+&Uacute;LTIMO INFORME DE CENTRAL DE RIESGO: <?=$this->solicitud->SBS_OPINION?><br/>
+
+OPINI&Oacute;N DEL ANALISTA: <?=$this->solicitud->OPINION_ANALISTA?><br/>
+
+COBRADOR ASIGNADO: <?=$this->cobrador->K_NOM?><br/>
+
+<h2>RESOLUCI&Oacute;N DEL JEFE DE CR&Eacute;DITOS</h2>
+<table width='100%'>
+  <tr>
+    <td width='33%'>MONTO APROBADO: <?=$this->credito->MONTO?></td>
+    <td width='33%'>N&deg; DE CUOTAS: <?=$this->credito->PLAZO?></td>
+    <td width='33%'>FECHA: <?=$this->credito->FEC?></td>
+  </tr>
+</table>
+OBSERVACIONES: <?=$this->credito->OBS?><br/>
+
+<table border="0" width="100%"><tr>
+<td width="50%">
+NOMBRE DE JEFE DE CR&Eacute;DITOS: <?=$this->analista->K_NOM?><br/>
+FIRMA: <br/>
+</td>
+<td  width="50%">
+NOMBRE DE ANALISTA: <?=$this->analista->K_NOM?><br/>
+FIRMA: <br/>
+</td>
+</tr></table>
+
+</body>
+</html>

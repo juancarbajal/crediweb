@@ -1,0 +1,141 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+          '<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n".
+          '<?xml-stylesheet href="'.$this->baseUrl().'/www/css/view.css" type="text/css"?>'."\n";
+          ?>
+<window title='<?=$this->title.' : '.$this->subTitle?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' >
+<script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+<script src='<?=$this->baseUrl()?>/www/js/validate.prototype.js' />
+<script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js' />
+<keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+<script>
+
+  function f_extraer(){
+            $('btnExtraer').disabled=true;
+    new Ajax.Request( 
+                     '<?=$this->url(array('action'=>'pagoplanilla'))?>',
+                     { method:'post',
+                         parameters: {op:'get',
+                           COBRADOR_COD: $('COBRADOR_COD').value,
+                           FEC: $('FEC').value
+                           }, 
+                         onSuccess: function(t) {
+                         r=t.responseJSON;
+                         if (r.code==0){ 
+                           Quipu.treeAdd($('tr'),r.data);
+                           f_limpiar();
+                         } 
+                         $('btnExtraer').disabled=false;
+                       } 
+                       } );
+
+  }
+function f_seleccion(){
+  //  fila=Quipu.getTreeRow($('tr')).firstChild;
+  //$('COD').value=fila.getAttribute("label");
+  //alert ();
+  fila=Quipu.getTreeRow($('tr')).childNodes;
+  $('COD').value=fila[0].getAttribute('label');
+  $('CLIENTE_COD').value=fila[1].getAttribute('label');
+  $('CLIENTE_NOM').value=fila[2].getAttribute('label');
+  $('MONTO').value=fila[7].getAttribute('label');
+}
+function f_pagar(){
+  fila=Quipu.getTreeRow($('tr'));
+  if (fila==null) {
+    Quipu.alertError('Seleccione una Registro');
+  }
+  else{
+  new Ajax.Request( 
+                   '<?=$this->url(array('controller'=>'caja','action'=>'pagocuota'))?>',
+                   { method:'post',
+                       parameters: {FEC:$('FEC').value,
+                         CREDITO:$('COD').value,
+                         MONTO:$('MONTO').value
+                         }, 
+                       onSuccess: function(t) {
+                       r=t.responseJSON;
+                       Quipu.alertError(r.msg)
+                       if (r.code==0){ 
+                         if ($('IMPRIMIR').checked){
+                           Quipu.print("<?=$this->url(array('controller'=>'caja','action'=>'pagocuotarep'))?>/COD/"+r.data.RECIBO,null, '<?=$this->baseUrl()?>');
+                          
+                         }
+                          Quipu.treeDelete($('tr'));
+                          f_limpiar();
+                       } 
+                     } 
+                     } );
+  }
+}
+function f_limpiar(){
+  $('COD').value='';
+  $('CLIENTE_COD').value='';
+  $('CLIENTE_NOM').value='';
+  $('MONTO').value='';
+}
+</script>
+<groupbox>
+  <caption label='<?=$this->subTitle?>' />
+  <grid>
+    <columns>
+      <column />
+      <column />
+    </columns>
+    <rows>
+      <row><label value='Fecha' control='FEC'/><datepicker id='FEC' maxlength='10' value="<?=date('Y-m-d')?>" readonly='true'/></row>
+      <row>            
+        <label value='Cobrador' control='COBRADOR_COD'/>
+        <menulist id='COBRADOR_COD'>
+          <menupopup>
+            <? foreach($this->cobradores as $cobrador){?>
+            <menuitem label='<?=$cobrador->NOM_LARGO?>' value='<?=$cobrador->COD?>' />
+            <? } ?>
+          </menupopup>
+        </menulist>
+        <button id='btnExtraer' label='Extraer Planilla' image='<?=$this->baseUrl()?>/www/img/icons/cronograma.png' oncommand='f_extraer()'/>
+      </row>
+    </rows>
+  </grid>
+  <tree id='tr' enableColumnDrag='true' flex='1' rows='10' onselect='f_seleccion()'>
+    <treecols>
+      <treecol label='Crédito'  flex='1'/>
+      <splitter class='tree-splitter' />
+      <treecol label='Còdigo Cliente' flex='1'/>
+      <splitter class='tree-splitter' />
+      <treecol label='Cliente' flex='1'/>
+      <splitter class='tree-splitter' />
+      <treecol label='Cuotas' flex='1'/>
+      <splitter class='tree-splitter' />
+      <treecol label='SubTotal' flex='1'/>
+      <splitter class='tree-splitter' />
+      <treecol label='ITF' flex='1'/>
+      <splitter class='tree-splitter' />
+      <treecol label='Mora' flex='1'/>
+      <splitter class='tree-splitter' />
+      <treecol label='Total' flex='1'/>
+      <splitter class='tree-splitter' />
+    </treecols>
+    <treechildren>
+    </treechildren>
+  </tree>
+
+  <grid>
+    <columns>
+      <column />
+      <column />
+    </columns>
+    <rows>
+      <row><label value='Crédito' control='COD'/>
+        <textbox id='COD' size='12' readonly='true'/>
+        <label value='Cliente' control='CLIENTE_COD'/>
+        <textbox id='CLIENTE_COD' size='12' readonly='true'/>
+        <textbox id='CLIENTE_NOM' size='40' readonly='true'/>
+        <label value='Monto' control='MONTO'/><textbox id='MONTO' maxlength='11' size='11'/>
+        <checkbox id='IMPRIMIR' value='1' label='Imprimir' />
+        <button label='Realizar Pago' image='<?=$this->baseUrl()?>/www/img/icons/ok.png' oncommand='f_pagar()'/>
+      </row>
+    </rows>
+  </grid>
+
+</groupbox>
+</window>

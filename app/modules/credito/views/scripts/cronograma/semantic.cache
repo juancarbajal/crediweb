@@ -1,0 +1,22 @@
+;; Object cronograma/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "cronograma/"
+  :tables (list 
+   (semanticdb-table "index.phtml"
+    :major-mode 'php-mode
+    :tags '(("Eacute" variable (:type ("CR" type (:type "class") nil nil)) nil [698 708]) ("iacute" variable (:type ("L" type (:type "class") nil nil)) nil [813 822]) ("Oacute" variable (:type ("LIQUIDACI" type (:type "class") nil nil)) nil [1243 1260]) ("iacute" variable (:type ("D" type (:type "class") nil nil)) nil [1929 1938]) ("$i" variable (:default-value "0" :type "int") nil [1967 1972]) ("foreach" function (:arguments (("" variable (:type ("$this" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1987 1993]) ("as" variable (:type ("cuotas" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1994 2010]) ("" variable (:type ("$cuota" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2004 2012])) :type "int") nil [1978 2539]))
+    :file "index.phtml"
+    :pointmax 3176
+    :unmatched-syntax 'nil
+    )
+   (semanticdb-table "desembolso.phtml"
+    :major-mode 'php-mode
+    :tags '(("Eacute" variable (:type ("CR" type (:type "class") nil nil)) nil [858 868]) ("iacute" variable (:type ("L" type (:type "class") nil nil)) nil [973 982]) ("Oacute" variable (:type ("LIQUIDACI" type (:type "class") nil nil)) nil [1403 1420]) ("iacute" variable (:type ("D" type (:type "class") nil nil)) nil [2089 2098]) ("$i" variable (:default-value "0" :type "int") nil [2127 2132]) ("foreach" function (:arguments (("" variable (:type ("$this" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2147 2153]) ("as" variable (:type ("cuotas" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2154 2170]) ("" variable (:type ("$cuota" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2164 2172])) :type "int") nil [2138 2699]) ("eacute" variable (:type ("pr" type (:type "class") nil nil)) nil [3416 3426]) ("uacute" variable (:type ("seg" type (:type "class") nil nil)) nil [3447 3458]) ("eacute" variable (:type ("Cr" type (:type "class") nil nil)) nil [3512 3522]) ("aacute" variable (:type ("simult" type (:type "class") nil nil)) nil [3540 3554]))
+    :file "desembolso.phtml"
+    :pointmax 3740
+    )
+   )
+  :file "semantic.cache"
+  :semantic-tag-version "2.0pre3"
+  :semanticdb-version "2.0pre3"
+  )

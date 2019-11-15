@@ -1,0 +1,22 @@
+<html>
+<head>
+<link rel="stylesheet" href="<?=$this->baseUrl()?>/www/css/print.css" type="text/css" media="screen,print" />
+</head>
+<body>
+<table width="100%">
+<tr>
+<td width="50%">
+<table width="100%">
+ <tr><td width="30%"><img src="<?=$this->baseUrl()?>/www/img/empresa/logo_min.jpg"/></td><td><h1 align="center"><?=$this->subTitle?></h1><h1>DESDE <?=$this->desde?> HASTA <?=$this->hasta?></h1></td><td width="30%" align="right">Fecha: <?=date('Y-m-d')?><br/>Hora: <?=date('H:i:s')?><br/>Usuario: <?=$this->user?></td></tr>
+</table>
+
+<table width="50%" align="center" border="1" cellspacing="0" cellpadding="0">
+<tr><th>CAPITAL PRESTADO</th><th>SALDO CAPITAL</th>
+</tr>
+<tr><td align="right">S/. <?=$this->capital->K_CAPITAL_PRESTADO?></td><td align="right">S/. <?=$this->capital->K_SALDO_CAPITAL?></td></tr>
+<tr><th>CAPITAL PRESTADO TOTAL</th><th>SALDO CAPITAL TOTAL</th>
+</tr>
+<tr><td align="right">S/. <?=$this->capital->K_CAPITAL_PRESTADO_TOTAL?></td><td align="right">S/. <?=$this->capital->K_SALDO_CAPITAL_TOTAL?></td></tr>
+</table>
+</body>
+</html>

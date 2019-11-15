@@ -1,0 +1,130 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+'<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n"
+.'<?xml-stylesheet href="'.$this->baseUrl().'/www/css/view.css" type="text/css"?>'."\n";
+?>
+<window title='<?=$this->title.' : '.$this->subTitle?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' onload="f_cargar()">
+<script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+<script src='<?=$this->baseUrl()?>/www/js/validate.prototype.js' />
+<script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js' />
+<keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+<script>
+function f_cargar(){
+  f_capturar_linea();
+  $('FEC').focus();
+}
+function f_capturar_linea(){
+  new Ajax.Request(
+                   '<?=$this->url(array('action'=>'linea'))?>',
+      {method: 'post',
+       parameters: { COD : $('LINEA_COD').value},
+       onSuccess: function(t){
+         r=t.responseJSON;
+         if (r.code==0){
+           $('TI_MENSUAL').value=r.data[0].TI_MENSUAL;
+           $('TI_MORA').value=r.data[0].TI_MORA;
+           $('TI_COMPENSA').value=r.data[0].TI_COMPENSA;
+           $('GA').value=r.data[0].GA;
+           $('MONTO_MIN').value=r.data[0].MONTO_MIN;
+           $('MONTO_MAX').value=r.data[0].MONTO_MAX;
+           $('CUOTA_MIN').value=r.data[0].CUOTA_MIN;
+           $('CUOTA_MAX').value=r.data[0].CUOTA_MAX;
+         }
+       }
+      }
+  );
+}
+function f_validar(){
+  v=new Validate();
+  v.addRules({id:'FEC', required: true, option: 'date', label: 'Fecha'});
+  v.addRules({id:'MONTO',required: true, option:'decimalRange',min:$('MONTO_MIN').value,max:$('MONTO_MAX').value,label:'Monto'});
+  v.addRules({id:'PLAZO',required: true, option:'integerRange',min:$('CUOTA_MIN').value,max:$('CUOTA_MAX').value,label:'Plazo '});
+  return v.Apply();
+}
+function f_cronograma(){
+  if (f_validar()){
+    url="<?=$this->url(array('controller'=>'cronograma','action'=>'index'))?>/index/f/"+$('FEC').value+"/p/"+$('PLAZO').value+"/m/"+$('MONTO').value+"/t/"+$('TI_MENSUAL').value+'/LINEA_COD/'+$('LINEA_COD').value+'/MODALIDAD_COD/'+$('MODALIDAD_COD').value+'/o/'+$('GA').value;
+    Quipu.print(url,null,'<?=$this->baseUrl()?>');
+  }
+}
+</script>
+<groupbox>
+  <caption label='<?=$this->subTitle?>' />
+<hbox><label value="Fecha" control="FEC"/><datepicker id="FEC" value="<?=date('Y-m-d')?>" type="popup"/>
+</hbox>
+  <hbox>
+    <label value="Línea"/><menulist id="LINEA_COD" oncommand="f_capturar_linea()">
+    <menupopup>
+      <? foreach($this->lineas as $linea){?>
+      <menuitem label="<?=$linea->NOM?>" value="<?=$linea->COD?>"/>
+      <? }?>
+    </menupopup>
+  </menulist>
+</hbox>
+    <grid>
+      <columns>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+      </columns>
+      <rows>
+        <row>
+          <label value="Tasa Mensual" control="TI_MENSUAL"/>
+          <label value="Tasa Moratoria" control="TI_MORA"/>
+          <label value="Tasa Compensatoria" control="TI_COMPENSA"/>
+          <label value="G.Administrativo"/>
+        </row>
+        <row>
+          <textbox id="TI_MENSUAL" readonly="true" size="10"/>
+          <textbox id="TI_MORA" readonly="true" size="10"/>
+          <textbox id="TI_COMPENSA" readonly="true" size="10"/>
+          <textbox id="GA" readonly="true" size="10"/>
+        </row>
+        <row>
+          <label value="Monto Mínimo" control="MONTO_MIN"/>
+          <label value="Monto Máximo" control="MONTO_MAX"/>
+          <label value="Plazo Mínimo" control="CUOTA_MIN"/>
+          <label value="Plazo Máximo" control="CUOTA_MAX"/>
+        </row>
+        <row>
+          <textbox id="MONTO_MIN" size="10" maxlength="11" readonly="true"/>
+          <textbox id="MONTO_MAX" size="10" maxlength="11" readonly="true"/>
+          <textbox id="CUOTA_MIN" size="10" maxlength="11" readonly="true"/>
+          <textbox id="CUOTA_MAX" size="10" maxlength="11" readonly="true"/>
+        </row>
+      </rows>
+    </grid>
+    <grid>
+      <columns>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+      </columns>
+      <rows>
+        <row>
+          <label value="Modalidad"/>
+          <menulist id="MODALIDAD_COD">
+            <menupopup>
+              <? foreach($this->modalidades as $modalidad){?>
+              <menuitem label="<?=$modalidad->NOM?>" value="<?=$modalidad->COD?>"/>
+              <? }?>
+            </menupopup>
+          </menulist>
+          <label value="Destino"/>
+          <menulist id="DESTINO_COD">
+            <menupopup>
+              <? foreach($this->destinos as $destino){?>
+              <menuitem label="<?=$destino->NOM?>" value="<?=$destino->COD?>"/>
+              <? }?>
+            </menupopup>
+          </menulist>
+        </row>
+        <row>
+          <label value="Monto" class="negrita"/><textbox id="MONTO" size="10"/><label value="Plazo" class="negrita"/> <textbox id="PLAZO" size="10"/>
+        </row>
+      </rows>
+    </grid>
+<hbox><button label="Simular Cronograma de Pagos" image="<?=$this->baseUrl()?>/www/img/icons/cronograma.png" oncommand="f_cronograma()" /></hbox>
+</groupbox>
+</window>

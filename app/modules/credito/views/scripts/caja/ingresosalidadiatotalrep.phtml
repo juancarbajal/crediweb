@@ -1,0 +1,169 @@
+<html>
+<head>
+<link rel="stylesheet" href="<?=$this->baseUrl()?>/www/css/print.css" type="text/css" media="screen,print" />
+</head>
+<body>
+<table width="100%">
+<tr>
+<td width="10%"><img src="<?=$this->baseUrl()?>/www/img/empresa/logo_min.jpg"/></td>
+<td>
+<h1>INGRESOS Y SALIDAS DIARIAS</h1>
+<? if (isset($this->empleado)) { ?><h1><?=$this->empleado?></h1><? }?>
+<h1>MONEDA: <?=$this->moneda?> FECHA: <?=$this->fecha?></h1>
+
+</td>
+<td width="20%">
+   Fecha: <?=date('Y-m-d')?><br/>
+   Hora: <?=date('H:i:s')?><br/>
+   Usuario: <?=$this->user?>
+</td>
+   </table>
+   <h1>INGRESOS</h1>
+   <table width="100%">
+   <thead>
+   <th>N&deg;</th>
+   <th>Recibo</th>
+   <th>Cr&eacute;dito</th>
+
+   <th>Cod.Cliente</th>
+   <th>Nombres y Apellidos</th>
+   <th>M</th>
+   <th>SubTotal</th>
+   <th>ITF</th>
+   <th>Total</th>
+<th>Usuario</th>
+   </thead>
+   <? $i=0;?>
+   <? foreach($this->ingresos as $ingreso){?>
+   <tr>
+     <td align="right"><?=(++$i)?></td>
+   <td><?=substr($ingreso->K_RECIBO_COD,6,6)?></td>
+   <td><?=substr($ingreso->K_CREDITO_COD,6,6)?></td>
+   <td><?=substr($ingreso->K_CLIENTE_COD,6,6)?></td>
+   <td><?=$ingreso->K_CLIENTE_NOM?></td>
+   <td><?=$ingreso->K_MONEDA?></td>
+   <td align="right"><?=$ingreso->K_SUBTOTAL?></td>
+   <td align="right"><?=$ingreso->K_ITF?></td>
+
+   <td align="right"><?=$ingreso->K_MONTO?></td>
+   <td><?=$ingreso->K_USR?></td></tr>
+   <? }?>
+
+   <? foreach($this->ingresosOtro as $ingreso){?>
+   <tr>
+     <td align="right"><?=(++$i)?></td>
+   <td><?=substr($ingreso->K_RECIBO_COD,6,6)?></td>
+   <td><?=substr($ingreso->K_CREDITO_COD,6,6)?></td>
+   <td><?=substr($ingreso->K_CLIENTE_COD,6,6)?></td>
+   <td><?=$ingreso->K_CLIENTE_NOM?></td>
+   <td><?=$ingreso->K_MONEDA?></td>
+   <td align="right"><?=$ingreso->K_SUBTOTAL?></td>
+   <td align="right"><?=$ingreso->K_ITF?></td>
+
+   <td align="right"><?=$ingreso->K_MONTO?></td>
+   <td><?=$ingreso->K_USR?></td></tr>
+   <? }?>
+
+   <tr><td colspan="4"></td>
+                          <td colspan="2" align="right"><b>TOTAL</b></td>
+                          <td align="right"><b><?=$this->totalIngresos->K_SUB_TOTAL?></b></td>
+                          <td align="right"><b><?=$this->totalIngresos->K_ITF?></b></td>
+                          <td align="right"><b><?=$this->totalIngresos->K_TOTAL?></b></td>
+
+                          </tr>
+</table>
+<br/>
+<br/>
+                   <h1>SALIDAS (DESEMBOLSOS)</h1>
+
+<table width="100%">
+<thead>
+  <th>N&deg;</th>
+   <th>Cr&eacute;dito</th>
+   <th>Cod.Cliente</th>
+   <th>Nombres y Apellidos</th>
+   <th>Plazo</th>
+   <th>M</th>
+   <th>Monto</th>
+   <th>Usuario</th>
+<thead>
+<? $i=0;?>
+   <? foreach($this->salidas as $salida){?>
+<tr>
+     <td align="right"><?=(++$i)?></td>
+<td><?=$salida->K_COD?></td>                     
+<td><?=substr($salida->K_CLIENTE_COD,6,6)?></td>                     
+<td><?=$salida->K_CLIENTE_NOM?></td>                     
+<td><?=$salida->K_PLAZO?></td>                     
+<td><?=$salida->K_MONEDA?></td>                    
+<td  align="right"><?=$salida->K_MONTO?></td>                     
+<td><?=$salida->K_USR?></td>                     
+</tr>
+     <?}?>
+<tr><td colspan="4"></td><td colspan="2" align="right"><b>TOTAL<b></td><td align="right"><b><?=$this->totalSalidas?></b></td><tr>
+</table>
+<br/>
+<hr/>
+<h1>MOVIMIENTOS (TRANSFERENCIAS)</h1>
+<table width="100%">
+<thead>
+<th>REG</th>
+<th>FECHA</th>
+<th>COD FUENTE</th>
+<th>NOM FUENTE</th>
+<th>COD DESTINO</th>
+<th>NOM DESTINO</th>
+<th>INGRESO</th>
+<th>SALIDA</th>
+</thead>
+<tbody>
+<? if (isset($this->empleado)) $sumIngreso=0;$sumSalida=0;?>
+                   <?foreach($this->movimientos as $mov){?>
+<tr>
+<td><?=$mov->K_ID?></td>
+<td><?=$mov->K_FEC_HORA?></td>
+<td><?=$mov->K_CAJA_FUE?></td>
+<td><?=$mov->K_CAJA_FUE_NOM?></td>
+<td><?=$mov->K_CAJA_DES?></td>
+<td><?=$mov->K_CAJA_DES_NOM?></td>
+<td align='right'><?=$mov->K_INGRESO?></td>
+<td align='right'><?=$mov->K_SALIDA?></td>
+</tr>
+   <? if (isset($this->empleado)) {$sumIngreso+=$mov->K_INGRESO; $sumSalida+=$mov->K_SALIDA;}?>
+   <?}?>
+      <? if (isset($this->empleado)) {?>
+   <tr><td colspan="6"  align='right'><b>TOTAL</b></td><td align='right'><b><?=number_format($sumIngreso,2,'.','')?></b></td><td align='right'><b><?=number_format($sumSalida,2,'.','')?></b></td></tr>
+      <?}?>
+
+</tbody>
+</table>
+<hr/>
+<h1>ANULACIONES</h1>
+<br/>
+<table width="100%">
+   <thead>
+     <th>N&deg;</th>
+     <th>Recibo</th>
+   <th>Cr&eacute;dito</th>
+   <th>Cod.Cliente</th>
+   <th>Nombres y Apellidos</th>
+   <th>M</th>
+   <th>Total</th>
+   <th>Obs</th>
+   <th>Usuario</th>
+   </thead>
+   <? foreach($this->ingresosAnulados as $ingreso){?>
+   <tr>
+<td align="right"><?=(++$i)?></td>
+   <td><?=substr($ingreso->K_RECIBO_COD,6,6)?></td>
+   <td><?=substr($ingreso->K_CREDITO_COD,6,6)?></td>
+   <td><?=substr($ingreso->K_CLIENTE_COD,6,6)?></td>
+   <td><?=$ingreso->K_CLIENTE_NOM?></td>
+   <td><?=$ingreso->K_MONEDA?></td>
+   <td align="right"><?=$ingreso->K_MONTO?></td>
+   <td><?=$ingreso->K_OBS?></td>
+   <td><?=$ingreso->K_USR?></td></tr>
+   <? }?>
+</table>
+</body>
+</html>

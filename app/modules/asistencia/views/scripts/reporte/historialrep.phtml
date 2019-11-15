@@ -1,0 +1,80 @@
+<html>
+<head>
+<link rel="stylesheet" href="<?=$this->baseUrl()?>/www/css/print.css" type="text/css" media="screen,print" />
+</head>
+<body>
+<table width="100%">
+<tr>
+<td width="10%"><img src="<?=$this->baseUrl()?>/www/img/empresa/logo_min.jpg"/></td>
+<td>
+<h1>HISTORIAL</h1>
+   <h1><?=substr($this->empleado->COD,6,6)?> - <?=$this->empleado->NOM_LARGO?></h1>
+<h1><?=$this->desde?> al <?=$this->hasta?></h1>
+</td>
+<td width="20%">
+   Fecha: <?=date('Y-m-d')?><br/>
+   Hora: <?=date('H:i:s')?><br/>
+   Usuario: <?=$this->user?>
+</td>
+</table>
+
+<table width="100%">
+<tr>
+<th rowspan='3'>Fecha</th>
+<th colspan='<?=count($this->turnos)*2?>'>Turnos</th>
+<th rowspan='3'>Trab.</th>
+<th rowspan='3'>Trab. Esp.</th>
+<th rowspan='3'>Extras</th>
+<th rowspan='3'>Permiso</th>
+<th rowspan='3'>Tardanza</th>
+<th rowspan='3'>Turnos <br>Falta</th>
+
+</tr>
+<tr>
+   <?foreach($this->turnos as $turno){?>
+   <th colspan='2'><?=$turno->NOM?>
+   </th>
+   <?}?>
+</tr>
+<tr>
+   <?for($i=0;$i<count($this->turnos);$i++){?>
+   <th> Ing.</th><th> Sal.</th>
+   <?}?>
+
+</tr>
+<tbody>
+   <?foreach ($this->base as $b){?>
+<tr>
+<td><?=$b->K_FEC?></td>
+<!--TURNOS-->
+<?foreach($this->turnos as $turno){?>
+<td><?=$b->K_TURNO[$turno->ID]['I']?></td>
+<td><?=$b->K_TURNO[$turno->ID]['S']?></td>
+ <?}?>
+<!--FIN TURNOS-->
+<td><?=$b->K_HOR_TRABAJADAS?></td>
+<td><?=$b->K_HOR_ESPECIAL?></td>
+<td><?=$b->K_HOR_EXTRAS?></td>
+<td>
+<?foreach($b->K_PERMISO as $p){?>
+<?=$p->K_HOR?><br/>
+<?}?>
+</td>
+<td><?=$b->K_HOR_TARDANZA?></td>
+<td><?=$b->K_DIA_FALTA?></td>
+</tr>
+ <?}?>
+
+<tr><td colspan='<?=count($this->turnos)*2+1?>' align='right'><b>TOTAL</b></td>
+<td><b><?=$this->baseTotal->K_HOR_TRABAJADAS?></b></td>
+<td><b><?=$this->baseTotal->K_HOR_ESPECIAL?></b></td>
+<td><b><?=$this->baseTotal->K_HOR_EXTRAS?></b></td>
+<td></td>
+<td><b><?=$this->baseTotal->K_HOR_TARDANZA?></b></td>
+<td><b><?=$this->baseTotal->K_DIA_FALTA?></b></td>
+</tr>
+</tbody>
+</table>
+
+</body>
+</table>

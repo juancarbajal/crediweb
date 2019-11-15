@@ -1,0 +1,60 @@
+<html>
+<head>
+<link rel="stylesheet" href="<?=$this->baseUrl()?>/www/css/print.css" type="text/css" media="screen,print" />
+</head>
+<body>
+<table width="100%">
+<tr>
+<td width="50%">
+
+<table width="100%">
+ <tr><td width="30%"><img src="<?=$this->baseUrl()?>/www/img/empresa/logo_min.jpg"/></td><td><h1 align="center"><?=$this->subTitle?></h1><h1>DESDE <?=$this->desde?> HASTA <?=$this->hasta?></h1></td><td width="30%" align="right">Fecha: <?=date('Y-m-d')?><br/>Hora: <?=date('H:i:s')?><br/>Usuario: <?=$this->user?></td></tr>
+</table>
+<? switch($this->impuesto){?>
+<? case 'ITF':?>
+<table width="100%" cellspacing="0" cellpadding="2">
+<tr>
+<th rowspan="2">CR&Eacute;DITO</th>
+<th rowspan="2">FECHA</th>
+<th rowspan="2">C&Oacute;D</th>
+<th rowspan="2">CLIENTE</th>
+<th rowspan="2">MONTO</th>
+<th rowspan="2">PLAZO</th>
+<th colspan="3">ITF</th>
+</tr>
+<tr>
+<th>DESEM.</th>
+<th>COBRO</th>
+<th>TOTAL</th>
+</tr>
+<? foreach($this->lista as $lista){?>
+<tr>
+<td class="bordelados"><?=substr($lista->K_COD,6,6)?></td>
+<td class="bordederecho"><?=$lista->K_FEC?></td>
+<td class="bordederecho"><?=substr($lista->K_CLIENTE_COD,6,6)?></td>
+<td class="bordederecho"><?=$lista->K_CLIENTE_NOM?></td>
+<td class="bordederecho" align="right"><?=$lista->K_MONTO?></td>
+<td class="bordederecho" align="right"><?=$lista->K_PLAZO?></td>
+<td class="bordederecho" align="right">&nbsp;<?=$lista->K_ITF_DESEMBOLSO?></td>
+<td class="bordederecho" align="right">&nbsp;<?=$lista->K_ITF_PAGO?></td>
+<td class="bordederecho" align="right">&nbsp;<?=$lista->K_ITF_TOTAL?></td>
+</tr>
+<? }?>
+<tr><td class="bordesuperior" colspan="8" align="right"><b>TOTAL</b></td><td class="cuadro" align="right"><b><?=$this->total?></b></td></tr>
+</table>
+<? break;?>
+<? case 'IGV':?>
+<table border="1" cellspacing="0" cellpadding="2" width="50%" align="center">
+<tr><th>INTERES</th><th>MORA</th><th>SEGURO</th><th>GA</th><th>IGV</th></tr>
+<tr>
+<td align="right">S/. <?=$this->total->K_INTERES?></td>
+<td align="right">S/. <?=$this->total->K_MORA?></td>
+<td align="right">S/. <?=$this->total->K_SEGURO?></td>
+<td align="right">S/. <?=$this->total->K_OTROS?></td>
+<td align="right">S/. <?=$this->total->K_IGV?></td>
+</tr>
+</table>
+<? break;?>
+<?}?>
+</body>
+</html>

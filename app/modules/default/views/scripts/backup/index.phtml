@@ -1,0 +1,72 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+'<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n".
+'<?xml-stylesheet href="'.$this->baseUrl().'/www/css/view.css" type="text/css"?>'."\n";
+?>
+<window title='<?=$this->title.' : '.$this->subTitle?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' onload="f_cargar()">
+<script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+<script src='<?=$this->baseUrl()?>/www/js/validate.prototype.js' />
+<script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js' />
+<keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+<script>
+function f_cargar(){
+            Quipu.tree=$('copia');
+}
+function f_generar(){
+  new Ajax.Request( 
+                   '<?=$this->url(array('action'=>'copia'))?>',
+      { method:'post',
+        parameters: {}, 
+        onSuccess: function(t) {
+          r=t.responseJSON;
+          alert(r.msg);
+          window.open('<?=$this->baseUrl()?>/files/backup/'+r.data,'v','');
+          /*if (r.code==0){ 
+            Quipu.treeAdd($('copia'),r.data)
+            } */
+        } 
+        } );
+}
+function f_descargar(){
+  url="<?=$this->baseUrl()?>/files/backup/"+Quipu.getTreeValue();
+  Quipu.open(url);
+}
+</script>
+<groupbox>
+<caption label='<?=$this->subTitle?>' />
+<groupbox orient="horizontal">
+<caption label="Generar"/>
+<label value="Se generara una copia de seguridad con el nombre <?=$this->prefix?>_backup_{FECHA}_{HORA}.tar.gz"/>
+<button label="Generar copia" image="<?=$this->baseUrl()?>/www/img/icons/ok.png" oncommand="f_generar()"/>
+</groupbox>
+
+<!--
+<groupbox>
+<caption label='Copias Existentes' />
+<hbox>
+<tree rows="15" flex="1" id="copia">
+<treecols>
+<treecol label="Nombre" flex="1"/>
+<splitter class="tree-splitter" />
+<treecol label="Fecha" flex="1"/>
+</treecols>
+<treechildren>
+
+<? foreach($this->copias as $copia) {?>
+<treeitem>
+<treerow>
+<treecell label="<?=$copia->NOM?>" />
+<treecell label="<?=$copia->FEC?>" />
+</treerow>
+</treeitem>
+<? } ?>
+</treechildren>
+</tree>
+
+<vbox>
+<button label="Descargar" oncommand="f_descargar()" image="<?=$this->baseUrl()?>/www/img/icons/download.png"/>
+</vbox>
+</hbox>
+</groupbox>
+-->
+</groupbox>
+</window>

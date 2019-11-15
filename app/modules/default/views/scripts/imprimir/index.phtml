@@ -1,0 +1,44 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+'<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n";
+?>
+<window title='<?=$this->title.' : '.$this->subTitle?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' width="600" height="500" >
+<script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+<script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js'/>
+
+<keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+<script>
+function f_imprimir(){
+  new Ajax.Request( 
+                   '<?=$this->url(array('action'=>'capturar'))?>',
+    { method:'post',
+        parameters: {pagina:'<?=$this->pagina?>'}, 
+        onSuccess: function(t) {
+        r=t.responseJSON;
+        if (r.code==0){ 
+          
+        } 
+      } 
+      } );
+  frames['pagina_imprimir'].focus();
+  frames['pagina_imprimir'].print();
+ 
+}
+function f_pdf(){
+  Quipu.open('<?=$this->url(array('action'=>'pdf'))?>?pagina=<?=$this->pagina?>','pdf');
+             //alert('Aun no implementado');
+}
+function f_actualizar(){
+  $('pagina_imprimir').setAttribute("src","<?=$this->pagina?>");
+}
+</script>
+<toolbox>
+  <toolbar>
+    <toolbarbutton image="<?=$this->baseUrl()?>/www/img/icons/print.png" label="Imprimir" oncommand="f_imprimir()"/>
+    <!--<toolbarbutton image="<?=$this->baseUrl()?>/www/img/icons/pdf.png" label="PDF" oncommand="f_pdf()"/>-->
+    <!--<toolbarbutton image="<?=$this->baseUrl()?>/www/img/icons/refresh.png" label="Actualizar" oncommand="f_actualizar()"/>-->
+    <toolbarbutton image="<?=$this->baseUrl()?>/www/img/icons/close.png" label="Cerrar" oncommand="window.close()" />
+  </toolbar>
+</toolbox>
+
+<iframe align="stretch" flex="1" id="pagina_imprimir" src="<?=$this->pagina?>"   style="scrolling:'yes'"/>
+</window>

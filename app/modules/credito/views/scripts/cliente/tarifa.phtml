@@ -1,0 +1,94 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+'<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n".
+'<?xml-stylesheet href="'.$this->baseUrl().'/www/css/view.css" type="text/css"?>'."\n";
+?>
+<window title='<?=$this->title.' : '.$this->subTitle?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' >
+<script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+<script src='<?=$this->baseUrl()?>/www/js/validate.prototype.js' />
+<script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js' />
+<keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+<script>
+function f_buscar(){
+  Quipu.open('<?=$this->url(array('action'=>'buscar'))?>?f=f_cargar_uno');
+}
+function f_cargar_uno(cod){
+  if (cod!=''){
+  new Ajax.Request( 
+                   '<?=$this->url(array('action'=>'tarifa'))?>',
+  { method:'post',
+      parameters: {COD:cod, op:'get'}, 
+             onSuccess: function(t) {
+               r=t.responseJSON;
+               if (r.code==0){ 
+                 rs=r.data;
+                 $('COD').value=rs.COD;
+                 $('NOM_LARGO').value=rs.NOM_LARGO;
+                 $('TI_MENSUAL').value=rs.TI_MENSUAL;
+                 $('TI_COMPENSA').value=rs.TI_COMPENSA;
+                 $('TI_MORA').value=rs.TI_MORA;
+               }
+               else {
+                 Quipu.alertError(r.msg);
+                 f_nuevo();
+               }
+             }
+  });
+  }
+}
+var v=new Validate();
+v.addRules({id:'COD', required: true, option: 'Alpha', label: 'Código'});
+v.addRules({id:'TI_MENSUAL', required: true, option: 'Decimal', label: 'Tasa de Interes Mensual'});
+v.addRules({id:'TI_MORA', required: true, option: 'Decimal', label: 'Tasa de Interes Compensatorio'});
+v.addRules({id:'TI_COMPENSA', required: true, option: 'Decimal', label: 'Tasa de Interes Moratorio'});
+
+function f_guardar(){
+  if (v.Apply()){
+  new Ajax.Request( 
+                   '<?=$this->url(array('action'=>'tarifa'))?>',
+  { method:'post',
+             parameters: { op: 'ins', COD: $('COD').value, TI_MENSUAL: $('TI_MENSUAL').value, TI_MORA:$('TI_MORA').value,TI_COMPENSA: $('TI_COMPENSA').value}, 
+             onSuccess: function(t) {
+               r=t.responseJSON;
+               Quipu.alertError(r.msg);
+               if (r.code==0){                                
+                 f_nuevo();
+               } 
+             } 
+  } );
+  }
+}
+//NUEVO
+function f_nuevo(){
+  $('COD').value="";
+  $('NOM_LARGO').value="";
+  $('TI_MENSUAL').value="";
+  $('TI_COMPENSA').value="";
+  $('TI_MORA').value="";
+  //$('COD').focus();
+
+}
+</script>
+<groupbox>
+<caption label='<?=$this->subTitle?>' />
+<grid>
+<columns>
+<column/>
+</columns>
+<rows>
+<row><label value='Cliente' control='COD'/><hbox flex="2"><textbox id='COD' maxlength='12' size="12" onchange="f_cargar_uno(this.value)"/> <textbox id='NOM_LARGO' readonly="true" flex="1"/> </hbox> <button image="<?=$this->baseUrl()?>/www/img/icons/search.png" oncommand="f_buscar()"/></row>
+<row>
+<label value='Tasa Interes (%)' control='TI_MENSUAL'/><textbox id='TI_MENSUAL' maxlength='11' size="11"/>
+</row>
+<row>
+<label value='Tasa Moratoria (%)' control='TI_MORA'/><textbox id='TI_MORA' maxlength='11' size="11"/>
+</row>
+<row>
+<label value='Tasa Compensatoria (%)' control='TI_COMPENSA'/><textbox id='TI_COMPENSA' maxlength='11' size="11"/>
+</row>
+</rows>
+</grid>
+<hbox>
+<button label="Guardar" image="<?=$this->baseUrl()?>/www/img/icons/ok.png" oncommand="f_guardar()"/>
+</hbox>
+</groupbox>
+</window>

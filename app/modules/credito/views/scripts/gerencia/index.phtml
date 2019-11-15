@@ -1,0 +1,121 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+'<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n";
+?>
+<window title='<?=$this->title.' : '.$this->subTitle?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' >
+<script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+<script src='<?=$this->baseUrl()?>/www/js/validate.prototype.js' />
+<script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js' />
+<keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+<script>
+function loadPage(url){
+  $("frmContenido").setAttribute('src',url);
+}
+function f_salir(){
+  window.location.href='<?=$this->baseUrl()?>';
+}
+</script>
+<menubar>
+    <menu label="Crédito">
+      <menupopup>
+          <menuitem label="Tarifa Especial" oncommand="loadPage('<?=$this->url(array('controller'=>'cliente','action'=>'tarifa'))?>')"/>
+          <menuitem label="Cambiar Tasa Moratoria" oncommand="loadPage('<?=$this->url(array('controller'=>'credito','action'=>'cambiarmora'))?>')"/>
+          <menuitem label="Redefinir Cuotas" oncommand="loadPage('<?=$this->url(array('controller'=>'credito','action'=>'redefinircuota'))?>')"/>
+          <menuseparator/>
+          <menuitem label="Simular Crónograma de Pagos" oncommand="loadPage('<?=$this->url(array('controller'=>'credito','action'=>'simulacion'))?>')"/>
+          <menuseparator/>
+          <menuitem label="Nuevo Cliente" oncommand="loadPage('<?=$this->url(array('module'=>'credito','controller'=>'cliente','action'=>'index'))?>')"/>
+          <menuitem label="Nuevo Crédito" oncommand="loadPage('<?=$this->url(array('controller'=>'credito','action'=>'index'))?>')"/>
+          <menuitem label="Aprobar Crédito" oncommand="loadPage('<?=$this->url(array('controller'=>'credito','action'=>'listaautorizar'))?>')"/>
+          <menuseparator/>
+          <menuitem label="Desembolso" oncommand="loadPage('<?=$this->url(array('controller'=>'caja','action'=>'desembolsolista'))?>')"/>
+      </menupopup>
+    </menu>
+    <menu label="Cobranza">
+      <menupopup>
+        <menuitem label="Asignar Cobrador" oncommand="loadPage('<?=$this->url(array('module'=>'credito','controller'=>'cobranza','action'=>'asignar'))?>')"/>
+          <menuseparator/>
+        <menuitem label="Planilla de Cobranza" oncommand="loadPage('<?=$this->url(array('module'=>'credito','controller'=>'cobranza','action'=>'planilla'))?>')"/>
+        <menuitem label="Recibo de Pago" oncommand="loadPage('<?=$this->url(array('module'=>'credito','controller'=>'caja','action'=>'pagocuota'))?>')"/>
+          <menuitem label="Recibo General" oncommand="loadPage('<?=$this->url(array('module'=>'credito','controller'=>'caja','action'=>'recibo'))?>')"/>
+        <menuitem label="Anular Recibo de Pago" oncommand="loadPage('<?=$this->url(array('module'=>'credito','controller'=>'caja','action'=>'anularecibo'))?>')"/>
+        <menuseparator/>
+          <menuitem label="Billetaje" oncommand="loadPage('<?=$this->url(array('module'=>'credito','controller'=>'caja','action'=>'billetaje'))?>')"/>
+      </menupopup>
+    </menu>
+    <menu label="Proveedores">
+      <menupopup>
+          <menuitem label="Proveedores" oncommand="loadPage('<?=$this->url(array('module'=>'credito','controller'=>'caja','action'=>'proveedor'))?>')"/>
+          <menuitem label="Pago a Proveedores" oncommand="loadPage('<?=$this->url(array('module'=>'credito','controller'=>'caja','action'=>'docprov'))?>')"/>
+      </menupopup>
+    </menu>
+    <menu label="Empleado">
+      <menupopup>
+        <menuitem label="Administración de Empleados" oncommand="loadPage('<?=$this->url(array('module'=>'default','controller'=>'config','action'=>'empleado'))?>')"/>
+      </menupopup>
+    </menu>
+  <menu label="Reportes">
+  <menupopup>
+          <menuitem label="Historial de Crédito" oncommand="loadPage('<?=$this->url(array('controller'=>'credito','action'=>'estadocredito'))?>')"/>
+        <menuitem label="Reporte de Ingresos y Salidas Diario " oncommand="loadPage('<?=$this->url(array('module'=>'credito','controller'=>'caja','action'=>'ingresosalidadiatotal'))?>')"/>
+        <menuitem label="Reporte de Ingresos y Salida entre Fechas" oncommand="loadPage('<?=$this->url(array('module'=>'credito','controller'=>'caja','action'=>'ingresosalidafecha'))?>')"/>
+
+        <menuitem label="Reporte de Mora" oncommand="loadPage('<?=$this->url(array('module'=>'credito','controller'=>'cobranza','action'=>'mora'))?>')"/>
+        <menuitem label="Reporte de Economico" oncommand="loadPage('<?=$this->url(array('module'=>'credito','controller'=>'credito','action'=>'economico'))?>')"/>
+        <menuitem label="Reporte de Capital" oncommand="loadPage('<?=$this->url(array('module'=>'credito','controller'=>'reporte','action'=>'capital'))?>')"/>
+        <menuitem label="Reporte General de Impuestos" oncommand="loadPage('<?=$this->url(array('module'=>'credito','controller'=>'reporte','action'=>'igvitf'))?>')"/>
+        <menuitem label="Reporte de Cartera Activa" oncommand="loadPage('<?=$this->url(array('module'=>'credito','controller'=>'reporte','action'=>'carteraactiva'))?>')"/>
+        <menuseparator/>
+        <menuitem label="Infocorp - Equifax" oncommand="loadPage('<?=$this->url(array('module'=>'infocorp','controller'=>'envio','action'=>'equifaxmes'))?>')"/>
+        <menuitem label="Control de Caja Diario" oncommand="loadPage('<?=$this->url(array('module'=>'credito','controller'=>'caja','action'=>'controlcajadia'))?>')"/>
+  
+</menupopup>
+</menu>
+    <menu label="Configuración">
+      <menupopup>
+        <menuitem label="Personal" oncommand="loadPage('<?=$this->url(array('module'=>'auth','controller'=>'config','action'=>'personal'))?>')"/>
+        <menuseparator/>
+        <menuitem label="Empresa" oncommand="loadPage('<?=$this->url(array('module'=>'default','controller'=>'config','action'=>'empresa'))?>')"/>
+        <menuitem label="Agencias" oncommand="loadPage('<?=$this->url(array('module'=>'default','controller'=>'config','action'=>'agencia'))?>')" />
+        <menuseparator/>
+        <menuitem label="Feriados" oncommand="loadPage('<?=$this->url(array('module'=>'credito','controller'=>'feriado','action'=>'index'))?>')" />
+        <menuitem label="Impuestos" oncommand="loadPage('<?=$this->url(array('module'=>'credito','controller'=>'config','action'=>'impuesto'))?>')" />
+        <menuitem label="CIIU" oncommand="loadPage('<?=$this->url(array('module'=>'credito','controller'=>'config','action'=>'ciiu'))?>')"/>
+        <menuitem label="Actividades" oncommand="loadPage('<?=$this->url(array('module'=>'credito','controller'=>'config','action'=>'actividad'))?>')"/>
+        <menuitem label="Ubigeo" oncommand="loadPage('<?=$this->url(array('module'=>'default','controller'=>'config','action'=>'localidad'))?>')"/>
+        <menuseparator/>
+        <menuitem label="Línea de Crédito" oncommand="loadPage('<?=$this->url(array('module'=>'credito','controller'=>'config','action'=>'linea'))?>')"/>
+        <menuitem label="Tipo de Crédito" oncommand="loadPage('<?=$this->url(array('module'=>'credito','controller'=>'config','action'=>'tipocredito'))?>')"/>
+        <menuitem label="Tipo de Prestamo" oncommand="loadPage('<?=$this->url(array('module'=>'credito','controller'=>'config','action'=>'tipoprestamo'))?>')"/>
+        <menuitem label="Modalidad de Crédito" oncommand="loadPage('<?=$this->url(array('module'=>'credito','controller'=>'config','action'=>'modalidad'))?>')"/>
+        <menuitem label="Destino de Crédito" oncommand="loadPage('<?=$this->url(array('module'=>'credito','controller'=>'config','action'=>'destino'))?>')"/>
+        <menuseparator/>
+        <menuitem label="Moneda" oncommand="loadPage('<?=$this->url(array('module'=>'credito','controller'=>'config','action'=>'moneda'))?>')"/>
+      </menupopup>
+    </menu>
+    <menu label="Seguridad">
+      <menupopup>
+        <menuitem label="Copia de Seguridad" oncommand="loadPage('<?=$this->url(array('module'=>'default','controller'=>'backup','action'=>'index'))?>')"/>
+        <menuitem label="Sincronizar" oncommand="loadPage('<?=$this->url(array('module'=>'default','controller'=>'sincro','action'=>'index'))?>')"/>
+      </menupopup>
+    </menu>
+
+    <menu label="Ayuda">
+      <menupopup>
+      <menuitem label="Ayuda" oncommand="Quipu.open('<?=$this->baseUrl()?>/docs/manual.pdf')"/>
+        <menuitem label="Acerca de ..."/>
+        <menuseparator/>
+        <menuitem label="Salir" oncommand="f_salir()"/>
+      </menupopup>
+    </menu>
+  </menubar>
+<toolbox>
+  <toolbar>
+    <toolbarbutton image="<?=$this->baseUrl()?>/www/img/icons/folder.png" oncommand="loadPage('<?=$this->url(array('module'=>'credito','controller'=>'credito','action'=>'index'))?>')" />
+    <toolbarbutton image="<?=$this->baseUrl()?>/www/img/icons/newclient.png" oncommand="loadPage('<?=$this->url(array('module'=>'credito','controller'=>'cliente','action'=>'index'))?>')" />
+    <toolbarbutton image="<?=$this->baseUrl()?>/www/img/icons/password.png" oncommand="loadPage('<?=$this->url(array('module'=>'auth','controller'=>'config','action'=>'personal'))?>')" />
+    <toolbarbutton image="<?=$this->baseUrl()?>/www/img/icons/close.png" oncommand="f_salir()" />
+  </toolbar>
+
+</toolbox>
+<iframe id="frmContenido" flex="2"  minheight="400px"></iframe>
+</window>

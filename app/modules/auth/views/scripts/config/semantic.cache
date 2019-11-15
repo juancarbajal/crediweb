@@ -1,0 +1,16 @@
+;; Object config/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "config/"
+  :tables (list 
+   (semanticdb-table "personal.phtml"
+    :major-mode 'php-mode
+    :tags '(("f_cargar" function (:type ("function" type (:type "class") nil nil)) nil [756 802]) ("f_guardar" function (:type ("function" type (:type "class") nil nil)) nil [803 1406]))
+    :file "personal.phtml"
+    :pointmax 2234
+    :unmatched-syntax 'nil
+    )
+   )
+  :file "semantic.cache"
+  :semantic-tag-version "2.0pre3"
+  :semanticdb-version "2.0pre3"
+  )

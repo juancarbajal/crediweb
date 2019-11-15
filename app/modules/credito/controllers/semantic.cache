@@ -1,0 +1,58 @@
+;; Object controllers/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "controllers/"
+  :tables (list 
+   (semanticdb-table "ConfigController.php"
+    :major-mode 'php-mode
+    :tags 'nil
+    :file "ConfigController.php"
+    :pointmax 14480
+    )
+   (semanticdb-table "CreditoController.php"
+    :major-mode 'php-mode
+    :tags 'nil
+    :file "CreditoController.php"
+    :pointmax 13674
+    )
+   (semanticdb-table "ClienteController.php"
+    :major-mode 'php-mode
+    :tags 'nil
+    :file "ClienteController.php"
+    :pointmax 10767
+    )
+   (semanticdb-table "FeriadoController.php"
+    :major-mode 'php-mode
+    :tags '(("indexAction" function (:type ("function" type (:type "class") nil nil)) nil [1897 2141]) ("calendarioAction" function (:type ("function" type (:type "class") nil nil)) nil [2255 3027]) ("mesAnterior" function (:type ("function" type (:type "class") nil nil)) nil [2865 2865]) ("mesSiguiente" function (:type ("function" type (:type "class") nil nil)) nil [2865 2865]))
+    :file "FeriadoController.php"
+    :pointmax 3060
+    :unmatched-syntax 'nil
+    )
+   (semanticdb-table "CronogramaController.php"
+    :major-mode 'php-mode
+    :tags 'nil
+    :file "CronogramaController.php"
+    :pointmax 5024
+    )
+   (semanticdb-table "CajaController.php"
+    :major-mode 'php-mode
+    :tags 'nil
+    :file "CajaController.php"
+    :pointmax 5675
+    )
+   (semanticdb-table "CobranzaController.php"
+    :major-mode 'php-mode
+    :tags 'nil
+    :file "CobranzaController.php"
+    :pointmax 1588
+    )
+   (semanticdb-table "LegalController.php"
+    :major-mode 'php-mode
+    :tags 'nil
+    :file "LegalController.php"
+    :pointmax 2638
+    )
+   )
+  :file "semantic.cache"
+  :semantic-tag-version "2.0pre3"
+  :semanticdb-version "2.0pre3"
+  )

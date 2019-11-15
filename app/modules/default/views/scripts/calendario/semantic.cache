@@ -1,0 +1,15 @@
+;; Object calendario/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "calendario/"
+  :tables (list 
+   (semanticdb-table "index.phtml"
+    :major-mode 'php-mode
+    :tags '(("foreach" function (:arguments (("" variable (:type ("$this" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [231 237]) ("as" variable (:type ("meses" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [238 251]) ("" variable (:type ("$key" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [247 252]) ("" variable (:type ("$mes" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [253 258])) :type "int") nil [223 311]))
+    :file "index.phtml"
+    :pointmax 489
+    )
+   )
+  :file "semantic.cache"
+  :semantic-tag-version "2.0pre3"
+  :semanticdb-version "2.0pre3"
+  )

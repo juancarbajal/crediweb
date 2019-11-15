@@ -1,0 +1,150 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+'<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n".
+  '<?xml-stylesheet href="'.$this->baseUrl().'/www/css/view.css" type="text/css"?>'."\n";
+?>
+<window title='<?=$this->title.' : '.$this->subTitle?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' onload='f_cargar()'>
+  <script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+  <script src='<?=$this->baseUrl()?>/www/js/validate.prototype.js' />
+  <script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js' />
+  <keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+  <script>
+function f_validar(){
+
+}
+function f_enviar_monto(){
+  new Ajax.Request( 
+                   'movsencillo',
+                   { method:'post',
+                       parameters: {op:'ins',
+                         CAJA_DESTINO: $('CAJA_DESTINO').value,
+                         CAJA_FUENTE: $('CAJA_FUENTE').value,
+                         MONTO: $('MONTO').value
+                         }, 
+                       onSuccess: function(t) {
+                       r=t.responseJSON;
+                       alert(r.msg);
+                       if (r.code==0){ 
+                         $('ID').value=r.data;
+                         f_limpiar();
+                         $('CAJA_DESTINO').focus();
+                       } 
+                     } 
+                     } );
+
+}
+function f_aceptar_monto(){
+  new Ajax.Request( 
+                   'movsencillo',
+                   { method:'post',
+                       parameters: {op:'aceptar',ID:Quipu.getTreeValue($('lista'))}, 
+                       onSuccess: function(t) {
+                       r=t.responseJSON;
+                       alert(r.msg);
+                       if (r.code==0){ 
+                         $('ID').value=r.data.id;
+                         Quipu.treeAdd($('lista'),r.data.lista);
+                       } 
+                     } 
+                     } );
+  $('CAJA_DESTINO').focus();  
+}
+function f_anular_transferencia(){
+    new Ajax.Request( 
+                   'movsencillo',
+                   { method:'post',
+                       parameters: {op:'anular',ID:Quipu.getTreeValue($('lista'))}, 
+                       onSuccess: function(t) {
+                       r=t.responseJSON;
+                       alert(r.msg);
+                       if (r.code==0){ 
+                         $('ID').value=r.data.id;
+                         Quipu.treeAdd($('lista'),r.data.lista);
+                       } 
+                     } 
+                     } );
+  $('CAJA_DESTINO').focus();  
+}
+function f_cargar(){
+  new Ajax.Request( 
+                   'movsencillo',
+                   { method:'post',
+                       parameters: {op:'getnum'}, 
+                       onSuccess: function(t) {
+                       r=t.responseJSON;
+                       if (r.code==0){ 
+                         $('ID').value=r.data.id;
+                         Quipu.treeAdd($('lista'),r.data.lista);
+                       } 
+                     } 
+                     } );
+  $('CAJA_DESTINO').focus();
+}
+function f_limpiar(){
+  $('MONTO').value='';
+}
+  </script>
+  <hbox >
+    <groupbox>
+      <caption label='Salida de Dinero' />
+      <grid>
+        <columns>
+          <column />
+          <column />
+        </columns>
+        <rows>
+          <row><label value='Número' control='ID'/><textbox id='ID' maxlength='11' readonly='true'/></row>
+          <row>
+            <label value='Caja Fuente' control='CAJA_FUENTE'/>
+            <?if (count($this->cajaFuente)>1){?>
+            <menulist id='CAJA_FUENTE'>
+              <menupopup>
+                <?foreach($this->cajaFuente as $cf){?>
+                <menuitem label='<?=$cf->COD?> - <?=$cf->NOM_LARGO?>' value='<?=$cf->COD?>' />
+                <?}?>
+              </menupopup>
+              </menulist>
+            <?} else {?>
+            <textbox id='CAJA_FUENTE' maxlength='11' value='<?=$this->cajaFuente[0]->COD?> - <?=$this->cajaFuente[0]->NOM_LARGO?>' readonly='true'/>
+            <?}?>
+          </row>
+          <row><label value='Caja Destino' control='CAJA_DESTINO'/>
+            <menulist id='CAJA_DESTINO'>
+              <menupopup>
+                <?foreach($this->cajas as $caja){?>
+                <menuitem label='<?=$caja->K_COD?> - <?=$caja->K_NOM?>' value='<?=$caja->K_COD?>' />
+                <?}?>
+              </menupopup>
+
+          </menulist></row>
+          <row><label value='Monto' control='MONTO'/><textbox id='MONTO' maxlength='11'/></row>
+        </rows>
+      </grid>
+      <hbox>
+        <button label='Enviar Monto' image='<?=$this->baseUrl()?>/www/img/icons/ok.png' oncommand='f_enviar_monto()'/>
+      </hbox>
+    </groupbox>
+    <groupbox flex='2'>
+      <caption label='Ingreso de Dinero'/>
+      <hbox flex='1'>
+        <tree id='lista' enableColumnDrag='true' rows='5' flex='2'>
+          <treecols>
+            <treecol label='Id' flex='1'/>
+            <splitter class='tree-splitter' />
+            <treecol label='Cod' flex='1'/>
+            <splitter class='tree-splitter' />
+            <treecol label='Cajero Fuente' flex='1'/>
+            <splitter class='tree-splitter' />
+            <treecol label='Monto' flex='1'/>
+            <splitter class='tree-splitter' />
+
+          </treecols>
+          <treechildren>
+          </treechildren>
+        </tree>
+        <vbox><button label='' image='<?=$this->baseUrl()?>/www/img/icons/new.png' oncommand='f_aceptar_monto()'/>
+          <button label='' image='<?=$this->baseUrl()?>/www/img/icons/delete.png' oncommand='f_anular_transferencia()'/>
+        </vbox>
+      </hbox>
+    </groupbox>
+  </hbox>
+</window>

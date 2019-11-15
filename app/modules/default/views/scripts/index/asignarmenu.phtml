@@ -1,0 +1,61 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+'<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n".
+  '<?xml-stylesheet href="'.$this->baseUrl().'/www/css/view.css" type="text/css"?>'."\n";
+?>
+<window title='<?=$this->title.' : '.$this->subTitle?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' scrollbar="auto">
+<script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+<script src='<?=$this->baseUrl()?>/www/js/validate.prototype.js' />
+<script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js' />
+<keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+<script>
+     function f_guardar(){
+     new Ajax.Request( 
+                      '<?=$this->url(array("action"=>"asignarmenu"))?>',
+    { method:'post',
+        parameters: {
+          <?foreach($this->roles as $rol){?>
+          <?foreach($this->menuItems as $mi){?>
+        MNU_<?=$rol->COD?>_<?=$mi->COD?>: ($('MNU_<?=$rol->COD?>_<?=$mi->COD?>').getAttribute('value')=='true')?1:0,
+          <?}?>
+          <?}?>
+          op:'ins'
+          }, 
+        onSuccess: function(t) {
+        r=t.responseJSON;
+        alert(r.msg);
+        if (r.code==0){ 
+          
+        } 
+      } 
+      } );
+    }
+</script>
+<groupbox>
+  <caption label='<?=$this->subTitle?>' />
+  <tree id="trOpciones" rows="20" editable="true" seltype="single">
+    <treecols>
+      <treecol label="OPCIONES DEL MENÚ"/>
+      <splitter class="tree-splitter" />
+      <?foreach($this->roles as $rol){?>
+      <treecol label="<?=$rol->NOM?>" type="checkbox" editable="true"/>
+      <splitter class="tree-splitter" />
+      <? }?>
+    </treecols>
+    <treechildren editable="true">
+      <?foreach($this->menuItems as $mi){?>
+      <treeitem>
+        <treerow>
+          <treecell label="<?=$mi->NOM?>"/>
+          <?foreach($this->roles as $rol){?>
+          <treecell  id="MNU_<?=$rol->COD?>_<?=$mi->COD?>" value="<?=($this->est[$mi->COD][$rol->COD]==1)?'true':'false'?>"/>
+          <?}?>
+        </treerow>
+      </treeitem>
+      <?}?>
+    </treechildren>
+  </tree>
+    <hbox>
+    <button label='Guardar' image='<?=$this->baseUrl()?>/www/img/icons/ok.png' oncommand="f_guardar()"/>
+    </hbox>
+</groupbox>
+</window>

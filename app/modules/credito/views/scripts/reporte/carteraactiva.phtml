@@ -1,0 +1,78 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+     '<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n".
+     '<?xml-stylesheet href="'.$this->baseUrl().'/www/css/view.css" type="text/css"?>'."\n";
+?>
+<window title='<?=$this->title.' : '.$this->subTitle?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' >
+     <script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+     <script src='<?=$this->baseUrl()?>/www/js/validate.prototype.js' />
+     <script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js' />
+     <keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+     <script>
+     function f_generar(){
+       Quipu.print("<?=$this->url(array('action'=>'carteraactivarep'))?>/HASTA/"+$('HASTA').value+"/LINEA/"+$('LINEA_COD').value+"/SEXO/"+$('SEXO').value+'/SEXO_OPC/'+$('SEXO_OPC').value+'/ACTIVIDAD_OPC/'+$('ACTIVIDAD_OPC').value+'/ACTIVIDAD/'+$('ACTIVIDAD').value+'/MONTO_OPC/'+$('MONTO_OPC').value+'/MONTO/'+$('MONTO').value,null,'<?=$this->baseUrl()?>');
+   }
+     </script>
+     <groupbox>
+     <caption label='<?=$this->subTitle?>' />
+     <grid>
+     <columns>
+     <column />
+     <column />
+     </columns>
+     <rows>
+     <row><label value='Línea' control='LINEA_COD'/>
+     <menulist id='LINEA_COD'>
+     <menupopup>
+     <?foreach ($this->lineas as $linea){?>
+     <menuitem label='<?=$linea->NOM?>' value='<?=$linea->COD?>' />
+   <?}?>
+        <menuitem label='TODOS' value='0' />
+     </menupopup>
+     </menulist></row>
+     <row><label value='Hasta' control='HASTA'/><datepicker id='HASTA' value="<?=date('Y-m-d')?>" type="popup"/>
+     </row>
+     <row><label value='Actividad'/>
+      <box>
+       <radiogroup flex="1" id="ACTIVIDAD_OPC">
+       <radio label="Todos" selected="true" oncommand="$('ACTIVIDAD').disabled=true" value="0"/>
+       <hbox><radio label="Valor" oncommand="$('ACTIVIDAD').disabled=false" value="1"/>
+            <menulist id='ACTIVIDAD' disabled="true">
+            <menupopup>
+       <?foreach($this->actividades as $actividad){?>
+     <menuitem label="<?=$actividad->COD?> - <?=$actividad->NOM?>" value="<?=$actividad->COD?>"/>
+       <?}?>
+            </menupopup>
+            </menulist>
+       </hbox>
+        </radiogroup></box>
+ 
+     </row>
+     <row>
+       <label value='Monto' control=''/>
+       <box>
+       <radiogroup flex="1" id="MONTO_OPC">
+       <radio label="Todos" selected="true" oncommand="$('MONTO').disabled=true;$('MONTO').value=''" value="0"/>
+       <hbox><radio label="Valor" oncommand="$('MONTO').disabled=false"  value="1"/><textbox id='MONTO' disabled="true"/></hbox>
+       <separator flex="1" />
+       </radiogroup></box>
+     </row>
+     <row><label value='Sexo' control='SEXO'/>
+       <box>
+       <radiogroup flex="1"  id="SEXO_OPC" >
+       <radio label="Todos" selected="true" oncommand="$('SEXO').disabled=true" value="0"/>
+       <hbox><radio label="Valor" oncommand="$('SEXO').disabled=false" value="1"/>
+            <menulist id='SEXO' disabled="true">
+            <menupopup>
+            <menuitem label='HOMBRE' value='H' />
+            <menuitem label='MUJER' value='M' />
+            </menupopup>
+            </menulist>
+       </hbox>
+        </radiogroup></box>
+
+      </row>
+     </rows>
+     </grid>
+<hbox><button label="Generar" image="<?=$this->baseUrl()?>/www/img/icons/ok.png" oncommand="f_generar()"/></hbox>
+     </groupbox>
+     </window>

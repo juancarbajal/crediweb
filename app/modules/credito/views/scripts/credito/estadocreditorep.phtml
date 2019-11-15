@@ -1,0 +1,119 @@
+<html>
+<head>
+<link rel="stylesheet" href="<?=$this->baseUrl()?>/www/css/print.css" type="text/css" media="screen,print" />
+</head>
+<body>
+<table width="100%">
+<tr>
+<td width"50%">
+
+<table width="100%">
+   <tr><td width="35%"><img src="<?=$this->baseUrl()?>/www/img/empresa/logo_min.jpg"/></td><td><h1 align="center">HISTORIAL DE CREDITO</h1><h1>CREDITO - <?=substr($this->COD,6,6)?></h1><h1>AL <?=date('Y-m-d')?></h1></td><td width="35%" align="right">Fecha: <?=date('Y-m-d')?><br/>Hora: <?=date('H:i:s')?><br/>Usuario: <?=$this->user?></td></tr>
+</table>
+<div class="cuadro">
+<table>
+   <tr><td>Cliente</td><td><?=substr($this->cliente->CLIENTE_COD,6,6)?> - <?=$this->cliente->NOM_LARGO?></td></tr>
+   <tr><td>Direcci&oacute;n</td><td><?=$this->cliente->DIRE?></td></tr>
+   <tr><td>Localidad</td><td><?=$this->cliente->LOCALIDAD?></td></tr>
+<tr><td>Analista</td><td><?=$this->analista->K_NOM?></td></tr>
+<tr><td>Cobrador</td><td><?=$this->cobrador->K_NOM?></td></tr>
+</table>
+</div>
+<br/>
+<div class="cuadro">
+<table width="100%">
+   <tr><td>Fecha de Emisi&oacute;n</td><td><?=$this->credito->FEC?></td><td>Fecha de Desembolso</td><td><?=$this->credito->DESEMBOLSO_FEC?></td><td>Estado</td><td><?=$this->estado?></td></tr>
+                                   <tr><td>Linea</td><td><?=$this->linea->NOM?></td><td>Moneda</td><td><?=$this->moneda->NOM?></td></tr>
+<tr><td>Monto</td><td><?=$this->credito->MONTO?></td><td>Plazo</td><td><?=$this->credito->PLAZO?></td><td>Tasa</td><td><?=number_format(100*$this->credito->TI_MENSUAL,2,'.',' ')?> %</td></tr>
+</table>
+</div>
+<br/>
+   <table width="100%" cellspacing="0">
+<tr><th colspan="3">DEBE</th><th colspan="11">HABER</th></tr>
+<tr><th>Cuota</th><th>Venc</th><th>Importe</th>
+<th>Rec</th><th>Fecha</th><th>Total</th><th>Capital</th><th>Interes</th><th>Mora</th><th>IGV</th><th>ITF</th><th>Seguro</th><th>GA</th><th>D&iacute;as</th></tr>
+<? $DiasMoraTotal=0?>
+<?foreach($this->historia as $cuota){?>
+  <tr>
+<td  class="bordelados"><b><?=str_pad($cuota->K_SAL_CUOTA,3,'0',STR_PAD_LEFT)?></b></td>
+<td  class="bordederecho"><?=$cuota->K_SAL_FEC_VENC?></td>
+<td align="right"  class="bordederecho"><?=$cuota->K_SAL_CAPITAL?></td>
+     <td  class="bordederecho"><?=(isset($cuota->K_ING_COD))?substr($cuota->K_ING_COD,6,6):'&nbsp;';?></td>
+     <td class="bordederecho"><?=(isset($cuota->K_ING_FEC))?$cuota->K_ING_FEC:'&nbsp;'?></td>
+     <td align="right"  class="bordederecho"><?=(isset($cuota->K_ING_TOTAL))?$cuota->K_ING_TOTAL:'&nbsp;'?></td>
+     <td align="right"  class="bordederecho"><?=(isset($cuota->K_ING_CAPITAL))?$cuota->K_ING_CAPITAL:'&nbsp;'?></td>
+     <td align="right"  class="bordederecho"><?=(isset($cuota->K_ING_INTERES))?$cuota->K_ING_INTERES:'&nbsp;'?></td>
+     <td align="right"  class="bordederecho"><?=(isset($cuota->K_ING_MORA))?$cuota->K_ING_MORA:'&nbsp;'?></td>
+     <td align="right"  class="bordederecho"><?=(isset($cuota->K_ING_IGV))?$cuota->K_ING_IGV:'&nbsp;'?></td>
+<td align="right"  class="bordederecho"><?=(isset($cuota->K_ING_ITF))?$cuota->K_ING_ITF:'&nbsp;'?></td>
+<td align="right"  class="bordederecho"><?=(isset($cuota->K_ING_SEGURO))?$cuota->K_ING_SEGURO:'&nbsp;'?></td>
+<td align="right"  class="bordederecho"><?=(isset($cuota->K_ING_OTROS))?$cuota->K_ING_OTROS:'&nbsp;'?></td>
+<td  align="right"  class="bordederecho"><?=(isset($cuota->K_ING_DIAS))?$cuota->K_ING_DIAS:'&nbsp;'?></td></tr>
+                                     <? $DiasMoraTotal+= ($cuota->K_ING_DIAS>0)?$cuota->K_ING_DIAS:0; ?>
+  <? } ?>
+<tr>
+<td colspan="2" align="right" class="bordesuperior"><b>TOTAL</b></td>
+<td class="cuadro"  align="right"><b><?=$this->totalHistoria->SAL_TOTAL?></b></td>
+                                                                                                                                                      <td colspan="2" class="cuadro">&nbsp;</td>
+<td class="cuadro" align="right"><b><?=$this->totalHistoria->ING_TOTAL?></b></td>
+<td class="cuadro" align="right"><b><?=$this->totalHistoria->ING_TOTAL_CAPITAL?></b></td>
+<td class="cuadro" align="right"><b><?=$this->totalHistoria->ING_TOTAL_INTERES?></b></td>
+<td class="cuadro" align="right"><b><?=$this->totalHistoria->ING_TOTAL_MORA?></b></td>
+<td class="cuadro" align="right"><b><?=$this->totalHistoria->ING_TOTAL_IGV?></b></td>
+<td class="cuadro" align="right"><b><?=$this->totalHistoria->ING_TOTAL_ITF?></b></td>
+<td class="cuadro" align="right"><b><?=$this->totalHistoria->ING_TOTAL_SEGURO?></b></td>
+<td class="cuadro" align="right"><b><?=$this->totalHistoria->ING_TOTAL_OTROS?></b></td>
+<td class="cuadro" align="right"><b><?=$DiasMoraTotal?></b></td>
+</tr>
+</table>
+
+<h1>DETALLE DE PAGOS</h1>
+
+<table width="100%" cellspacing="0">
+
+<tr>
+<th colspan="6">Recibo</th>
+<th colspan="5">Cuota</th>
+<th rowspan="2">Usuario</th>
+</tr>
+
+<tr>
+<th>N&deg;</th><th>Fecha</th><th>Total</th><th>ITF</th><th>A Cuenta</th><th>A Cuenta<br/>Sig.</th>
+<th>N&deg;</th><th>Fecha</th><th>Total</th><th>SubTotal</th><th>Mora</th>
+</tr>
+<? foreach($this->detPago as $det){?>
+<tr><td class="bordelados"><?=substr($det->K_COD,6,6)?></td>
+<td class="bordederecho"><?=$det->K_FEC?></td>
+<td class="bordederecho" align="right">&nbsp;<?=$det->K_MONTO?></td>
+<td class="bordederecho" align="right">&nbsp;<?=$det->K_ITF?></td>
+<td class="bordederecho" align="right">&nbsp;<?=$det->K_A_CUENTA?></td>
+<td class="bordederecho" align="right">&nbsp;<?=$det->K_A_CUENTA_SIG?></td>
+<td class="bordederecho">&nbsp;</td>
+<td class="bordederecho">&nbsp;</td>
+<td class="bordederecho">&nbsp;</td>
+<td class="bordederecho">&nbsp;</td>
+<td class="bordederecho">&nbsp;</td>
+<td class="bordederecho"><?=$det->K_USR?></td>
+</tr>
+<? foreach($det->DETALLE as $detalle){?>
+<tr>
+<td class="bordelados">&nbsp;</td>
+<td class="bordederecho">&nbsp;</td>
+<td class="bordederecho">&nbsp;</td>
+<td class="bordederecho">&nbsp;</td>
+<td class="bordederecho">&nbsp;</td>
+<td class="bordederecho">&nbsp;</td>
+<td class="bordederecho"><?=str_pad($detalle->K_ID,3,'0',STR_PAD_LEFT)?></td>
+<td class="bordederecho"><?=$detalle->K_FEC?></td>
+<td class="bordederecho" align="right">&nbsp;<?=$detalle->K_TOTAL?></td>
+<td class="bordederecho" align="right">&nbsp;<?=$detalle->K_SUBTOTAL?></td>
+<td class="bordederecho" align="right">&nbsp;<?=$detalle->K_MORA?></td>
+<td class="bordederecho">&nbsp;</td>
+</tr>
+<? }?>
+<?}?>
+<tr><td colspan="12" class="bordesuperior">&nbsp;</td></tr>
+</table>
+
+</body>
+</html>

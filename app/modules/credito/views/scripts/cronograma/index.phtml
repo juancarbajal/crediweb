@@ -1,0 +1,85 @@
+<html>
+<head>
+<title><?=$this->title ?> - <?=$this->subTitle ?></title>
+<link rel="stylesheet" href="<?=$this->baseUrl()?>/www/css/print.css" type="text/css" media="screen,print" />
+</head>
+<body oncontextmenu="return false"  leftmargin="80" topmargin="30" rightmargin="30">
+<table border="0" width="100%">
+<tr><td width="20%">RUC: <?=$this->empresa->COD?><br/>Agencia: <?=$this->empresa->NOM?></td>
+<td><h1 align="center"><?=$this->subTitle?></h1>
+<h2 align="center">CRONOGRAMA PRESTAMO INDIVIDUAL</h2></td>
+<td  width="20%">
+    <table><tr><td>Emitido:</td><td> <?=date('Y-m-d')?></td></tr>
+           <tr><td></td><td><?=date('H:i:s')?></td></tr></table>
+</td>
+</tr>
+</table>
+<table width="100%" border="0">
+<tr><td class="cuadro" border="1">
+<h3 align="center">DATOS DEL CR&Eacute;DITO</h3>
+<table border="0">
+<tr><td>Cliente :</td><td> <?=$this->cliente->NOM_LARGO?></td></tr>
+<tr><td>L&iacute;nea :</td><td><?=$this->linea->NOM?></td></tr>
+<tr><td>Monto :</td><td><?=$this->monto?></td></tr>
+<tr><td>Cuotas : </td><td><?=$this->plazo?></td></tr>
+<tr><td>Tasa Anual :</td><td> <?=number_format($this->tasaAnual,2,'.',' ')?></td></tr>
+<tr><td>Modalidad :</td><td> <?=$this->modalidad->NOM?></td></tr>
+<tr><td>Periodicidad :</td><td>DIARIO</td></tr>
+</table>
+</td>
+<td class="cuadro" valign="top">
+<h3 align="center">LIQUIDACI&Oacute;N</h3>
+<table border="0">
+<tr><td>PRESTAMO :</td><td align="right"><?=number_format($this->monto,2,'.',' ')?></td></tr>
+<tr><td>ITF :</td><td align="right"> <?=number_format($this->itf,2,'.',' ')?></td></tr>
+<tr><td></td><td><hr></td></tr>
+<tr><td></td><td align="right"><?=number_format($this->liquidez,2,'.',' ')?></td></tr>
+</table>
+</td>
+</tr>
+</table>
+<h2 align="center">Cronograma de Pagos</h2>
+<table  width="100%">
+<theader>
+<th width="4%">No</th>
+<th width="7%">Vencimiento</th>
+<th width="11%">Capital</th>
+<th width="11%">Interes</th>
+<th width="11%">Seguro</th>
+<th width="11%">IGV</th>
+<th width="11%">ITF</th>
+<th width="11%">G.A.</th>
+<th width="11%">Total</th>
+<th width="11%">D&iacute;a</th>
+</theader>
+<tbody>
+<? $i=0;?>
+<? foreach ($this->cuotas as $cuota ) {?>
+
+  <tr><td><?=str_pad(++$i,3,'0',STR_PAD_LEFT)?></td>
+<td><?=$cuota->FECHA?></td>
+<td align="right"><?=number_format($cuota->CAPITAL,2,'.',' ')?></td>
+<td align="right"><?=number_format($cuota->INTERES,2,'.',' ')?></td>
+<td align="right"><?=number_format($cuota->SEGURO,2,'.',' ')?></td>
+<td align="right"><?=number_format($cuota->IGV,2,'.',' ')?></td>
+<td align="right"><?=number_format($cuota->ITF,2,'.',' ')?></td>
+<td align="right"><?=number_format($cuota->GA,2,'.',' ')?></td>
+<td align="right"><?=number_format($cuota->TOTAL_ITF,2,'.',' ')?></td>
+<td><?=$cuota->DIA?></td>
+</tr>
+<?} //end for
+?>
+<tr><td colspan="2"></td><td colspan="7"><hr/></td></tr>
+<tr><td colspan="2" align="right">Total General</td>
+<td align="right"><?=number_format($this->total->SUMA_CAPITAL,2,'.',' ')?></td>
+<td align="right"><?=number_format($this->total->SUMA_INTERES,2,'.',' ')?></td>
+<td align="right"><?=number_format($this->total->SUMA_SEGURO,2,'.',' ')?></td>
+<td align="right"><?=number_format($this->total->SUMA_IMPUESTO,2,'.',' ')?></td>
+<td align="right"><?=number_format($this->total->SUMA_ITF,2,'.',' ')?></td>
+<td align="right"><?=number_format($this->total->SUMA_GA,2,'.',' ')?></td>
+<td align="right"><?=number_format($this->total->SUMA_TOTAL_ITF,2,'.',' ')?></td>
+</tr>
+</tbody>
+</table>
+<body>
+</html>

@@ -1,0 +1,46 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+'<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n"
+.'<?xml-stylesheet href="'.$this->baseUrl().'/www/css/view.css" type="text/css"?>'."\n";
+
+?>
+<window title='<?=$this->title.' : '.$this->subTitle?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' >
+<script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+<script src='<?=$this->baseUrl()?>/www/js/validate.prototype.js' />
+<script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js' />
+<keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+<script>
+function f_cambiarCalendario(){
+  url='<?=$this->url(array('action'=>'calendario'))?>/anio/'+$('anio').value+'/mes/'+(eval($('mes').value)+1);
+  $('calendario').setAttribute('src',url);
+
+}
+</script>
+<groupbox>
+<caption label='<?=$this->subTitle?>' />
+<hbox>
+
+
+<label value='Mes' control='mes'/>
+<menulist id='mes' oncommand="f_cambiarCalendario()">
+<menupopup>
+<?for ($i=0 ; $i<12 ;$i++ ) {
+  ?>
+<menuitem label='<?=$this->meses[$i]?>' value='<?=$i?>' selected='<?=(($i+1)==date('m'))?'true':'false'?>' />  
+<?
+} //end for
+?>
+</menupopup>
+</menulist>
+<label value='Año' control='anio'/>
+<menulist id='anio' oncommand="f_cambiarCalendario()">
+<menupopup>
+<? for ( $i=date('Y')-10;$i<date('Y')+10;$i++) { ?>
+<menuitem label='<?=$i?>' value='<?=$i?>' selected='<?=($i==date('Y'))?'true':'false'?>' />  
+<? } //end for
+?>
+</menupopup>
+</menulist>
+</hbox>
+<iframe id="calendario" src="<?=$this->url(array('action'=>'calendario'))?>" height="300px"/>
+</groupbox>
+</window>

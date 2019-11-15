@@ -1,0 +1,15 @@
+<?='<?xml version="1.0"?>'."\n"
+.'<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n";
+?>
+<window
+    id="login_window"
+    title="<?=$this->title.' - '.$this->subTitle;?>"
+    orient="vertical"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <script src="/www/js/prototype_xul.js"/>
+  <script src="/www/js/validatejs.js"/>
+<keyset>
+    <key keycode="VK_RETURN" oncommand="if (document.commandDispatcher.focusedElement.tagName!='button') document.commandDispatcher.advanceFocus();"/>
+</keyset>
+<?=$this->layout()->content."\n" ?>
+</window>

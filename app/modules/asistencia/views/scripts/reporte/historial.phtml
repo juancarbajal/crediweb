@@ -1,0 +1,40 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+'<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n".
+  '<?xml-stylesheet href="'.$this->baseUrl().'/www/css/view.css" type="text/css"?>'."\n";
+?>
+<window title='<?=$this->title.' : '.$this->subTitle?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' >
+<script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+<script src='<?=$this->baseUrl()?>/www/js/validate.prototype.js' />
+<script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js' />
+<keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+<script>
+function f_generar(){
+  url='<?=$this->url(array('action'=>'historialrep'))?>/EMPLEADO_COD/'+$('EMPLEADO_COD').value+'/DESDE/'+$('FEC_DESDE').value+'/HASTA/'+$('FEC_HASTA').value;
+    Quipu.print(url,null,'<?=$this->baseUrl()?>');
+}
+</script>
+<groupbox>
+  <caption label='<?=$this->subTitle?>' />
+  <grid>
+    <columns>
+      <column />
+      <column />
+    </columns>
+    <rows>
+  <row><label value='Empleado' control='EMPLEADO_COD'/>
+  <menulist id='EMPLEADO_COD'>
+  <menupopup>
+  <?foreach($this->empleados as $e){?>
+  <menuitem label='<?=$e->COD?> - <?=$e->NOM_LARGO?>' value='<?=$e->COD?>' />
+  <?}?>
+  </menupopup>
+  </menulist></row>
+      <row><label value='Desde' control='FEC_DESDE'/><datepicker id='FEC_DESDE' type='popup'/></row>
+      <row><label value='Hasta' control='FEC_HASTA'/><datepicker id='FEC_HASTA' type='popup'/></row>
+    </rows>
+  </grid>
+  <hbox>
+    <button label='Generar' image='<?=$this->baseUrl()?>/www/img/icons/ok.png' oncommand='f_generar()'/>
+  </hbox>
+</groupbox>
+</window>

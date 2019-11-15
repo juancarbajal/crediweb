@@ -1,0 +1,392 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+'<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n"
+.'<?xml-stylesheet href="'.$this->baseUrl().'/www/css/view.css" type="text/css"?>'."\n";
+
+?>
+<window title='<?=$this->title.' : '.$this->subTitle?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' >
+<script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+<script src='<?=$this->baseUrl()?>/www/js/validate.prototype.js' />
+<script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js' />
+<keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+<script>
+Quipu.url='<?=$this->url(array('action'=>'index'))?>';
+var opcion='ins';
+function f_cargar(){
+  //cargamos el pseudo codigo
+  $('TIPO').focus();
+}
+function f_seleccionTipo(opc){
+  if (opc=='N') {
+    $('tbPersonaNatural').setAttribute('style','display:yes');
+    $('tbPersonaJuridica').setAttribute('style','display:none');
+    $('N_DNI').focus();
+  }
+  else{
+    $('tbPersonaNatural').setAttribute('style','display:none');
+    $('tbPersonaJuridica').setAttribute('style','display:yes');
+    $('J_RUC').focus();
+  }
+}
+function f_seleccionEstadoCivil(opc){
+  if (opc=='C')
+    $('rConyuge').setAttribute('style','display:yes');
+  else
+    $('rConyuge').setAttribute('style','display:none');
+}
+
+
+function f_guardar(){
+  if (f_validar()){
+    if ($('TIPO').value=='N'){
+      par={
+        COD: $('COD').value,
+        TIPO: $('TIPO').value,
+        DNI: $('N_DNI').value,
+        NOM: $('N_NOM').value,
+        APE_PAT: $('N_APE_PAT').value,
+        APE_MAT: $('N_APE_MAT').value,
+        DIRE: $('N_DIRE').value,
+        LOCALIDAD_COD: $('N_LOCALIDAD_COD').value,
+        FEC_NAC: $('N_FEC_NAC').value,
+        FONO1: $('N_FONO1').value,
+        FONO2: $('N_FONO2').value,
+        ESTADO_CIVIL: $('N_ESTADO_CIVIL').value,
+        CONYUGE: $('N_CONYUGE').value,
+        DIR_NEGOCIO: $('N_DIR_NEGOCIO').value,
+        LOCALIDAD_NEGOCIO: $('N_LOCALIDAD_NEGOCIO').value,
+        DNI_VEN:$('N_DNI_VEN').value,
+        TIPO_DOC_COD: $('N_TIPO_DOC_COD').value,
+        ACTIVIDAD_COD: $('N_ACTIVIDAD_COD').value,
+        SEXO: $('N_SEXO').value,
+        op: opcion
+      };
+    }
+    else{
+      par={
+        COD: $('COD').value,
+        TIPO: $('TIPO').value,
+        RUC: $('J_RUC').value,
+        NOM_COMERCIAL: $('J_NOM_COMERCIAL').value,
+        SIGLAS: $('J_SIGLAS').value,
+        DNI: $('J_DNI').value,
+        NOM: $('J_NOM').value,
+        APE_PAT: $('J_APE_PAT').value,
+        APE_MAT: $('J_APE_MAT').value,
+        DIRE: $('J_DIRE').value,
+        LOCALIDAD_COD: $('J_LOCALIDAD_COD').value,
+        FONO1: $('J_FONO1').value,
+        FONO2: $('J_FONO2').value,
+        ESTADO_CIVIL: 'S',
+        DIR_NEGOCIO: $('J_DIR_NEGOCIO').value,
+        LOCALIDAD_NEGOCIO: $('J_LOCALIDAD_NEGOCIO').value,
+        DNI_VEN: '01.01.2100',
+        TIPO_DOC_COD: 'DNI',
+        ACTIVIDAD_COD: $('J_ACTIVIDAD_COD').value,
+        SEXO: $('J_SEXO').value,
+        op: opcion
+      };
+    }
+    new Ajax.Request(
+                     '<?=$this->url(array('action'=>'index'))?>',
+    { 
+    method: 'post',
+              parameters: par,
+              onSuccess: function(t){
+      result=t.responseJSON;
+      Quipu.alertError(result.msg);
+      if(result.code==0){
+        f_nuevo();
+        $('COD').value=result.data;
+      }
+    }
+    }
+                   
+                     );
+  }//if f_validar()
+}
+var vn=new Validate();
+vn.addRules({id:'N_DNI', required: true, option: 'Alpha', label: 'DNI'});
+vn.addRules({id:'N_DNI_VEN', required: true, option: 'Alpha', label: 'Vencimiento de DNI'});
+vn.addRules({id:'N_NOM', required: true, option: 'Alpha', label: 'Nombres'});
+vn.addRules({id:'N_APE_PAT', required: true, option: 'Alpha', label: 'Apellido Paterno'});
+vn.addRules({id:'N_APE_MAT', required: true, option: 'Alpha', label: 'Apellido Materno'});
+vn.addRules({id:'N_FEC_NAC', required: true, option: 'date', label: 'Fecha de Nacimiento'});
+vn.addRules({id:'N_DIRE', required: true, option: 'Alpha', label: 'Dirección'});
+vn.addRules({id:'N_FONO1', required: true, option: 'Alpha', label: 'Telefono'});
+vn.addRules({id:'N_FONO2', required: false, option: 'Alpha', label: 'Telefono de Negocio'});
+vn.addRules({id:'N_DIR_NEGOCIO', required: true, option: 'Alpha', label: 'Dirección de Negocio'});
+var vj=new Validate();
+vj.addRules({id:'J_RUC', required: true, option: 'Alpha', label: 'RUC'});
+vj.addRules({id:'J_NOM_COMERCIAL', required: true, option: 'Alpha', label: 'Nombre Comercial'});
+vj.addRules({id:'J_SIGLAS', required: true, option: 'Alpha', label: 'Siglas'});
+vj.addRules({id:'J_DIRE', required: true, option: 'Alpha', label: 'Dirección'});
+vj.addRules({id:'J_DNI', required: true, option: 'Alpha', label: 'DNI'});
+vj.addRules({id:'J_NOM', required: true, option: 'Alpha', label: 'Nombres'});
+vj.addRules({id:'J_APE_PAT', required: true, option: 'Alpha', label: 'Apellido Paterno'});
+vj.addRules({id:'J_APE_MAT', required: true, option: 'Alpha', label: 'Apellido Materno'});
+vj.addRules({id:'J_FONO1', required: true, option: 'Alpha', label: 'Telefono'});
+vj.addRules({id:'J_FONO2', required: false, option: 'Alpha', label: 'Telefono de Negocio'});
+vj.addRules({id:'J_DIR_NEGOCIO', required: true, option: 'Alpha', label: 'Dirección de Negocio'});
+
+
+function f_validar(){
+  if($('TIPO').value=='N'){
+    return vn.Apply();
+    //natural
+  }
+  else{
+    //juridica
+    return vj.Apply();
+  }
+}
+function f_buscar(){
+  Quipu.open('<?=$this->url(array('action'=>'buscar'))?>?f=f_cargar_uno');
+}
+function f_cargar_uno(cod){
+  new Ajax.Request( 
+                   '<?=$this->url(array('action'=>'datos'))?>',
+  { method:'post',
+             parameters: {COD:cod}, 
+             onSuccess: function(t) {
+               r=t.responseJSON;
+               if (r.code==0){ 
+                 rs=r.data;
+                 $('COD').value=rs.K_COD;
+                 $('TIPO').value=rs.K_TIPO;
+                 f_seleccionTipo(rs.K_TIPO);
+                 opcion='upd';
+                 switch(rs.K_TIPO){
+                 case 'N':
+                   $('N_TIPO_DOC_COD').value=rs.K_TIPO_DOC_COD;
+                   $('N_DNI').value=rs.K_DNI;
+                   $('N_DNI_VEN').value=rs.K_DNI_VEN;
+                   $('N_NOM').value=rs.K_NOM;
+                   $('N_APE_MAT').value=rs.K_APE_MAT;
+                   $('N_APE_PAT').value=rs.K_APE_PAT;
+                   $('N_DIRE').value=rs.K_DIRE;
+                   $('N_FEC_NAC').value=rs.K_FEC_NAC;
+                   $('N_LOCALIDAD_COD').value=rs.K_LOCALIDAD_COD;
+                   $('N_FONO1').value=rs.K_FONO1;
+                   $('N_FONO2').value=rs.K_FONO2;
+                   $('N_ESTADO_CIVIL').value=rs.K_ESTADO_CIVIL;
+                   $('N_CONYUGE').value=rs.K_CONYUGE;
+                   $('N_CONYUGE_NOM').value=rs.K_CONYUGE_NOM;
+                   $('N_DIR_NEGOCIO').value=rs.K_DIR_NEGOCIO;
+                   $('N_LOCALIDAD_NEGOCIO').value=rs.K_LOCALIDAD_NEGOCIO;
+                   $('N_ACTIVIDAD_COD').value=rs.K_ACTIVIDAD;
+                   $('N_SEXO').value=rs.K_SEXO;
+                   f_seleccionEstadoCivil(rs.K_ESTADO_CIVIL);
+                   break;
+                 case 'J':
+                   $('J_RUC').value=rs.K_RUC;
+                   $('J_NOM_COMERCIAL').value=rs.K_NOM_COMERCIAL;
+                   $('J_SIGLAS').value=rs.K_SIGLAS;
+                   $('J_FONO1').value=rs.K_FONO1;
+                   $('J_FONO2').value=rs.K_FONO2;
+                   $('J_DIRE').value=rs.K_DIRE;
+                   $('J_DIR_NEGOCIO').value=rs.K_DIR_NEGOCIO;
+                   $('J_LOCALIDAD_NEGOCIO').value=rs.K_LOCALIDAD_NEGOCIO;
+                   $('J_DNI').value=rs.K_DNI;
+                   $('J_NOM').value=rs.K_NOM;
+                   $('J_APE_MAT').value=rs.K_APE_MAT;
+                   $('J_APE_PAT').value=rs.K_APE_PAT;
+                   $('J_LOCALIDAD_COD').value=rs.K_LOCALIDAD_COD;
+                   $('J_ACTIVIDAD_COD').value=rs.K_ACTIVIDAD;
+                   $('J_SEXO').value=rs.K_SEXO;
+                   break;
+                 }
+               } 
+             } 
+  } );
+}
+//Conyuge
+function f_buscar_conyuge(){
+  Quipu.open('<?=$this->url(array('action'=>'buscar'))?>?f=f_cargar_conyuge');
+}
+function f_cargar_conyuge(cod){
+  new Ajax.Request( 
+                   '<?=$this->url(array('action'=>'conyuge'))?>',
+  { method:'post',
+             parameters: {COD: cod}, 
+             onSuccess: function(t) {
+               r=t.responseJSON;
+               if (r.code==0){ 
+                 $('N_CONYUGE').value=r.data.COD;
+                 $('N_CONYUGE_NOM').value=r.data.NOM_LARGO;
+               } 
+             } 
+  } );
+}
+//nuevo Registro
+function f_nuevo(){
+  Quipu.nuevoRegistro(new Array('N_DNI','N_NOM','N_APE_PAT','N_APE_MAT','N_DIRE','N_FEC_NAC','N_FONO1','N_FONO2','CONYUGE','CONYUGE_NOM','J_RUC','J_NOM_COMERCIAL','J_SIGLAS','J_DIRE','J_FONO1','J_FONO2','J_DNI','J_NOM','J_APE_PAT','J_APE_MAT','N_DNI_VEN','N_DIR_NEGOCIO'));
+  $('TIPO').value='N';
+  $('N_ESTADO_CIVIL').value="S";
+  f_seleccionTipo('N');
+  f_seleccionEstadoCivil('S');
+  $('TIPO').focus();
+  opcion='ins';
+}
+</script>
+<groupbox>
+  <caption label='<?=$this->subTitle?>' />
+  <grid>
+    <columns>
+      <column />
+      <column />
+    </columns>
+    <rows>
+      <row><label value="Código"/> <textbox id="COD" value="<?=$this->cod?>" readonly="true"/><button image="<?=$this->baseUrl()?>/www/img/icons/search.png" oncommand="f_buscar()"/></row>
+      <row><label value="Tipo"/>
+        <menulist id="TIPO" oncommand="f_seleccionTipo(this.value)">
+          <menupopup>
+            <menuitem label="Persona Natural" value="N"/>
+            <menuitem label="Persona Juridica" value="J"/>
+          </menupopup>
+      </menulist></row>
+    </rows>
+  </grid>
+  <box id="tbPersonaNatural">
+    <grid>
+      <columns>
+        <column/>
+        <column flex="2"/>
+      </columns>
+      <rows>
+        <row><label value="Doc. Identidad" control="N_DNI"/>
+            <menulist id='N_TIPO_DOC_COD'>
+              <menupopup>
+                <? foreach($this->tipoDocumentos as $tipoDocumento ){ ?>
+                <menuitem label='<?=$tipoDocumento->COD?> - <?=$tipoDocumento->NOM?>' value='<?=$tipoDocumento->COD?>' />
+                <? } ?>
+              </menupopup>
+            </menulist>
+        </row>
+<row><label value="Nº Doc."/><textbox id="N_DNI" maxlength="12"/></row>
+        <row><label value='Vencimiento' control='N_DNI_FEN' maxlength="10" size="10"/><datepicker id='N_DNI_VEN' type="popup"/></row>
+        <row><label value="Nombres" control="N_NOM"/><textbox id="N_NOM" maxlength="40" oninput="this.value=this.value.toUpperCase()"/></row>
+        <row><label value="Apellido Paterno" control="N_APE_PAT"/><textbox id="N_APE_PAT" maxlength="40" oninput="this.value=this.value.toUpperCase()"/></row>
+        <row><label value="Apellido Materno" control="N_APE_MAT"/><textbox id="N_APE_MAT" maxlength="40" oninput="this.value=this.value.toUpperCase()"/></row>
+  <row>
+  <label value='Sexo' control='N_SEXO'/>
+  <menulist id='N_SEXO'>
+  <menupopup>
+  <menuitem label='HOMBRE' value='H' />
+  <menuitem label='MUJER' value='M' />
+  </menupopup>
+  </menulist>
+  </row>
+  <row><label value="Fecha de Nacimiento" control="N_FEC_NAC"/><datepicker id="N_FEC_NAC" type="popup"/></row>
+
+        <row><label value="Dirección" control="N_DIRE"/><textbox id="N_DIRE" maxlength="200" oninput="this.value=this.value.toUpperCase()"/></row>
+        <row><label value="Localidad" control="N_LOCALIDAD_COD"/>
+          <menulist id="N_LOCALIDAD_COD">
+            <menupopup>
+              <?php foreach($this->localidades as $localidad){?>
+              <menuitem label="<?=$localidad->NOM?>" value="<?=$localidad->COD?>"/>
+              <?}?>
+            </menupopup>
+          </menulist>
+        </row>              
+        <row><label value="Telefono" control="N_FONO1"/><textbox id="N_FONO1" maxlength="25"/></row>            
+        <row><label value="Estado Civil" control="N_ESTADO_CIVIL"/>
+          <menulist id="N_ESTADO_CIVIL" oncommand="f_seleccionEstadoCivil(this.value)">
+            <menupopup>
+              <menuitem label="SOLTERO" value="S"/>
+              <menuitem label="CASADO" value="C"/>
+              <menuitem label="DIVORCIADO" value="D"/>
+              <menuitem label="VIUDO" value="V"/>
+            </menupopup>
+          </menulist>
+        </row>
+  <row id="rConyuge" style="display:none"><label value="Conyuge"/><hbox><textbox id="N_CONYUGE" readonly="true" size="12"/><textbox id="N_CONYUGE_NOM" readonly="true" flex="1"/></hbox>
+       <button image="<?=$this->baseUrl()?>/www/img/icons/search.png" oncommand="f_buscar_conyuge()"/>
+        </row>
+        <row>
+          <label value='Actividad' control='N_ACTIVIDAD_COD'/>
+          <menulist id='N_ACTIVIDAD_COD'>
+            <menupopup>
+              <? foreach($this->actividades as $actividad) { ?>
+              <menuitem label='<?=$actividad->COD?> - <?=$actividad->NOM?>' value='<?=$actividad->COD?>' />
+              <? }?>
+            </menupopup>
+          </menulist>
+        </row>
+        <row><label value="Dir. de Negocio" control="N_DIR_NEGOCIO"/><textbox id="N_DIR_NEGOCIO" maxlength="200" oninput="this.value=this.value.toUpperCase()"/></row>
+        <row><label value="Loc. de Negocio" control="N_LOCALIDAD_NEGOCIO"/>
+          <menulist id="N_LOCALIDAD_NEGOCIO">
+            <menupopup>
+              <?php foreach($this->localidades as $localidad){?>
+              <menuitem label="<?=$localidad->NOM?>" value="<?=$localidad->COD?>"/>
+              <?}?>
+            </menupopup>
+          </menulist>
+        </row>
+        <row><label value="Tel. Negocio" control="N_FONO2"/><textbox id="N_FONO2" maxlength="25"/></row>
+      </rows>
+    </grid>
+  </box>
+  <box id="tbPersonaJuridica" style="display:none">
+    <grid>
+      <columns>
+        <column/>
+        <column flex="2"/>
+      </columns>
+      <rows>
+        <row><label value="RUC" control="J_RUC"/><textbox id="J_RUC" maxlength="11"/></row>
+        <row><label value="Nombre Comercial" control="J_NOM_COMERCIAL"/><textbox id="J_NOM_COMERCIAL" maxlength="255" oninput="this.value=this.value.toUpperCase()"/></row>
+        <row><label value="Siglas" control="J_SIGLAS"/><textbox id="J_SIGLAS" maxlength="10" oninput="this.value=this.value.toUpperCase()"/></row>
+        <row>
+          <label value='Actividad' control='J_ACTIVIDAD_COD'/>
+          <menulist id='J_ACTIVIDAD_COD'>
+            <menupopup>
+              <? foreach($this->actividades as $actividad) { ?>
+              <menuitem label='<?=$actividad->COD?> - <?=$actividad->NOM?>' value='<?=$actividad->COD?>' />
+              <? }?>
+            </menupopup>
+          </menulist>
+        </row>
+
+        <row><label value="Dir. de Negocio" control="J_DIR_NEGOCIO"/><textbox id="J_DIR_NEGOCIO" maxlength="200" oninput="this.value=this.value.toUpperCase()"/></row>
+        <row><label value="Loc. de Negocio" control="J_LOCALIDAD_NEGOCIO"/>
+          <menulist id="J_LOCALIDAD_NEGOCIO">
+            <menupopup>
+              <?php foreach($this->localidades as $localidad){?>
+              <menuitem label="<?=$localidad->NOM?>" value="<?=$localidad->COD?>"/>
+              <?}?>
+            </menupopup>
+          </menulist>
+        </row>
+        <row><label value="Tel. Negocio" control="J_FONO2"/><textbox id="J_FONO2" maxlength="25"/></row>
+        <row><label value="Datos del Representante:" style="font-weight:bold"/></row>
+        <row><label value="DNI" control="J_DNI"/><textbox id="J_DNI" maxlength="8"/></row>
+        <row><label value="Nombres" control="J_NOM"/><textbox id="J_NOM" maxlength="40" oninput="this.value=this.value.toUpperCase()"/></row>
+        <row><label value="Apellido Paterno" control="J_APE_PAT"/><textbox id="J_APE_PAT" maxlength="40" oninput="this.value=this.value.toUpperCase()"/></row>
+        <row><label value="Apellido Materno" control="J_APE_MAT"/><textbox id="J_APE_MAT" maxlength="40" oninput="this.value=this.value.toUpperCase()"/></row>
+  <row>
+  <label value='Sexo' control='J_SEXO'/>
+  <menulist id='J_SEXO'>
+  <menupopup>
+  <menuitem label='HOMBRE' value='H' />
+  <menuitem label='MUJER' value='M' />
+  </menupopup>
+  </menulist>
+  </row>
+
+        <row><label value="Dirección" control="J_DIRE"/><textbox id="J_DIRE" maxlength="100" oninput="this.value=this.value.toUpperCase()"/></row>
+        <row><label value="Localidad" control="J_LOCALIDAD_COD"/>
+          <menulist id="J_LOCALIDAD_COD">
+            <menupopup>
+              <?php foreach($this->localidades as $localidad){?>
+              <menuitem label="<?=$localidad->NOM?>" value="<?=$localidad->COD?>"/>
+              <?}?>
+            </menupopup>
+          </menulist>
+        </row>
+        <row><label value="Telefono" control="J_FONO1"/><textbox id="J_FONO1" maxlength="25"/></row>            
+      </rows>
+    </grid>
+  </box>
+  <hbox><button label="Guardar" image="<?=$this->baseUrl()?>/www/img/icons/ok.png" oncommand="f_guardar()"/> <button label="Nuevo" image="<?=$this->baseUrl()?>/www/img/icons/new.png" oncommand="f_nuevo()"/></hbox>
+</groupbox>
+</window>

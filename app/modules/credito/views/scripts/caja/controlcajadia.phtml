@@ -1,0 +1,29 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+'<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n".
+  '<?xml-stylesheet href="'.$this->baseUrl().'/www/css/view.css" type="text/css"?>'."\n";
+?>
+<window title='<?=$this->title.' : '.$this->subTitle?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' >
+  <script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+  <script src='<?=$this->baseUrl()?>/www/js/validate.prototype.js' />
+  <script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js' />
+  <keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+  <script>
+  function f_generar(){
+  Quipu.print('<?=$this->url(array('action'=>'controlcajadiarep'))?>/FEC/'+$('FEC').value,null,'<?=$this->baseUrl()?>');
+}
+  </script>
+  <groupbox>
+  <caption label='<?=$this->subTitle?>' />
+  <grid>
+  <columns>
+  <column />
+  <column />
+  </columns>
+  <rows>
+  <row><label value='Fecha' control='FEC'/><datepicker id='FEC' value='<?=date('Y-m-d')?>' type="popup"/></row>
+  </rows>
+  </grid>
+  <row><button label='Generar' image='<?=$this->baseUrl()?>/www/img/icons/ok.png' oncommand="f_generar()"/></row>
+  
+  </groupbox>
+  </window>

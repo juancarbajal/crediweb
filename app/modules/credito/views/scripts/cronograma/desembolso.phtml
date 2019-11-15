@@ -1,0 +1,113 @@
+<html>
+<head>
+<title><?=$this->title ?> - <?=$this->subTitle ?></title>
+<link rel="stylesheet" href="<?=$this->baseUrl()?>/www/css/print.css" type="text/css" media="screen,print" />
+</head>
+<body  leftmargin="80" topmargin="30" rightmargin="30">
+<table border="0" width="100%">
+<tr>
+<td width="30%">RUC: <?=$this->empresa->COD?><br/>
+                AGENCIA: <?=$this->empresa->NOM?><br/>
+ADM. DE CARTERA: <?=$this->analista?>
+</td>
+<td><h1 align="center"><?=$this->subTitle?></h1>
+<h2 align="center">CRONOGRAMA PRESTAMO INDIVIDUAL</h2></td>
+<td  width="30%" align="right">
+    <table>
+           <tr><td>DESEMBOLSO:</td><td><?=$this->desembolso?></td></tr>
+           <tr><td>EMITIDO:</td><td> <?=date('d.m.Y')?></td></tr>
+           <tr><td></td><td><?=date('H:i:s')?></td></tr></table>
+</td>
+</tr>
+</table>
+<!--FIN DE CABEZERA-->
+<!--DATOS DEL CLIENTE-->
+<div width="100%" class="cuadro">
+<h3 align="center">DATOS DEL CLIENTE</h3>
+<table  border="0">
+<tr><td>CREDITO :</td><td><?=$this->COD?></td></tr>
+<tr><td>CLIENTE :</td><td><?=$this->cliente->K_COD?></td></tr>
+<tr><td>NOMBRES :</td><td><?=$this->cliente->K_NOM?></td></tr>
+<tr><td>DIRECCI&Oacute;N :</td><td><?=$this->cliente->K_DIRE?></td></tr>
+<tr><td>UBIGEO :</td><td><?=$this->cliente->K_UBIGEO?></td></tr>
+</table>
+</div>
+<!--FIN DE DATOS DEL CLIENTE-->
+<table width="100%" border="0">
+<tr><td class="cuadro" border="1">
+<h3 align="center">DATOS DEL CR&Eacute;DITO</h3>
+<table border="0">
+<tr><td>L&Iacute;NEA :</td><td><?=$this->linea->NOM?></td></tr>
+<tr><td>MONTO :</td><td><?=number_format($this->monto,2,'.',' ')?></td></tr>
+<tr><td>MONEDA :</td><td><?=$this->linea->MONEDA?></td></tr>
+<tr><td>CUOTAS : </td><td><?=$this->plazo?></td></tr>
+<tr><td>TASA ANUAL :</td><td> <?=number_format($this->tasaAnual,2,'.',' ')?></td></tr>
+<tr><td>MODALIDAD :</td><td> <?=$this->modalidad->NOM?></td></tr>
+<tr><td>PERIODICIDAD :</td><td>DIARIO</td></tr>
+</table>
+</td>
+<td class="cuadro" valign="top">
+<h3 align="center">LIQUIDACI&Oacute;N</h3>
+<table border="0">
+<tr><td>PRESTAMO :</td><td align="right"><?=number_format($this->monto,2,'.',' ')?></td></tr>
+<tr><td>ITF :</td><td align="right"> <?=number_format($this->itf,2,'.',' ')?></td></tr>
+<tr><td></td><td><hr></td></tr>
+<tr><td></td><td align="right"><?=number_format($this->liquidez,2,'.',' ')?></td></tr>
+</table>
+</td>
+</tr>
+</table>
+<h2 align="center">CRONOGRAMA DE PAGOS</h2>
+<table  width="100%">
+<theader>
+<th width="4%">N&deg;</th>
+<th width="7%">VENCIMIENTO</th>
+<th width="11%">CAPITAL</th>
+<th width="11%">INTERES</th>
+<th width="11%">SEGURO</th>
+<th width="11%">IGV</th>
+<th width="11%">ITF</th>
+<th width="11%">G.A.</th>
+<th width="11%">TOTAL</th>
+<th width="11%">D&Iacute;A</th>
+</theader>
+<tbody>
+<? $i=0;?>
+<? foreach ($this->cuotas as $cuota ) {?>
+
+  <tr><td><?=str_pad(++$i,3,'0',STR_PAD_LEFT)?></td>
+<td><?=$cuota->FECHA?></td>
+<td align="right"><?=number_format($cuota->CAPITAL,2,'.',' ')?></td>
+<td align="right"><?=number_format($cuota->INTERES,2,'.',' ')?></td>
+<td align="right"><?=number_format($cuota->SEGURO,2,'.',' ')?></td>
+<td align="right"><?=number_format($cuota->IGV,2,'.',' ')?></td>
+<td align="right"><?=number_format($cuota->ITF,2,'.',' ')?></td>
+<td align="right"><?=number_format($cuota->GA,2,'.',' ')?></td>
+     <td align="right"><?=($cuota->TOTAL_CONS>0)?number_format($cuota->TOTAL_CONS,2,'.',' '):number_format($cuota->TOTAL_ITF,2,'.',' ')?></td>
+<td><?=$cuota->DIA?></td>
+</tr>
+<?} //end for
+?>
+<tr><td colspan="2"></td><td colspan="7"><hr/></td></tr>
+<tr><td colspan="2" align="right">TOTAL GENERAL</td>
+<td align="right"><?=number_format($this->total->SUMA_CAPITAL,2,'.',' ')?></td>
+<td align="right"><?=number_format($this->total->SUMA_INTERES,2,'.',' ')?></td>
+<td align="right"><?=number_format($this->total->SUMA_SEGURO,2,'.',' ')?></td>
+<td align="right"><?=number_format($this->total->SUMA_IMPUESTO,2,'.',' ')?></td>
+<td align="right"><?=number_format($this->total->SUMA_ITF,2,'.',' ')?></td>
+<td align="right"><?=number_format($this->total->SUMA_GA,2,'.',' ')?></td>
+<td align="right"><?=($cuota->TOTAL_CONS>0)?number_format($this->total->SUMA_TOTAL_CONS,2,'.',' '):number_format($this->total->SUMA_TOTAL_ITF,2,'.',' ')?></td>
+</tr>
+</tbody>
+</table>
+<p>HE RECIBIDO DE <b><?=$this->empresa->NOM?></b> EN EFECTIVO LA SUMA DE <b><?=$this->numeroLetras?> (<?=$this->linea->ABREV?> <?=number_format($this->monto,2,'.',' ')?>)</b> POR CONCEPTO DE PR&Eacute;STAMO A SER DEVUELTO
+SEG&Uacute;N LAS CONDICIONES QUE SE ESTABLECEN EN EL CONTRATO DE CR&Eacute;DITO QUE SE FIRMA
+SIMULT&Aacute;NEAMENTE.</p>
+<br/><br/><br/><br/>
+<table align="center">
+<tr><td colspan="2"><?=$this->cliente->K_NOM?></td></tr>
+<tr><td><?=$this->tipoDoc?>:</td><td><?=$this->cliente->K_DNI?></td></tr>
+<tr><td>RUC:</td><td><?=$this->cliente->K_RUC?></td></tr>
+</table>
+<body>
+</html>

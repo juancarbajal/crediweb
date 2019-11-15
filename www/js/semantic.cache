@@ -1,0 +1,15 @@
+;; Object js/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "js/"
+  :tables (list 
+   (semanticdb-table "quipu_xul.js"
+    :major-mode 'java-mode
+    :tags 'nil
+    :file "quipu_xul.js"
+    :pointmax 1569
+    )
+   )
+  :file "semantic.cache"
+  :semantic-tag-version "2.0pre3"
+  :semanticdb-version "2.0pre3"
+  )

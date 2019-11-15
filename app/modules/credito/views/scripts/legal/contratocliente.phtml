@@ -1,0 +1,38 @@
+<html>
+<head>
+<link rel="stylesheet" href="<?=$this->baseUrl()?>/www/css/print.css" type="text/css" media="screen,print" />
+</head>
+<body oncontextmenu="return false">
+<table width="100%"><tr><td width="20%"><img src="<?=$this->baseUrl()?>/www/img/empresa/logo_min.jpg"/></td><td><h1><u>CONTRATO DE L&Iacute;NEA DE CR&Eacute;DITO<br/>BAJO LA MODALIDAD DE DESCUENTO DE T&Iacute;TULOS<br/>VALORES</u></h1></td><td width="20%"></td></tr></table>
+<p>Conste por el presente documento un Contrato de L&iacute;nea de Cr&eacute;dito bajo la modalidad de descuento de T&iacute;tulos Valores, que celebran de una parte la <b><?=$this->empresa->NOM?></b>, con RUC N&deg; <b><?=$this->empresa->COD?></b>, domiciliada en <b><?=$this->empresa->DIRE?></b>, <b>Provincia y Departamento de Tacna</b>, e inscrita en la <b>ficha N&deg; 11043456 del Libro de Sociedades Mercantiles, Registro de Personas Jur&iacute;dicas, de la Zona Registral XIII de la ciudad de Tacna</b>, a quien en adelante se le denominar&aacute; <b>" <?=$this->empresa->NOM?> "</b>, representada por su <b>Presidente del Directorio, Sr(a). Julio Caya Belahonia</b>, con <b>DNI N&deg; 44467218</b>, y de la otra parte como <b>"PRESTATARIOS"</b> el Se&ntilde;or(a)<b> <?=$this->cliente->NOM_LARGO?></b> identificado(a) con <b><?=$this->cliente->TIPO_DOCUMENTO?> N&deg; <?=$this->cliente->DOC?></b> de estado civil <b><? switch ($this->cliente->ESTADO_CIVIL) { case 'S': echo 'SOLTERO';break; case 'C': echo 'CASADO';break; case 'D': echo 'DIVORCIADO';break; case 'V': echo 'VIUDO';break;}?> </b> domiciliado en <b><?=$this->cliente->DIRE?></b> del DISTRITO DE <b><?=$this->clienteLocalidad[2]?></b>, PROVINCIA DE <b><?=$this->clienteLocalidad[1]?></b> Y DEPARTAMENTO DE <b><?=$this->clienteLocalidad[0]?></b>, quien(es) contrata(n) de acuerdo a los t&eacute;rminos y condiciones siguientes:</p>
+
+<p><u><b>PRIMERA:</b></u> Por el presente contrato el(los) <b>"PRESTATARIOS"</b> se constituye(n) en cliente(s) de <b>" <?=$this->empresa->NOM?> "</b> quien conviene en concederle(s) una l&iacute;nea de cr&eacute;dito (pr&eacute;stamos) por obligaciones directas e indirectas hasta por la suma de S/. 3,000 (Tres mil y 00/100 Nuevos Soles), bajo la modalidad de descuentos de t&iacute;tulos valores, que podr&aacute;n ser utilizados cuando el(los) <b>"PRESTATARIOS"</b> lo solicite(n), previa evaluaci&oacute;n y aprobaci&oacute;n por <b>" <?=$this->empresa->NOM?> "</b>. Para constancia de los desembolsos de los pr&eacute;stamos, el(los) <b>"PRESTARIOS"</b> suscribir&aacute;(n) t&iacute;tulos-valores renovables total o parcialmente, cuantas veces lo estime conveniente <b>" <?=$this->empresa->NOM?> "</b> en los que se fijar&aacute; el monto y condiciones propias de la operaci&oacute;n.</p>
+
+<p><u><b>SEGUNDA:</b></u> Las partes contratantes convienen que los t&iacute;tulos-valores que suscriban comprenden el pago del capital adeudado, intereses, gastos, seguros, costos del servicio, tributos y en su caso del juicio respectivo. Queda convenido que sin aviso previo <b>" <?=$this->empresa->NOM?> "</b> podr&aacute; reajustar las tasas de inter&eacute;s y comisiones durante la vigencia del cr&eacute;dito y hasta la total cancelaci&oacute;n del mismo.</p>
+
+<p><u><b>TERCERA:</b></u> Las partes contratantes convienen que el (los) cr&eacute;dito(s) puede(n) ser cedido por parte de <b>" <?=$this->empresa->NOM?> "</b> a terceros, asumiendo este &uacute;ltimo el derecho de exigir el cumplimiento de todas las obligaciones establecidas en el presente contrato de cargo de el(los) <b>PRESTATARIOS</b>. </p>
+
+<p><u><b>CUARTA:</b></u> En caso de incumplimiento de una cuota del pr&eacute;stamo o de cualesquiera otra obligaci&oacute;n del presente contrato, <b>" <?=$this->empresa->NOM?> "</b> queda facultada para dar por vencidos todos los plazos y cobrar el &iacute;ntegro del saldo que estuviesen adeudando el(los) <b>PRESTATARIOS</b>, adicionalmente el(los) <b>PRESTATARIOS</b> acepta(n) y pagar&aacute;(n) todos los gastos administrativos m&aacute;s los gastos de cobranza que origine su incumplimiento, como ser Transacciones extrajudiciales, Judiciales y todos los que se generen por el incumplimiento del presente contrato.</p>
+
+<p><u><b>QUINTA:</b></u> Son obligaciones de el(los) <b>PRESTATARIOS</b>:</p>
+1) Pagar puntualmente sus obligaciones sin necesidad de avisos previos a la fecha de vencimiento de su cuota.<br/>
+2) Suscribir un Pagar&eacute; a la orden de <b>" <?=$this->empresa->NOM?> "</b>, autorizando su uso, previa liquidaci&oacute;n, para exigir el pago del saldo deudor a la presentaci&oacute;n del mismo u optar por su protesto y exigir en todo caso, su pago en la v&iacute;a judicial.<br/>
+3) Suscribir el <b>"Cronograma de Pr&eacute;stamo Individual"</b>, adherido al Pagar&eacute;, en el que se establecen los d&iacute;as de pago de cada cuota y su monto total.<br/>
+4) Establecer, sustituir o mejorar de inmediato las garant&iacute;as
+que le requiera <b>" <?=$this->empresa->NOM?> "</b> a solo criterio de esta
+&uacute;ltima. 
+5)Asumir todos los gastos y tributos derivados del presente contrato o de su incumplimiento y de los que pudieran crearse en el futuro.
+
+<p><u><b>SEXTA:</b></u> Queda establecido de mutuo acuerdo, que en el caso que el(los) <b>"PRESTATARIOS"</b> no cumpliera(n) con devolver oportunamente el importe del cr&eacute;dito otorgado, independientemente del inter&eacute;s compensatorio y moratorio, pagar&aacute;(n) una <b>penalidad de S/. 3.00 (Tres y 00/100 Nuevos Soles) diarios</b>; la misma que s&oacute;lo se aplicar&aacute; si la recuperaci&oacute;n tuviera que realizarse por la v&iacute;a judicial. Acuerdo este que es plenamente reconocido y aceptado por el(los) <b>"PRESTATARIOS"</b>.</p>
+<p><u><b>S&Eacute;PTIMA:</b></u> <b>La Solicitud de Cr&eacute;dito, la Declaraci&oacute;n Jurada de Bienes y el Pagar&eacute;</b>, constituyen fuente de informaci&oacute;n veras del presente contrato.</p>
+<p><u><b>OCTAVA:</b></u> El se&ntilde;or(a) <b><?=$this->aval->NOM_LARGO?></b> con <b><?=$this->aval->TIPO_DOCUMENTO?> N&deg; <?=$this->aval->DNI?></b> de estado civil <b><? switch ($this->aval->ESTADO_CIVIL) { case 'S': echo 'SOLTERO';break; case 'C': echo 'CASADO';break; case 'D': echo 'DIVORCIADO';break; case 'V': echo 'VIUDO';break;}?></b>, domiciliado(s) en <b><?=$this->aval->DIRE?></b> del Distrito de <b><?=$this->avalLocalidad[2]?></b>, Provincia de <b><?=$this->avalLocalidad[1]?></b> y Departamento de <b><?=$this->avalLocalidad[0]?></b>, quien se constituye en AVAL(es) se obliga a cumplir con los compromisos y obligaciones del(los) <b>PRESTATARIOS</b> frente a <b>"<?=$this->empresa->NOM?>"</b> y aceptan desde ya las pr&oacute;rrogas que se otorguen al saldo deudor para el pago de la obligaci&oacute;n, asumiendo en forma solidaria todas las obligaciones hasta la total cancelaci&oacute;n de la deuda, renunciando a su derecho de excusi&oacute;n.</p>
+<p><u><b>NOVENA:</b></u> Para todos los efectos de este contrato, las partes se someten a la jurisdicci&oacute;n de los jueces y tribunales de la ciudad de Tacna, renunciando al fuero de sus domicilios arriba indicados. </p>
+<p>En se&ntilde;al de conformidad las partes procedieron a suscribir el presente contrato, en original y copia de igual tenor y efectos en la Ciudad de Tacna, a los <?=htmlentities($this->fecha)?>.</p>
+
+<table width="100%" cellspacing="5">
+<tr><td width="33%" align="center"><img src="<?=$this->baseUrl()?>/www/img/empresa/firma_contrato.jpg"/></td> <td width="33%"></td> <td width="33%"></td></tr>
+<tr><td><hr/></td><td><hr/></td><td><hr/></td></tr>
+<tr><td align="center">"<?=$this->empresa->NOM?>"</td><td align="center">"PRESTATARIO"</td><td align="center">"AVAL"</td></tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+'<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n".
+  '<?xml-stylesheet href="'.$this->baseUrl().'/www/css/view.css" type="text/css"?>'."\n";
+?>
+<window title='<?=$this->title.' : '.$this->subTitle?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul'  onload='f_cargar_reloj()'>
+  <script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+  <script src='<?=$this->baseUrl()?>/www/js/validate.prototype.js' />
+  <script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js' />
+  <keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+  <script>
+  function f_cargar_reloj(){
+  new Ajax.Request( 
+                   '<?=$this->url(array('module'=>'asistencia','controller'=>'index','action'=>'reloj'))?>',
+    { method:'post',
+        parameters: {}, 
+        onSuccess: function(t) {
+        r=t.responseJSON;
+        if (r.code==0){ 
+          $('reloj').value=r.data
+        } 
+      } 
+      } );
+  setTimeout('f_cargar_reloj()',10000);
+}
+function f_guardar(){
+  if ($('PERMISO').checked) per=1 
+    else per=0;
+new Ajax.Request( 
+'<?=$this->url(array('module'=>'asistencia','controller'=>'index','action'=>'marcar'))?>',
+{ method:'post',
+parameters: {
+  op:'ins',
+      FEC:$('FEC').value,
+      HOR:$('reloj').value,
+      PERMISO:per
+}, 
+onSuccess: function(t) {
+r=t.responseJSON;
+alert(r.msg);
+} 
+} );
+}
+  </script>
+
+  <groupbox orient='horizontal'>
+  <caption label='Marcar Asistencia'/>
+  <label value='Hora' control=''/><datepicker id='FEC' maxlength='' value='<?=date('Y-m-d')?>' readonly='true'/><timepicker id='reloj' value='<?=date('H:i:s')?>' readonly='true' hideseconds='true' />
+  <label value='Por permiso' control=''/><checkbox id='PERMISO' value='1'/>
+  <button label='Marcar' image='<?=$this->baseUrl?>/www/img/icons/ok.png' oncommand='f_guardar()'/>
+  </groupbox>
+
+<? if ((isset($this->reciboerror)) && (count($this->reciboerror)>0)){?>
+  <groupbox>
+  <caption label='Recibos emitidos fuera de la fecha' />
+  <tree id='' enableColumnDrag='true' rows='10'>
+    <treecols>
+      <treecol label='Recibo' flex='1'/>
+      <splitter class='tree-splitter' />
+      <treecol label='Fecha' flex='1'/>
+      <splitter class='tree-splitter' />
+      <treecol label='Crédito' flex='1'/>
+      <splitter class='tree-splitter' />
+      <treecol label='Cliente' flex='1'/>
+      <splitter class='tree-splitter' />
+      <treecol label='Monto' flex='1'/>
+      <splitter class='tree-splitter' />
+      <treecol label='Usuario' flex='1'/>
+      <splitter class='tree-splitter' />
+    </treecols>
+    <treechildren>
+      <?foreach($this->reciboerror as $e){?>
+<treeitem>
+<treerow>
+<treecell label="<?=$e->K_COD?>" />
+<treecell label="<?=$e->K_FEC_RECIBO?>" />
+<treecell label="<?=$e->K_CREDITO?>" />
+<treecell label="<?=$e->K_NOM?>" />
+<treecell label="<?=$e->K_MONTO?>" />
+<treecell label="<?=$e->K_USR?>" />
+</treerow>
+</treeitem>
+
+      <?}?>
+    </treechildren>
+    </tree>
+  </groupbox>
+<? }?>
+  </window>

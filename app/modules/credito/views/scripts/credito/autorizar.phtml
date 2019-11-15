@@ -1,0 +1,247 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+'<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n";
+?>
+<window title='<?=$this->title.' : '.$this->subTitle?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul'  onload="f_cargar()">
+<script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+<script src='<?=$this->baseUrl()?>/www/js/validate.prototype.js' />
+<script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js' />
+<keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+<script>
+function f_cargar(){
+  f_capturar_linea();
+  setTimeout('f_cambiar_modalidad()',Quipu.espera);
+  $('MONTO').focus();
+}
+function f_capturar_linea(){
+  new Ajax.Request(
+                   '<?=$this->url(array('action'=>'linea'))?>',
+      {method: 'post',
+       parameters: { COD : $('LINEA_COD').value},
+       onSuccess: function(t){
+         r=t.responseJSON;
+         if (r.code==0){
+           $('TI_MENSUAL').value=r.data[0].TI_MENSUAL;
+           $('TI_MORA').value=r.data[0].TI_MORA;
+           $('TI_COMPENSA').value=r.data[0].TI_COMPENSA;
+           $('GA').value=r.data[0].GA;
+           $('MONTO_MIN').value=r.data[0].MONTO_MIN;
+           $('MONTO_MAX').value=r.data[0].MONTO_MAX;
+           $('CUOTA_MIN').value=r.data[0].CUOTA_MIN;
+           $('CUOTA_MAX').value=r.data[0].CUOTA_MAX;
+           //$('MONTO').focus();
+         }
+       }
+      }
+  );
+}
+function f_proceso(url){
+  new Ajax.Request( 
+                   url,
+  { method:'post',
+             parameters: {COD: $('COD').value}, 
+             onSuccess: function(t) {
+               r=t.responseJSON;
+               alert(r.msg);
+               if (r.code==0){ 
+                 //                 Quipu.listAdd(Quipu.list,r.data);
+                 f_salir();
+               } 
+             } 
+  } );
+}
+function f_anular(){
+  f_proceso('<?=$this->url(array('action'=>'anular'))?>');
+}
+function f_denegar(){
+  f_proceso('<?=$this->url(array('action'=>'denegar'))?>');
+}
+function f_guardar(){
+  if (f_validar()){
+  new Ajax.Request( 
+                   '<?=$this->url(array('action'=>'autorizar'))?>',
+  { method:'post',
+             parameters: {
+                    COD: $('COD').value,
+                    LINEA_COD: $('LINEA_COD').value,
+                           MODALIDAD_COD:$('MODALIDAD_COD').value,
+                           DESTINO_COD: $('DESTINO_COD').value,
+                           TI_MENSUAL: $('TI_MENSUAL').value,
+                           TI_MORA: $('TI_MORA').value,
+                           TI_COMPENSA: $('TI_COMPENSA').value,
+                           COBRADOR_COD: $('COBRADOR_COD').value,
+                    MONTO:$('MONTO').value,
+                    PLAZO:$('PLAZO').value
+             }, 
+             onSuccess: function(t) {
+               r=t.responseJSON;
+               alert(r.msg);
+               if (r.code==0){ 
+                 Quipu.print('<?=$this->url(array('module'=>'legal','controller'=>'credito','action'=>'contratocliente'))?>/COD/'+$('COD').value,'contrato','<?=$this->baseUrl()?>');
+                 Quipu.print('<?=$this->url(array('module'=>'legal','controller'=>'credito','action'=>'pagarecliente'))?>/COD/'+$('COD').value,'pagare','<?=$this->baseUrl()?>');
+                 f_salir();
+               } 
+             } 
+  } );
+  }//if
+}
+function f_salir(){
+     window.location.href='<?=$this->url(array('action'=>'listaautorizar'))?>';
+}
+function f_validar(){
+  v=new Validate();
+  v.addRules({id:'MONTO',required: true, option:'decimalRange',min:$('MONTO_MIN').value,max:$('MONTO_MAX').value,label:'Monto'});
+  v.addRules({id:'PLAZO',required: true, option:'integerRange',min:$('CUOTA_MIN').value,max:$('CUOTA_MAX').value,label:'Plazo '});
+  return v.Apply();
+}
+function f_cronograma(){
+  //url="<?=$this->url(array('controller'=>'cronograma','action'=>'index'))?>/index/f/"+$('FEC').value+"/p/"+$('PLAZO').value+"/m/"+$('MONTO').value+"/t/"+$('TI_MENSUAL').value+'/o/'+$('GA').value;
+  url="<?=$this->url(array('controller'=>'cronograma','action'=>'index'))?>/index/f/"+$('FEC').value+"/p/"+$('PLAZO').value+"/m/"+$('MONTO').value+"/t/"+$('TI_MENSUAL').value+'/LINEA_COD/'+$('LINEA_COD').value+'/MODALIDAD_COD/'+$('MODALIDAD_COD').value+'/o/'+$('GA').value;
+  //alert(url);
+  Quipu.print(url,'cronograma','<?=$this->baseUrl()?>');
+}
+//Cambiando tarifa segun Destino
+function f_cambiar_modalidad(){
+  if ($('MODALIDAD_COD').value=='E'){
+    new Ajax.Request( 
+                     '<?=$this->url(array('controller'=>'cliente','action'=>'tarifa'))?>',
+    { method:'post',
+               parameters: {COD: $('CLIENTE_COD').value}, 
+               onSuccess: function(t) {
+                 r=t.responseJSON;
+                 if (r.code==0){ 
+                   rs=r.data;
+                   $('TI_MENSUAL').value=rs.TI_MENSUAL;
+                   $('TI_MORA').value=rs.TI_MORA;
+                   $('TI_COMPENSA').value=rs.TI_COMPENSA;
+                 } 
+               } 
+    } );
+  }
+  else {
+    f_capturar_linea();
+  }
+}
+function f_documentos(){
+  Quipu.print('<?=$this->url(array('module'=>'legal','controller'=>'credito','action'=>'solicitudcliente'))?>/COD/'+$('COD').value,'solicitud','<?=$this->baseUrl()?>');
+}
+</script>
+<groupbox>
+<caption label='<?=$this->subTitle?>' />
+  <hbox><label value="Código"/><textbox id="COD" size="12" readonly="true" value="<?=$this->cr->K_COD?>"/>
+  <label value="Fecha" control="FEC"/><datepicker id="FEC" readonly="true" value="<?=$this->cr->K_FEC?>" />
+</hbox>
+<groupbox>
+<caption label="Datos del Cliente"/>
+  <vbox>
+
+    <hbox>
+      <label value="Cliente"/><textbox id="CLIENTE_COD" size="12" value="<?=$this->cr->K_CLIENTE_COD?>" readonly="true"/> <textbox id="NOMBRES" readonly="true" size="60" value="<?=$this->cr->K_NOM_LARGO?>"/>
+    </hbox>
+    <hbox><label value="Dirección"/> <textbox id="DIRE" readonly="true" size="40" value="<?=$this->cr->K_DIRE?>"/> <label value="Localidad"/><textbox id="LOCALIDAD_COD" size="6" readonly="true" value="<?=$this->cr->K_LOCALIDAD_COD?>"/><textbox id="LOCALIDAD_NOM" readonly="true" value="<?=$this->cr->K_LOCALIDAD_NOM?>"/></hbox>
+    <hbox>
+      <label value='CIIU' control='CIIU'/><textbox id='CIIU' readonly="true" value="<?=$this->cr->K_CIIU?>" size="60"/>
+    </hbox>
+  </vbox>
+</groupbox>
+
+<groupbox>
+  <caption label="Datos del Crédito"/>
+  <hbox>
+    <label value="Línea"/><menulist id="LINEA_COD" oncommand="f_capturar_linea()" >
+    <menupopup>
+      <? foreach($this->lineas as $linea){?>
+      <menuitem label="<?=$linea->NOM?>" value="<?=$linea->COD?>" <? if ($this->cr->K_LINEA_COD==$linea->COD) echo "selected='true'";?>/>
+      <? }?>
+    </menupopup>
+  </menulist>
+</hbox>
+    <grid>
+      <columns>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+      </columns>
+      <rows>
+        <row>
+          <label value="Tasa Mensual" control="TI_MENSUAL"/>
+          <label value="Tasa Moratoria" control="TI_MORA"/>
+          <label value="Tasa Compensatoria" control="TI_COMPENSA"/>
+          <label value="G.Administrativo"/>
+        </row>
+        <row>
+          <textbox id="TI_MENSUAL" readonly="true" size="10"/>
+          <textbox id="TI_MORA" readonly="true" size="10"/>
+          <textbox id="TI_COMPENSA" readonly="true" size="10"/>
+          <textbox id="GA" readonly="true" size="10"/>
+        </row>
+        <row>
+          <label value="Monto Mínimo" control="MONTO_MIN"/>
+          <label value="Monto Máximo" control="MONTO_MAX"/>
+          <label value="Plazo Mínimo" control="CUOTA_MIN"/>
+          <label value="Plazo Máximo" control="CUOTA_MAX"/>
+        </row>
+        <row>
+          <textbox id="MONTO_MIN" size="10" maxlength="11" readonly="true"/>
+          <textbox id="MONTO_MAX" size="10" maxlength="11" readonly="true"/>
+          <textbox id="CUOTA_MIN" size="10" maxlength="11" readonly="true"/>
+          <textbox id="CUOTA_MAX" size="10" maxlength="11" readonly="true"/>
+        </row>
+      </rows>
+    </grid>
+    <grid>
+      <columns>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+      </columns>
+      <rows>
+        <row>
+          <label value="Modalidad"/>
+          <menulist id="MODALIDAD_COD" oncommand="f_cambiar_modalidad()">
+            <menupopup>
+              <? foreach($this->modalidades as $modalidad){?>
+              <menuitem label="<?=$modalidad->NOM?>" value="<?=$modalidad->COD?>" selected="<?=($modalidad->COD==$this->cr->K_MODALIDAD)?'true':'false'?>"/>
+              <? }?>
+            </menupopup>
+          </menulist>
+          <label value="Destino"/>
+          <menulist id="DESTINO_COD">
+            <menupopup>
+              <? foreach($this->destinos as $destino){?>
+              <menuitem label="<?=$destino->NOM?>" value="<?=$destino->COD?>" selected="<?=($destino->COD==$this->cr->K_DESTINO)?'true':'false'?>"/>
+              <? }?>
+            </menupopup>
+          </menulist>
+        </row>
+        <row>
+          <label value="Monto" class="negrita"/><textbox id="MONTO" size="10" value="<?=$this->cr->K_MONTO?>"/><label value="Plazo" class="negrita"/> <textbox id="PLAZO" size="10" value="<?=$this->cr->K_PLAZO?>"/>
+        </row>
+      </rows>
+    </grid>
+<hbox>
+  <label value='Observaciones' control='OBS'/><textbox id='OBS' multiline="true" cols="60" value="<?=$this->cr->K_OBS?>" style='text-transform: uppercase;' />
+</hbox>
+</groupbox>
+<groupbox orient="horizontal">
+<caption label="Datos del Cobrador"/>
+            <label value='Cobrador' control='COBRADOR_COD'/>
+            <menulist id='COBRADOR_COD'>
+            <menupopup>
+  <menuitem label='---' value=''/>
+            <? foreach($this->cobradores as $cobrador){?>
+            <menuitem label='<?=$cobrador->NOM_LARGO?>' value='<?=$cobrador->COD?>' />
+            <? } ?>
+            </menupopup>
+            </menulist>
+</groupbox>
+<hbox><button label="Cronograma de Pagos" image="<?=$this->baseUrl()?>/www/img/icons/cronograma.png" oncommand="f_cronograma()" />
+<button label="Documentos" image="<?=$this->baseUrl()?>/www/img/icons/new.png" oncommand="f_documentos()"/>
+<button label="Aprobar" image="<?=$this->baseUrl()?>/www/img/icons/ok.png" oncommand="f_guardar()"/>
+<button label="Denegar" image="<?=$this->baseUrl()?>/www/img/icons/denegar.png" oncommand="f_denegar()"/>
+<button label="Anular" image="<?=$this->baseUrl()?>/www/img/icons/delete.png" oncommand="f_anular()"/>
+<button label="Salir" image="<?=$this->baseUrl()?>/www/img/icons/close.png" oncommand="f_salir()"/>
+</hbox>
+</groupbox>
+</window>

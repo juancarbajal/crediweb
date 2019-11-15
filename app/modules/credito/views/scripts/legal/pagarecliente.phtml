@@ -1,0 +1,64 @@
+<html>
+<head>
+<link rel="stylesheet" href="<?=$this->baseUrl()?>/www/css/print.css" type="text/css" media="screen,print" />
+</head>
+<body oncontextmenu="return false">
+<table width="100%"><tr><td width="20%"><img src="<?=$this->baseUrl()?>/www/img/empresa/logo_min.jpg"/></td><td><h1><u>PAGARE</u></h1></td><td width="20%"></td></tr></table>
+<br/>
+<table width="100%" border="1px" cellspacing="0px">
+<theader>
+<th>N&Uacute;MERO</th><th>LUGAR DE EMISI&Oacute;N</th><th>FECHA DE EMISION</th><th>FECHA DE VENCIMIENTO</th><th>MONEDA</th><th>IMPORTE</th>
+</theader>
+<tbody>
+<tr>
+<td align="center"><?=$this->cliente->CREDITO_COD?></td>
+<td align="center">TACNA</td>
+<td align="center"><?=$this->credito->FEC?></td>
+<td align="center"><?=$this->credito->FEC_FIN?></td>
+<td align="center"><?=$this->moneda->NOM?></td>
+<td align="center"><?=$this->moneda->ABREV?> <?=$this->credito->MONTO?></td>
+</tr>
+</tbody>
+</table>
+<br/>
+Por este <b>PAGARE</b> debo(emos) y pagare(mos) solidaria e incondicionalmente a la orden de <b><?=$this->empresa->NOM?></b> con <b>RUC <?=$this->empresa->COD?></b>, en su domicilio social o donde se me(nos) presentare a cobro, o a quien &eacute;sta empresa se lo hubiese transferido mi deuda; por la cantidad de:
+<div class="cuadro">
+<br/>
+<center><b><?=$this->montoTexto?></b></center>
+<br/>
+</div>
+<br/>
+Importe a debitar en las oficinas de <b><?=$this->empresa->NOM?></b> ubicadas en la <b>DIRECCION <?=$this->empresa->DIRE?></b> del <b>Distrito de GREGORIO ALBARRACIN LANCHIPA,  Provincia y Departamento de TACNA</b> o cobrador acreditado por la empresa.
+<div class="cuadro">
+<br/>
+<table>
+<tr><td>Emitente</td><td><?=$this->cliente->NOM_LARGO?></td></tr>
+<tr><td><?=$this->cliente->TIPO_DOCUMENTO?> N&deg;</td><td><?=$this->cliente->DOC?></td></tr>
+<tr><td>Domicilio</td><td><?=$this->cliente->DIRE?> del Distrito de <?=$this->clienteLocalidad[2]?>, Provincia de <?=$this->clienteLocalidad[1]?> y Departamento de <?=$this->clienteLocalidad[0]?></td></tr>
+<tr><td>Firma y Huella</td><td><br/><br/><br/><br/><br/></td></tr>
+</table>
+</div><br/>
+<div class="cuadro">
+<table>
+<tr><td>Aval</td><td><?=$this->aval->NOM_LARGO?></td></tr>
+<tr><td><?=$this->aval->TIPO_DOCUMENTO?> N&deg;</td><td><?=$this->aval->DNI?></td></tr>
+<tr><td>Domicilio</td><td><?=$this->aval->DIRE?> del Distrito de <?=$this->avalLocalidad[2]?>, Provincia de <?=$this->avalLocalidad[1]?> y Departamento de <?=$this->avalLocalidad[0]?> </td></tr>
+<tr><td>Firma y Huella</td><td><br/><br/><br/><br/><br/></td></tr>
+</table>
+</div>
+<div class="cuadro">
+<u><h2>CLAUSULAS ESPECIALES</h2></u>
+<ol class="letras_may">
+<li>Este pagar&eacute; esta normado por la Ley 27287 Ley de T&iacute;tulos Valores y sus respectivas modificatorias.</li>
+<li>Este pagar&eacute; debe ser pagado en la misma moneda que expresa el t&iacute;tulo valor.</li>
+<li>A su vencimiento podr&aacute; ser prorrogado por su tenedor por el plazo que &eacute;ste se&ntilde;ale en este mismo documento, sin que sea necesaria intervenci&oacute;n alguna del obligado principal ni del Aval solidario.</li>
+<li>El presente pagar&eacute; puede ser cedido por parte de <b>"<?=$this->empresa->NOM?>"</b> a terceros, asumiendo este &uacute;ltimo el derecho de exigir el cumplimiento de todas las obligaciones establecidas en el presente documento para lo cual (el) los obligados dan su aceptaci&oacute;n.</li>
+<li>Desde su &uacute;ltimo vencimiento, su importe total y/o cuotas, generar&aacute; los intereses compensatorios, m&aacute;s los intereses moratorios a las tasas m&aacute;ximas autorizadas o permitidas a su &uacute;ltimo tenedor.</li>
+<li>El presente pagar&eacute; no requiere ser protestado por falta de pago, procediendo su ejecuci&oacute;n por el s&oacute;lo m&eacute;rito de haber vencido su plazo y no haber sido prorrogado. As&iacute; como en caso de incumplimiento de una o m&aacute;s cuotas se faculta al tenedor a dar por vencido todos los plazos en cuyo caso proceder&aacute; el protesto antes de su vencimiento.</li>
+<li>El importe de este pagar&eacute; ser&aacute; pagado en los montos de las cuotas que se se&ntilde;alan el documento en hoja adherida, denominado <b>"Cronograma de Pr&eacute;stamo Individual"</b>, los pagos ser&aacute;n en cuotas diarias, semanales, quincenales y/o mensuales seg&uacute;n lo estipulado y/o acordado con el cliente.</li>
+<li>El importe de este pagar&eacute; y/o de las cuotas pactadas, desde su fecha de emisi&oacute;n hasta la fecha de su respectivo vencimiento generar&aacute; un inter&eacute;s compensatorio a la tasa de inter&eacute;s legal vigente.</li>
+<li>Los pagos parciales o totales de las cuotas, podr&aacute;n ser verificados en <b><?=$this->empresa->NOM?></b>.</li>
+</ol>
+</div>
+</body>
+</html>

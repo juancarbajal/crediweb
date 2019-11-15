@@ -1,0 +1,43 @@
+;; Object controllers/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "controllers/"
+  :tables (list 
+   (semanticdb-table "CalendarController.php"
+    :major-mode 'php-mode
+    :tags 'nil
+    :file "CalendarController.php"
+    )
+   (semanticdb-table "IndexController.php"
+    :major-mode 'php-mode
+    :tags 'nil
+    :file "IndexController.php"
+    :pointmax 695
+    )
+   (semanticdb-table "ConfigController.php"
+    :major-mode 'php-mode
+    :tags 'nil
+    :file "ConfigController.php"
+    :pointmax 11063
+    )
+   (semanticdb-table "ImprimirController.php"
+    :major-mode 'php-mode
+    :tags 'nil
+    :file "ImprimirController.php"
+    :pointmax 766
+    )
+   (semanticdb-table "BackupController.php"
+    :major-mode 'php-mode
+    :tags 'nil
+    :file "BackupController.php"
+    :pointmax 2085
+    )
+   (semanticdb-table "AuthController.php"
+    :major-mode 'php-mode
+    :tags 'nil
+    :file "AuthController.php"
+    )
+   )
+  :file "semantic.cache"
+  :semantic-tag-version "2.0pre3"
+  :semanticdb-version "2.0pre3"
+  )

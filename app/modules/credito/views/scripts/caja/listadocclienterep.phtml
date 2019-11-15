@@ -1,0 +1,48 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="<?=$this->baseUrl()?>/www/css/print.css" type="text/css" media="screen,print" />
+  </head>
+  <body>
+    <table width="100%">
+      <tr>
+        <td width="10%"><img src="<?=$this->baseUrl()?>/www/img/empresa/logo_min.jpg"/></td>
+        <td>
+          <h1>LISTA DE DOCUMENTOS DE CLIENTES</h1>
+          <h1><?=$this->fecha?></h1>
+        </td>
+        <td width="20%">
+          Fecha: <?=date('Y-m-d')?><br/>
+          Hora: <?=date('H:i:s')?><br/>
+          Usuario: <?=$this->user?>
+        </td>
+    </table>
+
+    <table width='100%'>
+      <thead>
+        <th>NRO</th>
+        <th>NUM</th>
+        <th>FECHA</th>
+        <th>NOMBRE</th>
+        <th>DETALLE</th>
+        <th>M</th>
+        <th>MONTO</th>
+      </thead>
+      <tbody>
+        <?$i=0;$suma=0?>
+        <?foreach($this->lista as $d){?>
+        <tr>
+          <td><?=++$i?></td>
+           <td><?=substr($d->K_COD,6,6)?></td>
+          <td><?=$d->K_FEC?></td>
+          <td><?=$d->K_NOM?></td>
+          <td><?=$d->K_DET?></td>
+          <td><?=$d->K_MONEDA?></td>
+          <td align='right'><?=$d->K_MONTO?></td>
+          <?$suma+=$d->K_MONTO?>
+        </tr>
+        <?}?>
+        <tr><td colspan='6' align='right'><b>TOTAL</b></td><td align='right'><b><?=number_format($suma,2,'.',' ')?></b></td></tr>
+      </tbody>
+    </table>
+  </body>
+</html>

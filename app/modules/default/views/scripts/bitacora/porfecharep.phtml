@@ -1,0 +1,44 @@
+<html>
+<head>
+<link rel="stylesheet" href="<?=$this->baseUrl()?>/www/css/print.css" type="text/css" media="screen,print" />
+</head>
+<body>
+<table width="100%">
+<tr>
+<td width"50%">
+<table width="100%">
+ <tr><td width="30%"><img src="<?=$this->baseUrl()?>/www/img/empresa/logo_min.jpg"/></td><td><h1 align="center"><?=$this->subTitle?></h1>
+<h1>DESDE <?=$this->desde?> HASTA <?=$this->hasta?></h1></td><td width="30%" align="right">Fecha: <?=date('d.m.Y')?><br/>Hora: <?=date('H:i:s')?><br/>Usuario: <?=$this->user?></td></tr>
+</table>
+
+<table width="100%">
+<tr>
+<th>FECHA</th>
+<th>REG</th>
+<th>OPER</th>
+<th>SECCI&Oacute;N VISTADA</th>
+<th>USUARIO</th>
+<th>HORA</th>
+<th>MAQUINA</th>
+</tr>
+<tbody>
+  <?foreach($this->eventos as $ev){?>
+  <tr>
+      <td><?=$ev->FEC?></td>
+      <td align="right"><?=$ev->ID?></td>
+      <td><?=$ev->OPER?></td>
+      <td><?=$ev->URL?></td>
+      <td><?=$ev->USR?></td>
+                     <td><? $hora=explode(' ',$ev->USRT); echo $hora[1]?></td>
+      <td><?=$ev->MAQ?></td>
+  </tr>
+  <?}?>
+</tbody>
+</table>
+<br/>
+OPER - Leyenda:<br/>
+V: Ver<br/>
+P: Imprimir<br/>
+
+</body>
+</html>

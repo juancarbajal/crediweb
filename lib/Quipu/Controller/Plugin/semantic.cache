@@ -1,0 +1,14 @@
+;; Object Plugin/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "Plugin/"
+  :tables (list 
+   (semanticdb-table "Authorization.php"
+    :major-mode 'php-mode
+    :tags 'nil
+    :file "Authorization.php"
+    )
+   )
+  :file "semantic.cache"
+  :semantic-tag-version "2.0pre3"
+  :semanticdb-version "2.0pre3"
+  )

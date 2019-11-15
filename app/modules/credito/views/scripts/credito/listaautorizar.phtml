@@ -1,0 +1,81 @@
+<?='<?xml version="1.0" encoding="'.$this->encoding.'"?>'."\n".
+'<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>'."\n";
+?>
+<window title='<?=$this->title.' : '.$this->subTitle?>' orient='vertical' xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' onload="f_cargar()">
+<script src='<?=$this->baseUrl()?>/www/js/prototype_xul.js'/>
+<script src='<?=$this->baseUrl()?>/www/js/validate.prototype.js' />
+<script src='<?=$this->baseUrl()?>/www/js/quipu_xul.js' />
+<keyset><key keycode='VK_RETURN' oncommand='if (document.commandDispatcher.focusedElement.tagName!="button") document.commandDispatcher.advanceFocus();'/></keyset>
+<script>
+Quipu.url='<?=$this->url(array('action'=>'listaautorizar'))?>';
+function f_cargar(){
+  Quipu.tree=$('tr');
+  //Quipu.cargarLista({op:'get'});
+}
+function f_proceso(url){
+  new Ajax.Request( 
+                   url,
+  { method:'post',
+             parameters: {COD: Quipu.getTreeValue()}, 
+             onSuccess: function(t) {
+               r=t.responseJSON;
+               alert(r.msg);
+               if (r.code==0){ 
+                  Quipu.listAdd(Quipu.list,r.data);
+               } 
+             } 
+  } );
+}
+function f_anular(){
+  f_proceso('<?=$this->url(array('action'=>'anular'))?>');
+}
+function f_denegar(){
+  f_proceso('<?=$this->url(array('action'=>'denegar'))?>');
+}
+function f_autorizar(){
+  window.location.href='<?=$this->url(array('action'=>'autorizar'))?>?COD='+Quipu.getTreeValue();
+}
+</script>
+<groupbox>
+<caption label='<?=$this->subTitle?>' />
+<hbox>
+<tree id="tr" flex="1" enableColumnDrag="true" rows="10">
+<treecols>
+<treecol label="Código" flex="1"/>
+<splitter class="tree-splitter" />
+<treecol label="Fecha" flex="1"/>
+<splitter class="tree-splitter" />
+<treecol label="Línea" flex="1"/>
+<splitter class="tree-splitter" />
+<treecol label="Cliente" flex="3"/>
+<splitter class="tree-splitter" />
+<treecol label="Monto" flex="1"/>
+<splitter class="tree-splitter" />
+<treecol label="Plazo" flex="1"/>
+</treecols>
+<treechildren>
+<?
+foreach($this->lista as $credito){
+?>
+<treeitem>
+<treerow>
+<treecell label="<?=$credito->COD?>" />
+<treecell label="<?=$credito->FEC?>" />
+<treecell label="<?=$credito->LINEA_COD?>" />
+<treecell label="<?=$credito->NOM_LARGO?>" />
+<treecell label="<?=$credito->MONTO?>" />
+<treecell label="<?=$credito->PLAZO?>" />
+</treerow>
+</treeitem>
+<?}?>
+</treechildren>
+</tree>
+
+   <vbox>
+   <button image="<?=$this->baseUrl()?>/www/img/icons/ok.png" label="Aprobar" oncommand="f_autorizar()"/>
+   <button image="<?=$this->baseUrl()?>/www/img/icons/denegar.png" label="Denegar" oncommand="f_denegar()"/>
+   <button image="<?=$this->baseUrl()?>/www/img/icons/delete.png" label="Anular" oncommand="f_anular()"/>
+   </vbox>
+</hbox>
+</groupbox>
+</window>
