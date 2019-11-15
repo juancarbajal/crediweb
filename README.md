@@ -1,5 +1,5 @@
 # crediweb
-Sistema de gestión de empresas financieras 2008 , PHP/Firebird/XUL
+Sistema de gestión de empresas financieras 2008 , PHP/ZF/Firebird/XUL
 
 - Gestión de creditos (clientes, cronogramas, historicos=
 - Cobranzas
