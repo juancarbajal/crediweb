@@ -1,9 +1,18 @@
-# crediweb
-Sistema de gestión de empresas financieras 2008 , PHP/ZF/Firebird/XUL
+# Crediweb
+Crediweb es un sistema para la gestión integral de empresas financieras que brinden prestamos a corto plazo (diario)
 
-- Gestión de creditos (clientes, cronogramas, historicos)
-- Cobranzas
-- Caja
-- Reportes gerenciales (Equifax, morosidad, rendimiento)
-- Gestión de personal
-- Mantenimiento de sistemas (backups)
+# Modulos 
+Los modulos que se tienen son:
+- Gestión de creditos (clientes, cronogramas, historial crediticio, interes adicionales como mora).
+- Gestión de cobranzas diarios.
+- Gestión de pagos en caja. 
+- Reportes gerenciales (integración con Equifax, morosidad, rendimiento)
+- Gestión de personal y usuarios
+- Mantenimiento de sistemas (backups y logs de actividades)
+
+# Requisitos 
+- GNU/Linux Debian 5 o superior
+- PHP 5.3 o superior
+- ZendFramework 1 
+- Firebird 2
+- Firefox XUL 
